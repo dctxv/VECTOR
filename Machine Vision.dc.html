@@ -363,6 +363,12 @@
   .pq-dial i{position:absolute;top:0;bottom:0;width:3px;background:var(--bb-ink);transform:translateX(-50%);transition:left .15s steps(3);}
   .pq-todo{border:1px solid var(--bb-hud);background:var(--bb-hud);color:var(--bb-bg);padding:9px 11px;font-size:10px;line-height:1.5;}
   .pq-todo span{display:inline-block;font:900 8px 'IBM Plex Mono',monospace;letter-spacing:1px;opacity:.85;margin-right:8px;border:1px solid var(--bb-bg);padding:1px 5px;vertical-align:middle;}
+  .pq-tab.pulse{animation:mv-alarm 1s steps(1) infinite;box-shadow:inset 0 0 0 2px var(--bb-hud);}
+  .pq-intro{margin:22px 0 8px;border:1px solid var(--bb-hud);background:var(--bb-bg);padding:18px 16px;}
+  .pq-intro-list{list-style:none;margin:12px 0 16px;padding:0;display:grid;gap:12px;}
+  .pq-intro-list li{position:relative;padding-left:34px;color:var(--bb-muted);font-size:12px;line-height:1.55;}
+  .pq-intro-list li strong{color:var(--bb-ink);}
+  .pq-intro-list li span{position:absolute;left:0;top:0;font:900 11px 'IBM Plex Mono',monospace;color:var(--bb-hud);border:1px solid var(--bb-hud);padding:2px 5px;}
   .pq-legend{display:flex;flex-wrap:wrap;gap:12px;color:var(--bb-muted);font-size:8px;letter-spacing:.5px;padding:1px 0 2px;}
   .pq-legend span{display:inline-flex;align-items:center;gap:5px;}
   .pq-lg{display:inline-block;width:9px;height:9px;flex:0 0 auto;}
@@ -1605,6 +1611,18 @@
         <h1 class="bb-title" style="font-size:clamp(44px,14vw,72px);">THE LOCK<br>THAT<br>SURVIVES</h1>
         <p class="bb-friendly">Try to break the new lock the way you broke RSA — and discover a hard problem that resists classical AND quantum attack, because there's no hidden period for interference to exploit.</p>
 
+        <sc-if value="{{ pqIntroOpen }}" hint-placeholder-val="{{ true }}">
+          <section class="pq-intro">
+            <div class="bb-kicker">CHAPTER 00 // WHY A NEW LOCK</div>
+            <ol class="pq-intro-list">
+              <li><span>01</span>RSA hid a <strong>repeating pattern</strong>. A quantum computer is a machine for finding repeating patterns — so it finds RSA's, and the lock falls.</li>
+              <li><span>02</span>This new lock hides a <strong>location</strong> instead — one exact dot in a huge grid of dots. There's no pattern to repeat, so there's nothing for the quantum machine to lock onto.</li>
+              <li><span>03</span>Everything ahead is that one idea. The <strong>grid dots are all the possible locked messages</strong>; the <strong>◆ is YOUR message</strong>, knocked just off a dot by deliberate noise. The right key knows which dot it came from. A wrong key only guesses.</li>
+            </ol>
+            <button class="cx-btn solid" data-reticle-target="begin" onClick="{{ pqBeginTour }}">&gt; BEGIN // BUILD THE GRID</button>
+          </section>
+        </sc-if>
+
         <section class="pq-chamber">
           <div class="pq-chamber-grid">
             <div class="pq-stage">
@@ -1702,7 +1720,7 @@ class Component extends DCLogic {
     qrRevealed:false, qrTries:0, qrBruteActive:false, qrQuantumRun:false, qrCascade:false,
     pqBasis:'bad', pqGuessWrong:false, pqQuantumFizzled:false, pqDecoded:false,
     pqChapter:0, pqSkew:3, pqGoodBasis:[[1.6,0.2],[0.2,1.6]], pqTarget:[2.3,1.4], pqShowTruth:false, pqLanded:null, pqNearest:null,
-    pqNoise:2, pqMessageBit:1, pqCipher:null, pqLweDecoded:null, pqDimension:2 };
+    pqIntroSeen:false, pqCh0Done:false, pqTriedGood:false, pqTriedBad:false };
 
   // ---------- graph ----------
   buildGraph() {
@@ -2508,14 +2526,20 @@ class Component extends DCLogic {
     // ---- POST-QUANTUM / LATTICE (FR-03) ----
     const pqBad = st.pqBasis !== 'good';
     const pqChapter = Math.max(0, Math.min(2, Number(st.pqChapter) || 0));
-    const pqNoise = Math.max(0, Math.min(9, Number(st.pqNoise) || 0));
-    const pqDimension = Math.max(2, Math.min(12, Number(st.pqDimension) || 2));
+    // chapter 00 // WHY A NEW LOCK: a no-interaction anchor shown before the lattice,
+    // so the learner knows why they're staring at a grid before they touch it
+    const pqIntroOpen = !st.pqIntroSeen;
+    // auto-advance: when a chapter's DO THIS is done, pulse the tab that comes next
+    const pqCh0Done = !!st.pqCh0Done;                              // dragged an arrow
+    const pqCh1Done = !!st.pqTriedGood && !!st.pqTriedBad;         // tried both keys
+    const pqPulse = pqChapter === 0 ? (pqCh0Done ? 1 : -1)
+                  : pqChapter === 1 ? (pqCh1Done ? 2 : -1) : -1;
     const pqChapterDefs = [
       ['01','THE GRID','Two arrows build an endless grid of dots. Drag an arrow tip — the whole grid follows. The arrows ARE the description of the grid.'],
       ['02','TWO KEYS','The same dots can be described two ways. The private key uses short, tidy arrows. The public key uses long, skewed ones — same grid, far harder to read.'],
       ['03','THE ATTACK','A message is a point knocked off the grid by noise — the ◆. To read it you find the nearest dot. The private key snaps to it; the public key lands on the wrong one. A quantum computer cannot shortcut this.'],
     ];
-    const pqChapters = pqChapterDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'pq-tab' + (i === pqChapter ? ' on' : '') }));
+    const pqChapters = pqChapterDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'pq-tab' + (i === pqChapter ? ' on' : '') + (i === pqPulse ? ' pulse' : '') }));
     const pqChapterTitle = pqChapterDefs[pqChapter][1] + ' // ' + pqChapterDefs[pqChapter][0];
     const pqChapterCopy = pqChapterDefs[pqChapter][2];
     const pqTodo = [
@@ -2533,12 +2557,6 @@ class Component extends DCLogic {
     const pqDragHint = this._pqDrag ? ('DRAGGING ' + this._pqDrag.kind.toUpperCase()) : 'DRAG HANDLES // ORBIT EMPTY SPACE';
     const pqView = this._pqView || { yaw:-0.68, pitch:0.86, zoom:1 };
     const pqCameraReadout = 'YAW ' + Math.round(pqView.yaw * 57.2958) + ' // PITCH ' + Math.round(pqView.pitch * 57.2958);
-    const pqCipher = st.pqCipher;
-    const pqDecodedLwe = st.pqLweDecoded;
-    const pqDialValue = pqDecodedLwe ? (pqDecodedLwe.d / 97 * 100) : (pqCipher ? (pqCipher.v / 97 * 100) : 50);
-    const pqLweReadout = pqDecodedLwe
-      ? ('DECODED BIT ' + pqDecodedLwe.bit + ' // EXPECTED ' + (st.pqMessageBit ? 1 : 0) + ' // ' + (pqDecodedLwe.ok ? 'PASS' : 'FAIL') + ' // d=' + pqDecodedLwe.d)
-      : (pqCipher ? ('CIPHERTEXT READY // u=[' + pqCipher.u.join(',') + '] // v=' + pqCipher.v + ' // decrypt to test the noise') : 'NO CIPHERTEXT // pick a bit, set noise, then encrypt.');
 
     const hidden = (extra) => ({ opacity:0, transform:'translateY(8px)', transition:'opacity .5s steps(4), transform .5s steps(4)', ...extra });
     const shown  = (extra) => ({ opacity:1, transform:'translateY(0)', transition:'opacity .5s steps(4), transform .5s steps(4)', ...extra });
@@ -2750,14 +2768,13 @@ class Component extends DCLogic {
 
       // ---- POST-QUANTUM ----
       pqcOpen:st.stubId === 'pqc',
+      pqIntroOpen,
       pqChapters, pqChapterTitle, pqChapterCopy, pqStageTag, pqDragHint, pqCameraReadout,
       pqTodo, pqShowKeys, pqShowSkew, pqShowAttack,
-      pqSkew:String(Math.max(0, Math.min(6, Number(st.pqSkew) || 0))), pqNoise:String(pqNoise), pqDimension:String(pqDimension),
+      pqSkew:String(Math.max(0, Math.min(6, Number(st.pqSkew) || 0))),
       pqBasisLabel:pqBad ? 'PUBLIC' : 'PRIVATE',
       pqGoodClass:'pq-pill' + (!pqBad ? ' on' : ''), pqBadClass:'pq-pill' + (pqBad ? ' on' : ''),
-      pqBit0Class:'pq-pill' + (!st.pqMessageBit ? ' on' : ''), pqBit1Class:'pq-pill' + (st.pqMessageBit ? ' on' : ''),
-      pqCvpLabel, pqSolveButtonLabel, pqTruthLabel, pqDialStyle:{ left:Math.max(0, Math.min(100, pqDialValue)).toFixed(1) + '%' },
-      pqLweReadout,
+      pqCvpLabel, pqSolveButtonLabel, pqTruthLabel,
       pqGuessWrong:!!st.pqGuessWrong, pqDecoded:!!st.pqDecoded, pqQuantumFizzled:!!st.pqQuantumFizzled,
       pqStatus:st.pqDecoded ? 'DECODED' : (st.pqQuantumFizzled ? 'QUANTUM FIZZLED' : (st.pqGuessWrong ? 'WRONG POINT' : 'LATTICE LOADED')),
       pqHud:st.pqQuantumFizzled ? 'QUANTUM: NO ADVANTAGE' : (pqBad ? 'PUBLIC BASIS · HARD' : 'PRIVATE BASIS · EASY'),
@@ -2778,17 +2795,13 @@ class Component extends DCLogic {
       pqCanvasMove:(e) => this.pqCanvasMove(e),
       pqCanvasUp:(e) => this.pqCanvasUp(e),
       pqPickChapter:(e) => this.pqPickChapter(e),
+      pqBeginTour:() => this.setState({ pqIntroSeen:true }),
       pqUseGood:() => this.pqUseGood(),
       pqUseBad:() => this.pqUseBad(),
       pqSetSkew:(e) => this.pqSetSkew(e),
       pqSnap:() => this.pqSnap(),
       pqToggleTruth:() => this.pqToggleTruth(),
       pqResetLab:() => this.pqResetLab(),
-      pqSetNoise:(e) => this.pqSetNoise(e),
-      pqSetBit:(e) => this.pqSetBit(e),
-      pqEncrypt:() => this.pqEncrypt(),
-      pqDecrypt:() => this.pqDecrypt(),
-      pqSetDimension:(e) => this.pqSetDimension(e),
       pqQuantumTry:() => this.pqQuantumTry(),
 
       initiateScan: () => this.initiateScan(),
@@ -3149,7 +3162,7 @@ class Component extends DCLogic {
     const active = this.state.pqBasis === 'good' ? good : bad;
     const target = this.state.pqTarget || [2.3, 1.4];
     const chapter = Number(this.state.pqChapter) || 0;
-    const range = Math.max(4, Math.min(7, 4 + Math.floor((Number(this.state.pqDimension) || 2) / 4)));
+    const range = 5;
     const view = this.pqView();
     if (!this._pqDrag && !this._reduceMotion) view.yaw += 0.00075 * Math.max(0.25, (this.mi || 45) / 45);
 
@@ -3212,8 +3225,18 @@ class Component extends DCLogic {
     const landed = this.state.pqLanded;
     const nearest = this.state.pqNearest;
     if (landed) {
-      drawLine([target[0], target[1], .25], [landed[0], landed[1], .25], this.state.pqGuessWrong ? '#ff2a22' : hud, .8, 2, [4, 4]);
-      const L = this.pqProject([landed[0], landed[1], .32], W, H);
+      // the landing marker travels from the ◆ to its rounded dot over ~200ms
+      const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+      const an = this._pqSnapAnim;
+      let lx = landed[0], ly = landed[1];
+      if (an && an.to && an.to[0] === landed[0] && an.to[1] === landed[1]) {
+        const k = Math.min(1, (now - an.t0) / 200), e2 = 1 - Math.pow(1 - k, 3); // easeOutCubic
+        lx = an.from[0] + (an.to[0] - an.from[0]) * e2;
+        ly = an.from[1] + (an.to[1] - an.from[1]) * e2;
+        if (k >= 1) this._pqSnapAnim = null;
+      }
+      drawLine([target[0], target[1], .25], [lx, ly, .25], this.state.pqGuessWrong ? '#ff2a22' : hud, .8, 2, [4, 4]);
+      const L = this.pqProject([lx, ly, .32], W, H);
       ctx.save(); ctx.strokeStyle = this.state.pqGuessWrong ? '#ff2a22' : hud; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(L.x, L.y, 12, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
     }
     if ((this.state.pqShowTruth || chapter >= 2) && nearest) {
@@ -3221,18 +3244,16 @@ class Component extends DCLogic {
       ctx.save(); ctx.strokeStyle = ink; ctx.fillStyle = bg; ctx.lineWidth = 2; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.rect(N.x - 9, N.y - 9, 18, 18); ctx.stroke(); ctx.fillText('TRUE', N.x + 12, N.y + 3); ctx.restore();
     }
 
-    if (chapter >= 4 || this.state.pqCipher) {
-      const noise = Number(this.state.pqNoise) || 0, tq = this.pqProject([target[0], target[1], .22], W, H);
-      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .12 + noise * .035; ctx.lineWidth = 1;
-      for (let i = 1; i <= 4; i++) { ctx.beginPath(); ctx.arc(tq.x, tq.y, 9 + i * (5 + noise), 0, Math.PI * 2); ctx.stroke(); }
-      ctx.restore();
-    }
-    if (chapter >= 5) {
-      const dim = Number(this.state.pqDimension) || 2;
-      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .18; ctx.lineWidth = 1;
-      for (let i = 0; i < dim; i++) {
-        const x = 18 + i * Math.min(16, (W - 44) / Math.max(1, dim - 1)), h = 18 + i * 8;
-        ctx.strokeRect(x, H - 34 - h, 8, h);
+    // quantum fizzle: rings pulse out from the message and find nothing to lock onto
+    if (this.state.pqQuantumFizzled) {
+      const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+      const tq = this.pqProject([target[0], target[1], .22], W, H);
+      const phase = ((now - (this._pqFizzleAt || 0)) / 1400) % 1;
+      ctx.save(); ctx.strokeStyle = hud; ctx.lineWidth = 1.4;
+      for (let i = 0; i < 3; i++) {
+        const p = (phase + i / 3) % 1;
+        ctx.globalAlpha = 0.5 * (1 - p);
+        ctx.beginPath(); ctx.arc(tq.x, tq.y, 6 + p * 120, 0, Math.PI * 2); ctx.stroke();
       }
       ctx.restore();
     }
@@ -3276,7 +3297,7 @@ class Component extends DCLogic {
     const s = len > 4.2 ? 4.2 / len : 1;
     good[d.kind === 'b1' ? 0 : 1] = [p[0] * s, p[1] * s];
     if (Math.abs(this.pqDet(good)) < .15) return;
-    this.setState({ pqGoodBasis:good, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false });
+    this.setState({ pqGoodBasis:good, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false, pqCh0Done:true });
   }
   pqCanvasUp() { this._pqDrag = null; }
   pqPickChapter(e) {
@@ -3287,8 +3308,8 @@ class Component extends DCLogic {
     if (n === 2) patch.pqBasis = this.state.pqBasis || 'bad';
     this.setState(patch);
   }
-  pqUseGood() { this.setState({ pqBasis:'good', pqGuessWrong:false }); }
-  pqUseBad() { this.setState({ pqBasis:'bad', pqDecoded:false }); }
+  pqUseGood() { this.setState({ pqBasis:'good', pqGuessWrong:false, pqTriedGood:true }); }
+  pqUseBad() { this.setState({ pqBasis:'bad', pqDecoded:false, pqTriedBad:true }); }
   pqSetSkew(e) { this.setState({ pqSkew:Number(e.currentTarget.value) || 0, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false }); }
   pqToggleTruth() {
     const target = this.state.pqTarget || [2.3, 1.4];
@@ -3297,76 +3318,22 @@ class Component extends DCLogic {
   }
   pqResetLab() {
     this._pqView = { yaw:-0.68, pitch:0.86, zoom:1 };
-    this._pqDrag = null;
-    this.setState({ pqBasis:'good', pqChapter:0, pqSkew:3, pqGoodBasis:this.pqDefaultGood(), pqTarget:[2.3,1.4], pqShowTruth:false, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false, pqQuantumFizzled:false, pqNoise:2, pqMessageBit:1, pqCipher:null, pqLweDecoded:null, pqDimension:2 });
+    this._pqDrag = null; this._pqSnapAnim = null; this._pqFizzleAt = 0;
+    this.setState({ pqBasis:'good', pqChapter:0, pqSkew:3, pqGoodBasis:this.pqDefaultGood(), pqTarget:[2.3,1.4], pqShowTruth:false, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false, pqQuantumFizzled:false, pqCh0Done:false, pqTriedGood:false, pqTriedBad:false });
   }
   pqSnap() {
     const target = this.state.pqTarget || [2.3, 1.4];
     const landed = this.pqBabai(target, this.pqActiveBasis()).landed;
     const nearest = this.pqNearest(target, this.pqGenerateLattice(this.pqGoodBasis(), 7));
     const correct = this.pqDist(landed, nearest) < 1e-6;
+    // animate the marker travelling from the ◆ message to the dot it rounds to,
+    // so private-snaps-right vs public-lands-near is watchable, not a teleport
+    this._pqSnapAnim = { from:target.slice(), to:landed, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()) };
     this.setState({ pqChapter:2, pqLanded:landed, pqNearest:nearest, pqDecoded:correct, pqGuessWrong:!correct, pqShowTruth:true });
   }
-  pqLweBase() {
-    if (!this._pqLweBase) this._pqLweBase = {
-      q:97, n:4, m:8, s:[17, 42, 8, 63],
-      A:[[11,7,31,5],[19,23,3,41],[29,13,17,37],[43,2,47,11],[5,53,7,19],[61,31,2,29],[3,71,43,13],[37,5,59,23]],
-      eBase:[1.45,-.72,2.05,-1.2,.35,1.78,-.55,.96],
-      r:[1,0,1,1,0,1,0,0],
-    };
-    return this._pqLweBase;
-  }
-  pqMod(x, q) { return ((x % q) + q) % q; }
-  pqRingDist(a, b, q) { const d = Math.abs(this.pqMod(a, q) - this.pqMod(b, q)); return Math.min(d, q - d); }
-  pqLweDerived(base, sigma) {
-    const e = base.eBase.map(x => Math.round(x * sigma));
-    const b = base.A.map((row, i) => this.pqMod(row.reduce((acc, aij, j) => acc + aij * base.s[j], 0) + e[i], base.q));
-    return { e, b };
-  }
-  pqEncryptBit(base, derived, r, bit) {
-    const u = Array.from({ length:base.n }, (_, j) => {
-      let acc = 0; for (let i = 0; i < base.m; i++) acc += base.A[i][j] * r[i];
-      return this.pqMod(acc, base.q);
-    });
-    const v = this.pqMod(derived.b.reduce((acc, bi, i) => acc + bi * r[i], 0) + bit * Math.floor(base.q / 2), base.q);
-    return { r:r.slice(), u, v, bit };
-  }
-  pqDecryptBit(base, ct) {
-    const d = this.pqMod(ct.v - ct.u.reduce((acc, ui, j) => acc + ui * base.s[j], 0), base.q);
-    const bit = this.pqRingDist(d, Math.floor(base.q / 2), base.q) < this.pqRingDist(d, 0, base.q) ? 1 : 0;
-    return { d, bit, ok:bit === ct.bit };
-  }
-  pqSetNoise(e) {
-    const noise = Number(e.currentTarget.value) || 0;
-    const patch = { pqNoise:noise };
-    if (this.state.pqCipher) {
-      const base = this.pqLweBase(), derived = this.pqLweDerived(base, noise);
-      const ct = this.pqEncryptBit(base, derived, this.state.pqCipher.r, this.state.pqMessageBit ? 1 : 0);
-      patch.pqCipher = ct;
-      patch.pqLweDecoded = this.state.pqLweDecoded ? this.pqDecryptBit(base, ct) : null;
-    }
-    this.setState(patch);
-  }
-  pqSetBit(e) {
-    const bit = Number(e.currentTarget.dataset.bit) ? 1 : 0;
-    const patch = { pqMessageBit:bit, pqLweDecoded:null };
-    if (this.state.pqCipher) {
-      const base = this.pqLweBase(), derived = this.pqLweDerived(base, Number(this.state.pqNoise) || 0);
-      patch.pqCipher = this.pqEncryptBit(base, derived, this.state.pqCipher.r, bit);
-    }
-    this.setState(patch);
-  }
-  pqEncrypt() {
-    const base = this.pqLweBase(), derived = this.pqLweDerived(base, Number(this.state.pqNoise) || 0);
-    this.setState({ pqChapter:4, pqCipher:this.pqEncryptBit(base, derived, base.r, this.state.pqMessageBit ? 1 : 0), pqLweDecoded:null });
-  }
-  pqDecrypt() {
-    const base = this.pqLweBase();
-    const ct = this.state.pqCipher || this.pqEncryptBit(base, this.pqLweDerived(base, Number(this.state.pqNoise) || 0), base.r, this.state.pqMessageBit ? 1 : 0);
-    this.setState({ pqChapter:4, pqCipher:ct, pqLweDecoded:this.pqDecryptBit(base, ct) });
-  }
-  pqSetDimension(e) { this.setState({ pqChapter:5, pqDimension:Math.max(2, Math.min(12, Number(e.currentTarget.value) || 2)) }); }
-  pqQuantumTry() { this.setState({ pqChapter:5, pqQuantumFizzled:true, pqDimension:Math.max(8, Number(this.state.pqDimension) || 2) }); }
+  // the quantum attack finds nothing to lock onto — stay on THE ATTACK and fire a
+  // scan-ring pulse from the message that dissipates without resolving to a dot
+  pqQuantumTry() { this._pqFizzleAt = (typeof performance !== 'undefined' ? performance.now() : Date.now()); this.setState({ pqQuantumFizzled:true }); }
 
   // ---------- day / night sensor mode (corner-to-corner square-flip wipe) ----------
   toggleTheme() {
