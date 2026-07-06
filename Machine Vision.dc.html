@@ -175,47 +175,31 @@
   .bbc-end{border:1px solid var(--bb-hud);padding:22px 16px;margin-top:24px;}
   .bbc-score{display:grid;grid-template-columns:1fr auto;gap:8px;border-bottom:1px solid rgba(245,21,14,.25);padding:7px 0;font-size:9px;}
 
-  /* How the Internet Works: one request, scrubbed through the full conversation */
+  /* How the Internet Works: a typed message, animated across the machines, narrated at each slow-mo stop */
   .iw-shell{width:min(100%,620px);}
-  .iw-control{position:sticky;top:46px;z-index:73;background:var(--bb-bg);padding:10px 0 14px;border-bottom:1px solid rgba(245,21,14,.35);}
-  .iw-url-row{display:grid;grid-template-columns:1fr auto;gap:6px;}
-  .iw-url{width:100%;min-width:0;border:1px solid var(--bb-hud);outline:0;background:var(--bb-bg);color:var(--bb-ink);font:700 19px 'Archivo',sans-serif;padding:12px;caret-color:var(--bb-hud);}
-  .iw-load{border:1px solid var(--bb-hud);background:var(--bb-hud);color:var(--bb-bg);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:0 12px;}
-  .iw-scrub{width:100%;height:28px;margin:11px 0 0;accent-color:var(--bb-hud);}
-  .iw-object{margin-top:12px;border:1px solid var(--bb-hud);padding:8px 10px;color:var(--bb-hud);font-size:9px;letter-spacing:1px;display:flex;justify-content:space-between;gap:8px;}
-  .iw-chunks{display:grid;grid-template-columns:auto 1fr auto;gap:5px;margin:20px 0;}
-  .iw-chunk{border:1px solid var(--bb-hud);padding:11px 7px;min-width:0;overflow:hidden;text-align:center;}
-  .iw-chunk strong{display:block;color:var(--bb-ink);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .iw-chunk span{display:block;color:var(--bb-hud);font-size:7px;letter-spacing:1px;margin-top:7px;}
-  .iw-dns{display:grid;grid-template-columns:1fr 30px 1fr;align-items:center;margin:22px 0;}
-  .iw-card{border:1px solid var(--bb-hud);padding:15px 10px;background:var(--bb-bg);color:var(--bb-ink);min-width:0;}
-  .iw-card-label{color:var(--bb-hud);font-size:7px;letter-spacing:1px;margin-bottom:8px;}
-  .iw-card-big{font:900 clamp(16px,5.5vw,25px) 'Archivo',sans-serif;line-height:1;overflow-wrap:anywhere;}
-  .iw-route{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;position:relative;margin:24px 0 10px;}
-  .iw-route:before{content:'';position:absolute;left:8%;right:8%;top:27px;height:1px;background:var(--bb-hud);opacity:.35;}
-  .iw-hop{position:relative;z-index:1;border:1px solid var(--bb-hud);background:var(--bb-bg);padding:11px 2px;text-align:center;min-width:0;}
-  .iw-hop-dot{display:block;width:9px;height:9px;margin:0 auto 9px;border:1px solid var(--bb-hud);background:var(--bb-bg);}
-  .iw-hop.on .iw-hop-dot{background:var(--bb-ink);}
-  .iw-hop.live{box-shadow:0 0 0 2px rgba(245,21,14,.25);}
-  .iw-hop-name{display:block;color:var(--bb-ink);font:800 clamp(8px,2.5vw,11px) 'Archivo',sans-serif;white-space:nowrap;overflow:hidden;}
-  .iw-hop-meta{display:block;color:var(--bb-hud);font-size:6px;margin-top:7px;}
-  .iw-resources{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:20px 0;}
-  .iw-resource{border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-ink);padding:14px 5px;text-align:left;min-width:0;}
-  .iw-resource strong{display:block;font:900 15px 'Archivo',sans-serif;}
-  .iw-resource span{display:block;color:var(--bb-hud);font-size:7px;margin-top:8px;}
-  .iw-page{border:1px solid var(--bb-hud);padding:10px;background:var(--bb-ink);color:var(--bb-bg);margin-top:22px;}
-  .iw-page-bar{height:8px;background:var(--bb-bg);opacity:.28;margin-bottom:9px;}
-  .iw-page-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:7px;}
-  .iw-page-el{border:1px solid var(--bb-bg);background:transparent;color:var(--bb-bg);padding:12px 8px;text-align:left;font-family:'IBM Plex Mono',monospace;min-height:62px;}
-  .iw-page-el.heading{grid-column:1/-1;font:900 24px 'Archivo',sans-serif;min-height:auto;}
-  .iw-page-el.fail{border-color:#ff2a22;color:#ff2a22;animation:mv-alarm .7s steps(2) infinite;}
-  .iw-trace{border-left:2px solid var(--bb-hud);padding:13px 14px;margin-top:18px;color:var(--bb-muted);font-size:9px;line-height:1.75;}
-  .iw-trace strong{color:var(--bb-ink);font-weight:500;}
-  .iw-failures{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:16px;}
-  .iw-failure{border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:7px 'IBM Plex Mono',monospace;padding:10px 2px;}
-  .iw-failure.on{background:#ff2a22;color:#050505;border-color:#ff2a22;}
-  .iw-next{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px;}
-  .iw-next button{border:1px dashed var(--bb-hud);background:var(--bb-bg);color:var(--bb-ink);padding:14px 8px;font:800 12px 'Archivo',sans-serif;}
+  .iw-compose{position:sticky;top:46px;z-index:73;background:var(--bb-bg);padding:10px 0 14px;border-bottom:1px solid rgba(245,21,14,.35);}
+  .iw-compose-row{display:grid;grid-template-columns:1fr auto;gap:6px;}
+  .iw-msg{width:100%;min-width:0;border:1px solid var(--bb-hud);outline:0;background:var(--bb-bg);color:var(--bb-ink);font:700 18px 'Archivo',sans-serif;padding:12px;caret-color:var(--bb-hud);}
+  .iw-send{border:1px solid var(--bb-hud);background:var(--bb-hud);color:var(--bb-bg);font:900 10px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:0 16px;white-space:nowrap;}
+  .iw-to{margin-top:9px;color:var(--bb-hud);font-size:9px;letter-spacing:1px;display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;}
+  .iw-to strong{color:var(--bb-ink);font:800 12px 'Archivo',sans-serif;}
+  .iw-to span{color:var(--bb-muted);letter-spacing:.4px;text-transform:none;font-size:8px;}
+  .iw-stage-wrap{position:relative;margin:22px 0 12px;border:1px solid var(--bb-hud);background:var(--bb-bg);overflow:hidden;
+    background-image:linear-gradient(90deg,rgba(245,21,14,.05) 1px,transparent 1px),linear-gradient(0deg,rgba(245,21,14,.05) 1px,transparent 1px);
+    background-size:24px 24px;}
+  :root[data-theme="dark"] .iw-stage-wrap{background-image:linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.04) 1px,transparent 1px);}
+  .iw-stage-wrap:before{content:'THE INTERNET // A CHAIN OF MACHINES';position:absolute;left:10px;top:-7px;background:var(--bb-bg);color:var(--bb-hud);font:7px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:0 6px;z-index:2;}
+  .iw-stage-wrap canvas{display:block;width:100%;height:auto;aspect-ratio:1000/620;touch-action:none;}
+  .iw-speed{position:absolute;right:10px;top:10px;color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;pointer-events:none;background:var(--bb-bg);padding:2px 5px;}
+  .iw-dots{display:flex;gap:6px;justify-content:center;margin:2px 0 16px;}
+  .iw-dots i{width:26px;height:4px;background:var(--bb-hud);opacity:.22;transition:opacity .25s,transform .25s;}
+  .iw-dots i.on{opacity:.85;}
+  .iw-dots i.cur{opacity:1;transform:scaleY(2);}
+  .iw-explain{border-left:3px solid var(--bb-hud);padding:4px 0 4px 16px;margin:6px 0 4px;animation:mv-boxin .5s steps(6) both;}
+  .iw-explain-tag{color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:2px;margin-bottom:8px;}
+  .iw-explain-title{font:900 clamp(24px,7vw,34px) 'Archivo',sans-serif;line-height:.98;text-transform:uppercase;color:var(--bb-ink);margin:0 0 10px;letter-spacing:-.5px;}
+  .iw-explain-body{color:var(--bb-muted);font-size:13px;line-height:1.65;margin:0;}
+  .iw-actions{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-top:16px;}
 
   /* Symmetric Encryption: a shared-key transformation chamber */
   .sy-inputs{display:grid;gap:8px;margin-top:22px;}
@@ -281,6 +265,23 @@
   .pk-key span{display:block;color:var(--bb-hud);font-size:7px;margin-top:6px;letter-spacing:.5px;}
   .pk-key.pub{box-shadow:inset 0 0 0 2px rgba(245,21,14,.16);}
   .pk-wire{border:1px dashed var(--bb-hud);padding:14px 10px;margin-top:14px;text-align:center;color:var(--bb-hud);font-size:9px;letter-spacing:1px;line-height:1.5;}
+
+  /* Hashing: the grinder */
+  .ha-compose{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:6px;}
+  .ha-msg{width:100%;min-width:0;border:1px solid var(--bb-hud);outline:0;background:var(--bb-bg);color:var(--bb-ink);font:700 17px 'Archivo',sans-serif;padding:12px;caret-color:var(--bb-hud);}
+  .ha-feed{border:1px solid var(--bb-hud);background:var(--bb-hud);color:var(--bb-bg);font:900 10px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:0 15px;white-space:nowrap;}
+  .ha-stage-wrap{position:relative;margin:16px 0 12px;border:1px solid var(--bb-hud);background:var(--bb-bg);overflow:hidden;}
+  .ha-stage-wrap:before{content:'ONE-WAY GRINDER // FORWARD ONLY';position:absolute;left:10px;top:-7px;background:var(--bb-bg);color:var(--bb-hud);font:7px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:0 6px;z-index:2;}
+  .ha-stage-wrap canvas{display:block;width:100%;height:auto;aspect-ratio:820/920;touch-action:none;}
+  .ha-stage-tag{position:absolute;right:10px;top:10px;color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;background:var(--bb-bg);padding:2px 5px;pointer-events:none;}
+  .ha-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:12px;}
+  .ha-tab{border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-ink);padding:9px 6px;text-align:left;min-width:0;}
+  .ha-tab strong{display:block;font:900 11px 'Archivo',sans-serif;line-height:1;text-transform:uppercase;}
+  .ha-tab span{display:block;color:var(--bb-hud);font-size:6px;letter-spacing:.7px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ha-tab.on{background:var(--bb-ink);color:var(--bb-bg);}
+  .ha-tab.on span{color:var(--bb-bg);opacity:.7;}
+  .pk-stage-wrap:before{content:'PUBLIC-KEY BENCH // ONE LOCK, TWO KEYS';}
+  .pk-stage-wrap canvas{aspect-ratio:820/720;}
 
   /* TLS step-order puzzle */
   .tl-steps{display:grid;gap:6px;margin-top:14px;}
@@ -363,6 +364,12 @@
   .pq-dial i{position:absolute;top:0;bottom:0;width:3px;background:var(--bb-ink);transform:translateX(-50%);transition:left .15s steps(3);}
   .pq-todo{border:1px solid var(--bb-hud);background:var(--bb-hud);color:var(--bb-bg);padding:9px 11px;font-size:10px;line-height:1.5;}
   .pq-todo span{display:inline-block;font:900 8px 'IBM Plex Mono',monospace;letter-spacing:1px;opacity:.85;margin-right:8px;border:1px solid var(--bb-bg);padding:1px 5px;vertical-align:middle;}
+  .pq-tab.pulse{animation:mv-alarm 1s steps(1) infinite;box-shadow:inset 0 0 0 2px var(--bb-hud);}
+  .pq-intro{margin:22px 0 8px;border:1px solid var(--bb-hud);background:var(--bb-bg);padding:18px 16px;}
+  .pq-intro-list{list-style:none;margin:12px 0 16px;padding:0;display:grid;gap:12px;}
+  .pq-intro-list li{position:relative;padding-left:34px;color:var(--bb-muted);font-size:12px;line-height:1.55;}
+  .pq-intro-list li strong{color:var(--bb-ink);}
+  .pq-intro-list li span{position:absolute;left:0;top:0;font:900 11px 'IBM Plex Mono',monospace;color:var(--bb-hud);border:1px solid var(--bb-hud);padding:2px 5px;}
   .pq-legend{display:flex;flex-wrap:wrap;gap:12px;color:var(--bb-muted);font-size:8px;letter-spacing:.5px;padding:1px 0 2px;}
   .pq-legend span{display:inline-flex;align-items:center;gap:5px;}
   .pq-lg{display:inline-block;width:9px;height:9px;flex:0 0 auto;}
@@ -810,141 +817,65 @@
       <div class="bb-hud">
         <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
         <span class="bb-corner bl"></span><span class="bb-corner br"></span>
-        <div style="position:absolute;left:22px;top:20px;">FD-02 // REQUEST TRACER</div>
+        <div style="position:absolute;left:22px;top:20px;">FD-02 // MESSAGE TRACER</div>
         <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
           <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
             <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
             <button data-reticle-target="exit" onClick="{{ closeStub }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">[ EXIT ]</button>
           </div>
-          <div>{{ internetHud }}</div>
+          <div>{{ iwHud }}</div>
         </div>
-        <div style="position:absolute;left:22px;bottom:20px;">{{ internetStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
-        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">HOP {{ internetHop }}/05</div>
+        <div style="position:absolute;left:22px;bottom:20px;">{{ iwStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">BEAT {{ iwBeatCount }}/06</div>
       </div>
 
       <main class="bb-shell iw-shell">
         <div class="bb-kicker">MODULE 01 // FOUNDATIONS</div>
-        <h1 class="bb-title" style="font-size:clamp(42px,13vw,72px);">HOW THE<br>INTERNET WORKS</h1>
-        <p class="bb-friendly">Load a tiny pretend website. Then move its request forward — or backward — one machine at a time.</p>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">SEND A<br>MESSAGE</h1>
+        <p class="bb-friendly">Type a message to a friend on the other side of the world. Then watch it actually get there — one machine at a time, in slow motion, with the internet narrating each step as the packet coasts to a stop.</p>
 
-        <div class="iw-control">
-          <div style="display:flex;justify-content:space-between;color:var(--bb-hud);font-size:8px;letter-spacing:1px;margin-bottom:7px;">
-            <span>URL INPUT</span><span>{{ internetStageLabel }}</span>
+        <div class="iw-compose">
+          <div class="iw-compose-row">
+            <input id="iw-msg" class="iw-msg" data-reticle-target="input" value="{{ iwMsg }}" onChange="{{ iwMsgInput }}" maxlength="40" autocomplete="off" spellcheck="false" placeholder="hi bob, meet at 8?">
+            <button class="iw-send" data-reticle-target="send" onClick="{{ iwSend }}">{{ iwSendLabel }}</button>
           </div>
-          <div class="iw-url-row">
-            <input id="iw-url" class="iw-url" data-reticle-target="input" value="{{ internetUrl }}" onChange="{{ internetUrlInput }}" maxlength="48" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="example.com/page">
-            <button class="iw-load" data-reticle-target="load" onClick="{{ loadInternet }}">LOAD</button>
-          </div>
-          <div style="display:flex;gap:5px;margin-top:7px;">
-            <sc-for list="{{ internetPresets }}" as="p" hint-placeholder-count="3">
-              <button data-reticle-target="preset" data-url="{{ p.url }}" onClick="{{ chooseInternetPreset }}" style="flex:1;min-width:0;border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:7px 'IBM Plex Mono',monospace;padding:7px 2px;overflow:hidden;">{{ p.url }}</button>
-            </sc-for>
-          </div>
-          <input class="iw-scrub" data-reticle-target="scrub" type="range" min="0" max="10" step="1" value="{{ internetStage }}" onChange="{{ scrubInternet }}" aria-label="Scrub the request through the internet">
-          <div class="iw-object"><span>{{ internetObjectType }}</span><strong style="color:var(--bb-ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ internetObject }}</strong></div>
+          <div class="iw-to">TO&nbsp; <strong>bob.host</strong> <span>your friend's computer, somewhere far away</span></div>
         </div>
 
-        <section class="bb-section">
-          <div class="bb-kicker">{{ internetScan }}</div>
-          <h2 class="bb-statement">{{ internetStatement }}</h2>
-          <p class="bb-friendly">{{ internetCaption }}</p>
+        <section class="iw-stage-wrap">
+          <canvas id="iw-canvas" width="1000" height="620" aria-label="Animated journey of a message across the internet"></canvas>
+          <div class="iw-speed" id="iw-speed"></div>
         </section>
 
-        <sc-if value="{{ internetParsed }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="iw-chunks">
-              <button class="iw-chunk" data-reticle-target="chunk"><strong>{{ internetProtocol }}</strong><span>PROTOCOL</span></button>
-              <button class="iw-chunk" data-reticle-target="chunk"><strong>{{ internetDomain }}</strong><span>DOMAIN</span></button>
-              <button class="iw-chunk" data-reticle-target="chunk"><strong>{{ internetPath }}</strong><span>PATH</span></button>
-            </div>
-            <p class="bb-friendly">The URL is instructions: how to talk, where to go, and what to ask for.</p>
+        <div class="iw-dots"><sc-for list="{{ iwDots }}" as="d" hint-placeholder-count="7"><i class="{{ d.className }}"></i></sc-for></div>
+
+        <sc-if value="{{ iwStarted }}" hint-placeholder-val="{{ false }}">
+          <section class="iw-explain">
+            <div class="iw-explain-tag">{{ iwBeatTag }}</div>
+            <h2 class="iw-explain-title">{{ iwBeatTitle }}</h2>
+            <p class="iw-explain-body">{{ iwBeatBody }}</p>
           </section>
         </sc-if>
 
-        <sc-if value="{{ internetDnsReady }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">DNS QUERY // DOCUMENTATION-SAFE SIMULATION</div>
-            <div class="iw-dns">
-              <div class="iw-card"><div class="iw-card-label">HUMAN NAME</div><div class="iw-card-big">{{ internetDomain }}</div></div>
-              <div class="bb-arrow"></div>
-              <div class="iw-card"><div class="iw-card-label">MACHINE ADDRESS</div><div class="iw-card-big">{{ internetIp }}</div></div>
-            </div>
-            <p class="bb-friendly">DNS is the internet asking, “What number belongs to this name?” The answer may already be cached, or it may travel through several lookup layers.</p>
-          </section>
+        <sc-if value="{{ iwShowActions }}" hint-placeholder-val="{{ false }}">
+          <div class="iw-actions">
+            <button class="cx-btn solid" data-reticle-target="continue" onClick="{{ iwContinue }}">{{ iwContinueLabel }}</button>
+            <button class="cx-btn" data-reticle-target="replay" onClick="{{ iwReplay }}">RESTART</button>
+          </div>
         </sc-if>
 
-        <sc-if value="{{ internetRequestReady }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">HTTP REQUEST OBJECT // PORT 443</div>
-            <button class="iw-card" data-reticle-target="request" onClick="{{ flipInternetRequest }}" style="width:100%;text-align:left;">
-              <div class="iw-card-label">{{ internetRequestFace }}</div>
-              <div class="iw-card-big">{{ internetRequestMain }}</div>
-              <div style="font-size:8px;color:var(--bb-muted);margin-top:10px;">{{ internetRequestSub }}</div>
-            </button>
-            <p class="bb-friendly">Now the browser can write the envelope. Tap the request card to turn it over.</p>
-
-            <div class="iw-route">
-              <sc-for list="{{ internetRoute }}" as="hop" hint-placeholder-count="5">
-                <div class="{{ hop.className }}">
-                  <span class="iw-hop-dot"></span><span class="iw-hop-name">{{ hop.name }}</span><span class="iw-hop-meta">{{ hop.meta }}</span>
-                </div>
-              </sc-for>
-            </div>
-            <div class="bb-readout">{{ internetRouteReadout }}</div>
-          </section>
-        </sc-if>
-
-        <sc-if value="{{ internetResponseReady }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">RESPONSE STATUS // 200 OK</div>
-            <h2 class="bb-statement">THE SERVER ANSWERS IN PIECES.</h2>
-            <p class="bb-friendly">Not one giant “website.” A skeleton, some style, an image, and behavior — your browser puts them together.</p>
-            <div class="iw-resources">
-              <sc-for list="{{ internetResources }}" as="r" hint-placeholder-count="3">
-                <button class="iw-resource" data-reticle-target="resource" data-resource="{{ r.id }}" onClick="{{ traceInternetResource }}"><strong>{{ r.name }}</strong><span>{{ r.job }}</span></button>
-              </sc-for>
+        <sc-if value="{{ iwDone }}" hint-placeholder-val="{{ false }}">
+          <section class="bb-payoff">
+            <h2 class="bb-statement" style="max-width:12ch;">THE INTERNET IS A RELAY RACE.</h2>
+            <p class="bb-friendly">No machine knew the whole route. Each one just knew a good next step and handed the packet on — your router, DNS the phone-book, your ISP, the backbone, and finally Bob's server. Secrecy, trust, and identity aren't part of this yet. Anyone relaying the packet could read it.</p>
+            <div class="iw-actions" style="margin-top:16px;">
+              <button class="cx-btn" data-reticle-target="replay" onClick="{{ iwReplay }}">&gt; RUN IT AGAIN</button>
+              <button class="cx-btn solid" data-reticle-target="next" data-node="crypto" onClick="{{ openInternetBridge }}">&gt; NEXT: LOCK IT DOWN</button>
             </div>
           </section>
         </sc-if>
 
-        <sc-if value="{{ internetPageReady }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">BROWSER ASSEMBLY // PAGE READY</div>
-            <h2 class="bb-statement">NOW PICK SOMETHING YOU CAN SEE.</h2>
-            <p class="bb-friendly">Tap any piece. The machine will trace the hidden conversation that made it.</p>
-            <div class="iw-page">
-              <div class="iw-page-bar"></div>
-              <div class="iw-page-grid">
-                <button class="iw-page-el heading" data-reticle-target="page" data-resource="html" onClick="{{ traceInternetResource }}">A SMALL SHOP</button>
-                <button class="iw-page-el" data-reticle-target="page" data-resource="css" onClick="{{ traceInternetResource }}">BUTTON<br><span style="font-size:7px;">styled by CSS</span></button>
-                <button class="{{ internetImageClass }}" data-reticle-target="page" data-resource="image" onClick="{{ traceInternetResource }}">{{ internetImageLabel }}<br><span style="font-size:7px;">hero.png</span></button>
-              </div>
-            </div>
-
-            <sc-if value="{{ internetTraceOpen }}" hint-placeholder-val="{{ false }}">
-              <div class="iw-trace"><strong>{{ internetTraceTitle }}</strong><br>{{ internetTracePath }}</div>
-            </sc-if>
-
-            <div class="bb-kicker" style="margin-top:34px;">SIMULATED FAILURE LAB</div>
-            <p class="bb-friendly">When loading breaks, one link in the conversation usually failed. Pick a symptom, then tap the page to trace it.</p>
-            <div class="iw-failures">
-              <sc-for list="{{ internetFailures }}" as="f" hint-placeholder-count="4">
-                <button class="{{ f.className }}" data-reticle-target="failure" data-failure="{{ f.id }}" onClick="{{ setInternetFailure }}">{{ f.label }}</button>
-              </sc-for>
-            </div>
-
-            <div class="bb-payoff">
-              <h2 class="bb-statement" style="max-width:12ch;">THE INTERNET IS A CONVERSATION.</h2>
-              <p class="bb-friendly" style="margin-bottom:0;">Your browser asks. Machines pass the message along. A server answers. Your browser rebuilds the pieces.</p>
-            </div>
-            <div class="iw-next">
-              <button data-reticle-target="next" data-node="networks" onClick="{{ openInternetBridge }}">NETWORKS<br><span style="font:7px 'IBM Plex Mono',monospace;color:var(--bb-hud);">ROUTING DETAIL</span></button>
-              <button data-reticle-target="next" data-node="crypto" onClick="{{ openInternetBridge }}">CRYPTOGRAPHY<br><span style="font:7px 'IBM Plex Mono',monospace;color:var(--bb-hud);">TRUST LAYER</span></button>
-            </div>
-          </section>
-        </sc-if>
-
-        <div class="bb-scope">SIMULATION ONLY // No live DNS, requests, scanning, interception, or probing. Routes and failures are simplified; return paths can differ in the real internet. Addresses shown here are reserved for documentation.</div>
+        <div class="bb-scope">SIMULATION ONLY // No live DNS, requests, scanning, interception, or probing. The route and timing are simplified; real paths have far more hops and can differ each way. Addresses shown here are reserved for documentation.</div>
       </main>
     </div>
   </sc-if>
@@ -1086,7 +1017,7 @@
       <div class="bb-hud">
         <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
         <span class="bb-corner bl"></span><span class="bb-corner br"></span>
-        <div style="position:absolute;left:22px;top:20px;">CR-02 // FINGERPRINT</div>
+        <div style="position:absolute;left:22px;top:20px;">CR-02 // THE GRINDER</div>
         <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
           <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
             <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
@@ -1095,87 +1026,53 @@
           <div>{{ haHud }}</div>
         </div>
         <div style="position:absolute;left:22px;bottom:20px;">{{ haStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
-        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">ATT {{ haAttempts }}</div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">{{ haHud2 }}</div>
       </div>
 
       <main class="bb-shell">
         <div class="bb-kicker">MODULE 03 // CRYPTOGRAPHY</div>
-        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">THE<br>FINGERPRINT</h1>
-        <p class="bb-friendly">Every message has a fingerprint. Try to change a message without changing its print. You can't — and that impossibility is the whole tool.</p>
+        <h1 class="bb-title" style="font-size:clamp(52px,17vw,84px);">THE<br>GRINDER</h1>
+        <p class="bb-friendly">A hash is a meat-grinder for data. Whatever you feed it — a word, a whole book — falls through and comes out as one fixed-size fingerprint. Feed it something and watch.</p>
 
-        <div class="iw-control">
-          <div class="cx-field">
-            <label>MESSAGE // TYPE ANYTHING</label>
-            <input id="ha-input" data-reticle-target="input" value="{{ haText }}" onChange="{{ haInput }}" maxlength="40" autocomplete="off" spellcheck="false" placeholder="pay bob $100">
-          </div>
+        <div class="ha-compose">
+          <input id="ha-input" class="ha-msg" data-reticle-target="input" value="{{ haText }}" onChange="{{ haInput }}" maxlength="40" autocomplete="off" spellcheck="false" placeholder="pay bob $100">
+          <button class="ha-feed" data-reticle-target="grind" onClick="{{ haGrind }}">{{ haGrindLabel }}</button>
         </div>
 
-        <section class="bb-section">
-          <div class="bb-kicker">SCAN 01 // AVALANCHE</div>
-          <h2 class="bb-statement">CHANGE ONE LETTER. WATCH IT DETONATE.</h2>
-          <p class="bb-friendly">The top print is your message's fingerprint. The bottom is the same message with the last character nudged by one. Nearly half the print flips — a tiny lie makes a totally different fingerprint.</p>
-          <div class="cx-card"><div class="cx-lab">YOUR MESSAGE → FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haDigestA }}" as="n" hint-placeholder-count="32"><span class="{{ n.className }}">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <div class="cx-card"><div class="cx-lab">ONE CHARACTER CHANGED → FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haDigestB }}" as="n" hint-placeholder-count="32"><span class="{{ n.className }}">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <div class="bb-readout">INPUT DELTA / <strong>1 CHARACTER</strong><br>FINGERPRINT DELTA / <strong>{{ haAvalanche }}%</strong> OF NIBBLES CHANGED</div>
+        <section class="ha-stage-wrap">
+          <canvas id="ha-canvas" width="820" height="920" aria-label="A grinder turning your message into a fixed-size fingerprint"></canvas>
+          <div class="ha-stage-tag" id="ha-tag"></div>
         </section>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 02 // COLLISION HUNT</div>
-          <h2 class="bb-statement">FORGE A DIFFERENT MESSAGE WITH THE SAME PRINT.</h2>
-          <p class="bb-friendly">Target fingerprint sits below. Keep generating messages and try to make one land on it.</p>
-          <div class="cx-card"><div class="cx-lab">TARGET FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haTargetPrint }}" as="n" hint-placeholder-count="32"><span class="cx-nib">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <sc-if value="{{ haHasCandidate }}" hint-placeholder-val="{{ false }}">
-            <div class="cx-card"><div class="cx-lab">CANDIDATE // "{{ haCandidateText }}"</div>
-              <div class="cx-fp"><sc-for list="{{ haCandidatePrint }}" as="n" hint-placeholder-count="32"><span class="{{ n.className }}">{{ n.ch }}</span></sc-for></div>
-            </div>
-          </sc-if>
-          <div class="cx-counter">{{ haAttempts }}<span> ATTEMPTS</span></div>
-          <div style="color:var(--bb-hud);font-size:8px;letter-spacing:1px;">MATCHES 0 // COLLISION SPACE UNREACHABLE</div>
-          <button class="cx-btn solid" data-reticle-target="collide" onClick="{{ haCollide }}">&gt; GENERATE ANOTHER MESSAGE</button>
-          <sc-if value="{{ haGaveUp }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">You can't. Nobody can, in any reasonable time. Hashing's value <strong>is</strong> the wall you just hit.</div></sc-if>
+        <div class="ha-tabs"><sc-for list="{{ haTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ haPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ haBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ haBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ haBeatBody }}</p>
         </section>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 03 // ONE-WAY</div>
-          <h2 class="bb-statement">NOW RUN IT BACKWARDS.</h2>
-          <p class="bb-friendly">Here is a fingerprint. Recover the message that made it. There is no undo button, no inverse.</p>
-          <div class="cx-card"><div class="cx-lab">UNKNOWN INPUT → FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haSecretPrint }}" as="n" hint-placeholder-count="32"><span class="cx-nib">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <div class="cx-field"><label>RECOVERED MESSAGE?</label>
-            <input id="ha-recover" data-reticle-target="input" value="{{ haRecover }}" onChange="{{ haRecoverInput }}" maxlength="40" autocomplete="off" placeholder="type your guess">
-          </div>
-          <button class="cx-btn" data-reticle-target="recover" onClick="{{ haTryRecover }}">&gt; CHECK GUESS</button>
-          <sc-if value="{{ haRecoverTried }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">NO MATCH // A FINGERPRINT REVEALS NOTHING ABOUT ITS INPUT. It only runs forwards. That is why passwords are stored this way — steal the prints, still can't get the passwords.</div></sc-if>
-        </section>
+        <div class="pq-todo"><span>DO THIS</span>{{ haTodo }}</div>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 04 // THE DETECTOR</div>
-          <h2 class="bb-statement">YOU ARE THE TAMPER ALARM.</h2>
-          <p class="bb-friendly">Original on top, received copy below. Edit the received copy — the prints diverge instantly. Put it back — they re-align.</p>
-          <div class="cx-card"><div class="cx-lab">ORIGINAL</div>
-            <div style="font:800 15px 'Archivo',sans-serif;color:var(--bb-ink);">{{ haOriginal }}</div>
-            <div class="cx-fp"><sc-for list="{{ haOrigPrint }}" as="n" hint-placeholder-count="32"><span class="cx-nib">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <div class="cx-field"><label>RECEIVED // EDIT ME</label>
-            <input id="ha-received" data-reticle-target="input" value="{{ haReceived }}" onChange="{{ haReceivedInput }}" maxlength="40" autocomplete="off">
-          </div>
-          <div class="cx-card"><div class="cx-lab">RECEIVED → FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haRecvPrint }}" as="n" hint-placeholder-count="32"><span class="{{ n.className }}">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <sc-if value="{{ haIntact }}" hint-placeholder-val="{{ true }}"><div class="cx-ok">INTEGRITY OK // FINGERPRINTS MATCH // NOTHING WAS CHANGED.</div></sc-if>
-          <sc-if value="{{ haTampered }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">INTEGRITY VIOLATION // FINGERPRINTS DIVERGE // THE RECEIVED COPY WAS ALTERED.</div></sc-if>
-        </section>
+        <sc-if value="{{ haChapterGrind }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="grind" onClick="{{ haGrind }}" style="margin-top:12px;">&gt; GRIND IT</button>
+        </sc-if>
+
+        <sc-if value="{{ haChapterAval }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="nudge" onClick="{{ haNudge }}" style="margin-top:12px;">&gt; NUDGE ONE LETTER &amp; RE-GRIND</button>
+          <sc-if value="{{ haNudged }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">SAME MESSAGE, ONE LETTER MOVED // FINGERPRINT DELTA / <strong>{{ haAvalanche }}%</strong> OF THE PRINT FLIPPED. A tiny lie makes a totally different fingerprint — that is what makes it a tamper detector.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ haChapterOneWay }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="reverse" onClick="{{ haReverse }}" style="margin-top:12px;">&gt; RUN IT BACKWARDS</button>
+          <sc-if value="{{ haReversed }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">JAMMED // A FINGERPRINT REVEALS NOTHING ABOUT ITS INPUT. The grinder has no reverse. That is why passwords are stored as hashes — steal the prints, you still can't get the passwords back.</div></sc-if>
+        </sc-if>
 
         <section class="bb-payoff">
           <h2 class="bb-statement" style="max-width:13ch;">IT CATCHES ANY CHANGE.</h2>
-          <p class="bb-friendly" style="margin-bottom:0;">But a fingerprint can't tell you WHO sent a message — an attacker could change it and recompute a fresh print. You need a fingerprint only one specific person could have produced. Hold that thought.</p>
+          <p class="bb-friendly" style="margin-bottom:0;">But a fingerprint can't tell you WHO sent a message — an attacker could change it and grind a fresh print. You need a fingerprint only one specific person could have produced. Hold that thought.</p>
           <button class="cx-btn solid" data-reticle-target="next" data-node="rsa" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: PUBLIC-KEY CRYPTOGRAPHY</button>
         </section>
         <div class="bb-scope">LEARNING SIMULATION // This is an illustrative hash, not real SHA-256. Real hashes are longer and battle-tested; the behaviour you felt — avalanche, no inverse, no collisions — is identical.</div>
@@ -1189,7 +1086,7 @@
       <div class="bb-hud">
         <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
         <span class="bb-corner bl"></span><span class="bb-corner br"></span>
-        <div style="position:absolute;left:22px;top:20px;">CR-03 // ASYMMETRIC</div>
+        <div style="position:absolute;left:22px;top:20px;">CR-03 // THE BENCH</div>
         <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
           <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
             <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
@@ -1203,56 +1100,55 @@
 
       <main class="bb-shell">
         <div class="bb-kicker">MODULE 04 // CRYPTOGRAPHY</div>
-        <h1 class="bb-title" style="font-size:clamp(42px,13vw,68px);">A LOCK<br>YOU CAN'T<br>OPEN</h1>
-        <p class="bb-friendly">Send a secret to a stranger you've never shared a key with — by discovering that the lock and the key can be two different objects.</p>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,74px);">TWO<br>KEYS</h1>
+        <p class="bb-friendly">Every lock you've ever used, one key both locks and unlocks. This one is stranger: the key that snaps it shut can't open it. Send a secret to a stranger you've never shared a key with — and watch why that's possible.</p>
 
-        <section class="bb-section">
-          <div class="bb-kicker">SCAN 00 // THE PADLOCK</div>
-          <h2 class="bb-statement">ANYONE CLICKS IT SHUT. ONLY THE KEY OPENS IT.</h2>
-          <div class="{{ rsaLockClass }}">
-            <div class="pk-shackle"></div>
-            <div class="pk-body"><strong>{{ rsaLockGlyph }}</strong></div>
-          </div>
-          <div class="cx-grid2">
-            <button class="cx-btn" data-reticle-target="padlock" onClick="{{ rsaClickShut }}">CLICK SHUT</button>
-            <button class="cx-btn" data-reticle-target="padlock" onClick="{{ rsaClickOpen }}">CLICK TO OPEN</button>
-          </div>
-          <button class="cx-btn solid" data-reticle-target="usekey" onClick="{{ rsaUseKey }}">USE THE KEY</button>
-          <div class="bb-readout">{{ rsaLockTelemetry }}</div>
+        <section class="ha-stage-wrap pk-stage-wrap">
+          <canvas id="pk-canvas" width="820" height="720" aria-label="A padlock with a public key that only locks and a private key that only opens"></canvas>
+          <div class="ha-stage-tag" id="pk-tag"></div>
         </section>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 01 // TWO DIFFERENT KEYS</div>
-          <h2 class="bb-statement">ONE KEY LOCKS. A DIFFERENT KEY UNLOCKS.</h2>
-          <p class="bb-friendly">Lock this message with the server's PUBLIC key. Then try to open it — first with that same public key.</p>
-          <div class="cx-plain">{{ rsaBoxContent }}</div>
-          <div class="pk-keys">
-            <div class="pk-key pub"><strong>PUBLIC KEY</strong><span>SERVER // LOCKS ONLY</span></div>
-            <div class="pk-key"><strong>PRIVATE KEY</strong><span>SERVER // UNLOCKS ONLY</span></div>
+        <div class="ha-tabs"><sc-for list="{{ rsaTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ rsaPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ rsaBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ rsaBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ rsaBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ rsaTodo }}</div>
+
+        <sc-if value="{{ rsaChapterKeys }}" hint-placeholder-val="{{ true }}">
+          <div class="cx-grid2" style="margin-top:12px;">
+            <button class="cx-btn solid" data-reticle-target="pub" onClick="{{ rsaUsePublic }}">USE PUBLIC KEY</button>
+            <button class="cx-btn" data-reticle-target="priv" onClick="{{ rsaUsePrivate }}">USE PRIVATE KEY</button>
           </div>
-          <button class="cx-btn solid" data-reticle-target="lockmsg" onClick="{{ rsaSeal }}">&gt; LOCK WITH PUBLIC KEY</button>
+          <sc-if value="{{ rsaRejectShown }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">REFUSED // the PUBLIC key only closes. It physically cannot turn the other way. Locking and unlocking are genuinely different powers.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ rsaChapterSeal }}" hint-placeholder-val="{{ false }}">
+          <div class="cx-plain">{{ rsaBoxContent }}</div>
+          <button class="cx-btn solid" data-reticle-target="lockmsg" onClick="{{ rsaSeal }}" style="margin-top:8px;">&gt; SEAL THE BOX WITH THE PUBLIC KEY</button>
           <sc-if value="{{ rsaSealed }}" hint-placeholder-val="{{ false }}">
-            <div class="cx-grid2">
+            <div class="cx-grid2" style="margin-top:8px;">
               <button class="cx-btn" data-reticle-target="openpub" onClick="{{ rsaOpenPub }}">OPEN WITH PUBLIC</button>
               <button class="cx-btn" data-reticle-target="openpriv" onClick="{{ rsaOpenPriv }}">OPEN WITH PRIVATE</button>
             </div>
           </sc-if>
-          <sc-if value="{{ rsaOpenFail }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">SEALED // THAT KEY ONLY CLOSES. IT CANNOT OPEN. Look for the other one — locking and unlocking are genuinely different powers.</div></sc-if>
+          <sc-if value="{{ rsaOpenFail }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">SEALED // THAT KEY ONLY CLOSES. Look for the other one — the PRIVATE key never left the server's hands.</div></sc-if>
           <sc-if value="{{ rsaOpened }}" hint-placeholder-val="{{ false }}"><div class="cx-ok">OPENED // "{{ rsaBoxContent }}" — only the PRIVATE key could do this.</div></sc-if>
-        </section>
+        </sc-if>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 02 // PUBLISH THE LOCK</div>
-          <h2 class="bb-statement">THROW YOUR PUBLIC KEY INTO THE OPEN.</h2>
-          <p class="bb-friendly">Here's the wild part. Hand your lock to everyone — including the eavesdropper on the wire. Watch them stay stuck anyway.</p>
-          <div class="pk-wire">{{ rsaWireLabel }}</div>
-          <button class="cx-btn solid" data-reticle-target="publish" onClick="{{ rsaPublish }}">&gt; PUBLISH PUBLIC KEY TO THE WIRE</button>
+        <sc-if value="{{ rsaChapterPublish }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="publish" onClick="{{ rsaPublish }}" style="margin-top:12px;">&gt; PUBLISH PUBLIC KEY TO THE WIRE</button>
           <sc-if value="{{ rsaPublished }}" hint-placeholder-val="{{ false }}">
-            <button class="cx-btn" data-reticle-target="eaves" onClick="{{ rsaEavesTry }}">EAVESDROPPER: OPEN AN INTERCEPTED BOX WITH IT</button>
-            <div class="cx-counter">{{ rsaEaves }}<span> SEALED</span></div>
-            <div class="bb-readout">A <strong>public</strong> key is safe to publish because it only closes locks. Attempts {{ rsaEaves }} // opened 0. This is the moment RSA stops sounding impossible.</div>
+            <button class="cx-btn" data-reticle-target="eaves" onClick="{{ rsaEavesTry }}" style="margin-top:8px;">EAVESDROPPER: TRY AN INTERCEPTED BOX</button>
+            <div class="cx-counter">{{ rsaEaves }}<span> STILL SEALED</span></div>
+            <div class="bb-readout">A <strong>public</strong> key is safe to publish because it only closes locks. Attempts {{ rsaEaves }} // opened 0. This is the moment public-key crypto stops sounding impossible.</div>
           </sc-if>
-        </section>
+        </sc-if>
 
         <section class="bb-payoff">
           <h2 class="bb-statement" style="max-width:13ch;">SECRECY WITHOUT A SHARED SECRET.</h2>
@@ -1605,6 +1501,18 @@
         <h1 class="bb-title" style="font-size:clamp(44px,14vw,72px);">THE LOCK<br>THAT<br>SURVIVES</h1>
         <p class="bb-friendly">Try to break the new lock the way you broke RSA — and discover a hard problem that resists classical AND quantum attack, because there's no hidden period for interference to exploit.</p>
 
+        <sc-if value="{{ pqIntroOpen }}" hint-placeholder-val="{{ true }}">
+          <section class="pq-intro">
+            <div class="bb-kicker">CHAPTER 00 // WHY A NEW LOCK</div>
+            <ol class="pq-intro-list">
+              <li><span>01</span>RSA hid a <strong>repeating pattern</strong>. A quantum computer is a machine for finding repeating patterns — so it finds RSA's, and the lock falls.</li>
+              <li><span>02</span>This new lock hides a <strong>location</strong> instead — one exact dot in a huge grid of dots. There's no pattern to repeat, so there's nothing for the quantum machine to lock onto.</li>
+              <li><span>03</span>Everything ahead is that one idea. The <strong>grid dots are all the possible locked messages</strong>; the <strong>◆ is YOUR message</strong>, knocked just off a dot by deliberate noise. The right key knows which dot it came from. A wrong key only guesses.</li>
+            </ol>
+            <button class="cx-btn solid" data-reticle-target="begin" onClick="{{ pqBeginTour }}">&gt; BEGIN // BUILD THE GRID</button>
+          </section>
+        </sc-if>
+
         <section class="pq-chamber">
           <div class="pq-chamber-grid">
             <div class="pq-stage">
@@ -1691,18 +1599,18 @@ class Component extends DCLogic {
     bitsRound:0, bitsValue:0, bitsFlips:0, bitsCalibrationFlips:0, bitsLocks:0, bitsLocked:false, bitsLost:false, bitsTimer:0, bitsElapsed:0,
     bitsTimedIndex:0, bitsLastFlip:'AWAITING FIRST FLIP', bitsMessageReceived:'PAY BOB $900', bitsCorruptIndex:-1,
     bitsCorruptionLevel:0, bitsEnd:false, bitsHint:false, bitsRoundElapsed:0,
-    internetUrl: '', internetStage: 0, internetRequestBack: false, internetTrace: null, internetFailure: null,
+    iwMsg: 'hi bob, meet at 8?', iwBeat: 0, iwStarted: false, iwMoving: false, iwDone: false,
     symMessage:'', symKey:'', symSealed:false, symSealedMessage:'', symSealedKey:'', symSealProgress:0,
     symResult:'', symFailure:false, symIntercepted:false, symMutation:1, symFriendHasKey:true,
-    haText:'PAY BOB $100', haAttempts:0, haRecover:'', haRecoverTried:false, haReceived:'PAY BOB $100',
-    rsaLatch:'open', rsaLockTelemetry:'The shackle is open. Try clicking it shut — no key needed.', rsaSealed:false, rsaOpenState:null, rsaPublished:false, rsaEaves:0,
+    haText:'PAY BOB $100', haChapter:0, haGround:false, haNudged:false, haReversed:false, haBusy:false,
+    rsaChapter:0, rsaShut:false, rsaReject:false, rsaSealed:false, rsaOpenState:null, rsaPublished:false, rsaEaves:0,
     sgMessage:'ALICE: SEND $500 TO BOB', sgSigned:false, sgSignedHash:'', sgSignedMessage:'', sgVerifier:'alice', sgVerifyResult:null, sgForgeTried:false,
     tlSequence:[], tlFailed:null, tlSecure:false, tlAttacker:false, tlMitm:false,
     qbBit:0, qbAngle:90, qbZeros:0, qbOnes:0, qbTrapSprung:false, qbPhase:180, qbClassicalTries:0, qbClassicalResult:'—', qbQuantumSolved:false,
     qrRevealed:false, qrTries:0, qrBruteActive:false, qrQuantumRun:false, qrCascade:false,
     pqBasis:'bad', pqGuessWrong:false, pqQuantumFizzled:false, pqDecoded:false,
     pqChapter:0, pqSkew:3, pqGoodBasis:[[1.6,0.2],[0.2,1.6]], pqTarget:[2.3,1.4], pqShowTruth:false, pqLanded:null, pqNearest:null,
-    pqNoise:2, pqMessageBit:1, pqCipher:null, pqLweDecoded:null, pqDimension:2 };
+    pqIntroSeen:false, pqCh0Done:false, pqTriedGood:false, pqTriedBad:false };
 
   // ---------- graph ----------
   buildGraph() {
@@ -2031,6 +1939,9 @@ class Component extends DCLogic {
       if ((this._wantNear || liveModuleActive) && f % 3 === 0 && (!this.state.stubId || liveModuleActive)) { this._wantNear = false; this.updateNear(); }
       this.updateScanners();
       if (this.state.stubId === 'pqc') this.drawPqCanvas();
+      if (this.state.stubId === 'internet') this.drawIwCanvas();
+      if (this.state.stubId === 'hashing') this.drawHaCanvas();
+      if (this.state.stubId === 'rsa') this.drawPkCanvas();
       requestAnimationFrame(this._loop);
     };
     requestAnimationFrame(this._loop);
@@ -2371,55 +2282,20 @@ class Component extends DCLogic {
     const bitsWord = Array.from(timedWord).map((ch, idx) => ({ glyph:ch, className:idx < st.bitsTimedIndex ? 'done' : (idx === st.bitsTimedIndex ? 'on' : '') }));
     const activeFlips = Math.max(1, (st.bitsFlips || 0) - (st.bitsCalibrationFlips || 0));
     const bitsEfficiency = Math.min(100, Math.round(13 / activeFlips * 100));
-    const internetStage = Math.max(0, Math.min(10, Number(st.internetStage) || 0));
-    const internetParsedUrl = this.parseInternetUrl(st.internetUrl);
-    const internetIp = this.internetIpFor(internetParsedUrl.domain);
-    const internetHop = Math.max(0, Math.min(5, internetStage - 3));
-    const internetStages = [
-      ['INPUT 00 // AWAITING URL','START WITH SOMETHING FAMILIAR.','Type a website. Nothing leaves your device until the browser has a name to work with.'],
-      ['SCAN 01 // URL PARSED','A URL IS A SET OF INSTRUCTIONS.','Your browser sees how to talk, where to go, and which page you want.'],
-      ['SCAN 02 // DNS RESOLVED','THE FRIENDLY NAME NEEDS AN ADDRESS.','Machines route to numbers, so DNS translates the domain before the request can move.'],
-      ['SCAN 03 // REQUEST SEALED','NOW THE BROWSER CAN ASK.','It writes a small request: “Can I have this page?”'],
-      ['HOP 01 // DEVICE','THE MESSAGE LEAVES YOUR DEVICE.','Your phone or laptop hands the request to the first machine nearby.'],
-      ['HOP 02 // ROUTER','ONE MACHINE CHOOSES THE NEXT.','The router does not need the whole map. It only needs a useful next step.'],
-      ['HOP 03 // ISP','YOUR PROVIDER PASSES IT ON.','The request joins the larger network, still carrying the same destination.'],
-      ['HOP 04 // NETWORK','THE REQUEST CROSSES THE INTERNET.','Many machines cooperate by passing the message forward. It never teleports.'],
-      ['HOP 05 // SERVER','THE SERVER HEARS THE QUESTION.','A server is simply a machine listening for requests and preparing answers.'],
-      ['SCAN 09 // RESPONSE 200','THE ANSWER COMES BACK IN PIECES.','HTML, CSS, images, and behavior can each be their own little conversation.'],
-      ['SCAN 10 // PAGE ASSEMBLED','YOUR BROWSER REBUILDS THE ANSWER.','What looks like one page is the final shape of many machine messages.'],
+    // ---- HOW THE INTERNET WORKS (FD-02) — the message's slow-mo journey ----
+    const iwBeatDefs = [
+      ['LEAVING // YOUR DEVICE', 'YOU HIT SEND.', 'Your sentence is chopped into tiny numbered packets, each one stamped with where it’s headed. Nothing has moved yet — this is the packet, sitting on your machine, about to be handed off.'],
+      ['HOP 01 // HOME ROUTER', 'THE FIRST GATEKEEPER.', 'Your router has no clue who “bob” is, and it doesn’t need to. Its whole job is to know one good next step toward him and shove the packet that way.'],
+      ['DETOUR // DNS LOOKUP', 'WAIT — WHERE IS BOB?', '“bob.host” is a name for humans; machines need a number. The packet detours to DNS, the internet’s phone-book, which answers instantly: bob.host = 203.0.113.18. Watch the name-tag flip to a number.'],
+      ['HOP 02 // YOUR ISP', 'ONTO THE BIG ROADS.', 'Your internet provider lifts the packet off your street and merges it onto the backbone — the motorways of the internet, carrying millions of other packets at once.'],
+      ['HOP 03 // THE BACKBONE', 'ACROSS THE WORLD, HOP BY HOP.', 'Undersea cables and city-sized routers pass the packet hand to hand. It never teleports — every leg is one machine handing it to the next, thousands of times a second.'],
+      ['ARRIVAL // BOB’S SERVER', 'BOB’S MACHINE CATCHES IT.', 'The destination reassembles your sentence from its packets, reads it, and writes a reply — ready to send the whole trip back in reverse.'],
+      ['RETURN // THE ROUND TRIP', 'AND THE ANSWER COMES HOME.', 'The reply retraces the route back to you and your device rebuilds it. That entire round-the-world round trip took a few hundred milliseconds. That’s the internet: a conversation, relayed by strangers.'],
     ];
-    const internetStageData = internetStages[internetStage];
-    const internetObjectTypes = ['URL CHIP','DOMAIN','IP ADDRESS','REQUEST','PACKET','PACKET','PACKET','PACKET','SERVER JOB','RESPONSE GROUP','PAGE'];
-    const internetObjects = [
-      st.internetUrl || 'AWAITING INPUT', internetParsedUrl.domain, internetIp,
-      'GET ' + internetParsedUrl.path, 'GET ' + internetParsedUrl.path,
-      'TO ' + internetIp, 'TO ' + internetIp, 'TO ' + internetIp,
-      'PROCESS ' + internetParsedUrl.path, '200 OK · 3 RESOURCES', 'PAGE READY',
-    ];
-    const hopNames = ['DEVICE','ROUTER','ISP','NETWORK','SERVER'];
-    const hopMeta = ['LOCAL','HOP_02','HOP_03','HOP_04',internetIp];
-    const internetRoute = hopNames.map((name, idx) => {
-      const threshold = 4 + idx, on = internetStage >= threshold, live = internetStage === threshold;
-      return { name, meta:hopMeta[idx], className:'iw-hop' + (on ? ' on' : '') + (live ? ' live' : '') };
-    });
-    const internetResources = [
-      { id:'html', name:'HTML', job:'PAGE SKELETON' },
-      { id:'css', name:'CSS', job:'COLOUR + LAYOUT' },
-      { id:'image', name:'IMAGE', job:'GET /hero.png' },
-    ];
-    const traceNames = { html:'HEADING / HTML_NODE', css:'BUTTON / CSS_RULE', image:'IMAGE / IMG_02' };
-    const traceRequests = { html:'GET ' + internetParsedUrl.path, css:'GET /styles.css', image:'GET /hero.png' };
-    const traced = st.internetTrace || 'html';
-    let internetTraceTitle = traceNames[traced] || traceNames.html;
-    let internetTracePath = (traceRequests[traced] || traceRequests.html) + ' ← 200 OK ← ' + internetIp + ' ← ROUTE ← DNS ← ' + internetParsedUrl.domain;
-    if (st.internetFailure === 'dns') { internetTraceTitle = 'LOAD STOPPED / DNS TIMEOUT'; internetTracePath = internetParsedUrl.domain + ' ← DNS_TIMEOUT ← NO ADDRESS RETURNED'; }
-    if (st.internetFailure === 'route') { internetTraceTitle = 'LOAD STALLED / ROUTE TIMEOUT'; internetTracePath = 'HOP_03 ← PACKET_TIMEOUT ← REQUEST NOT DELIVERED'; }
-    if (st.internetFailure === 'server') { internetTraceTitle = 'PAGE FAILED / SERVER ERROR'; internetTracePath = 'GET ' + internetParsedUrl.path + ' ← 500_SERVER_ERROR ← ' + internetIp; }
-    if (st.internetFailure === 'image' && traced === 'image') { internetTraceTitle = 'BROKEN IMAGE / REQUEST FAILED'; internetTracePath = 'GET /hero.png ← 404_NOT_FOUND ← ' + internetIp; }
-    const internetFailures = [
-      { id:'dns', label:'DNS FAIL' }, { id:'route', label:'SLOW ROUTE' },
-      { id:'server', label:'SERVER 500' }, { id:'image', label:'BREAK IMAGE' },
-    ].map(f => ({ ...f, className:'iw-failure' + (st.internetFailure === f.id ? ' on' : '') }));
+    const iwBeat = Math.max(0, Math.min(6, Number(st.iwBeat) || 0));
+    const iwStarted = !!st.iwStarted, iwDone = !!st.iwDone, iwMoving = !!st.iwMoving;
+    const iwCur = iwBeatDefs[iwBeat];
+    const iwDots = iwBeatDefs.map((_, i) => ({ className:'iw-dot' + (i <= iwBeat ? ' on' : '') + (i === iwBeat && !iwMoving ? ' cur' : '') }));
     const symMessage = st.symMessage || '', symKey = st.symKey || '';
     const symReady = !!symMessage && !!symKey;
     const symKeyHash = this.hashLearningText(symKey || 'empty');
@@ -2441,33 +2317,30 @@ class Component extends DCLogic {
     const blueKey = 'blue-' + (symSealedKey.match(/\d+$/)?.[0] || '742');
     const symKeyCards = [symSealedKey, wrongKey, blueKey].map((key, i) => ({ key, label:i===0 ? key : key })).filter(c => c.key);
 
-    // ---- HASHING (CR-02) ----
+    // ---- HASHING (CR-02) — the grinder ----
     const haText = st.haText || '';
-    const haBumped = haText ? this.mutateLearningKey(haText, 1) : haText;
-    const haDA = this.learningDigest(haText), haDB = this.learningDigest(haBumped);
-    const haDigestA = haDA.split('').map((ch, i) => ({ ch, className:'cx-nib' + (haText && ch !== haDB[i] ? ' diff' : '') }));
-    const haDigestB = haDB.split('').map((ch, i) => ({ ch, className:'cx-nib' + (haText && ch !== haDA[i] ? ' diff' : '') }));
-    const haAvChanged = haText ? haDA.split('').reduce((n, ch, i) => n + (ch !== haDB[i] ? 1 : 0), 0) : 0;
+    const haDA = this.learningDigest(haText), haDN = this.learningDigest(this.haBumpLast(haText));
+    const haAvChanged = haText ? haDA.split('').reduce((n, ch, i) => n + (ch !== haDN[i] ? 1 : 0), 0) : 0;
     const haAvalanche = ((haAvChanged / 32) * 100).toFixed(0);
-    const haOriginal = 'PAY BOB $100';
-    const haCollideSamples = ['SEND $9000','PAY EVE $500','WIRE $100.00','pay bob $100','PAY  BOB $100','Pay Bob $100','PAY BOB $1O0','TRANSFER NOW','pay bob $101','APPROVE XFER','PAY BOB $100!','ok pay $100'];
-    const haAttempts = st.haAttempts || 0;
-    const haCandidateText = haAttempts > 0 ? haCollideSamples[(haAttempts - 1) % haCollideSamples.length] : '';
-    const haTargetStr = this.learningDigest(haOriginal);
-    const haTargetPrint = haTargetStr.split('').map(ch => ({ ch }));
-    const haCandStr = haCandidateText ? this.learningDigest(haCandidateText) : '';
-    const haCandidatePrint = haCandStr.split('').map((ch, i) => ({ ch, className:'cx-nib' + (ch !== haTargetStr[i] ? ' diff' : '') }));
-    const haSecret = 'the-2019-budget-memo';
-    const haSecretPrint = this.learningDigest(haSecret).split('').map(ch => ({ ch }));
-    const haReceived = st.haReceived || '';
-    const haOrigStr = this.learningDigest(haOriginal), haRecvStr = this.learningDigest(haReceived);
-    const haOrigPrint = haOrigStr.split('').map(ch => ({ ch }));
-    const haRecvPrint = haRecvStr.split('').map((ch, i) => ({ ch, className:'cx-nib' + (ch !== haOrigStr[i] ? ' diff' : '') }));
-    const haIntact = haReceived === haOriginal;
+    const haChapter = Math.max(0, Math.min(2, Number(st.haChapter) || 0));
+    const haBeatDefs = [
+      ['01','GRIND','CHEW IT UP.','Whatever you type falls through the rollers and comes out the bottom as a 32-cell fingerprint. Feed it a word or a whole paragraph — the fingerprint is always the same size.','Type a message above and press GRIND. Watch your text drop through the rollers and the fingerprint crystallise cell by cell.'],
+      ['02','AVALANCHE','ONE LETTER. TOTAL DETONATION.','Move a single character and grind again. Nearly half the fingerprint cells flip. A tiny change to the input scrambles the whole output — no way to nudge the print a little.','Press NUDGE ONE LETTER & RE-GRIND and watch the changed cells flash red across the tray.'],
+      ['03','ONE-WAY','NO REVERSE GEAR.','Try to feed a fingerprint back in and get the message out. The grinder jams — it only runs forward. That is exactly why passwords are stored as fingerprints.','Press RUN IT BACKWARDS and watch the rollers seize up.'],
+    ];
+    const haCur = haBeatDefs[haChapter];
+    const haTabs = haBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === haChapter ? ' on' : '') }));
 
     // ---- PUBLIC-KEY / RSA (CR-03) ----
-    const rsaLatch = st.rsaLatch || 'open';
     const rsaOpened = st.rsaOpenState === 'ok', rsaOpenFail = !!st.rsaSealed && st.rsaOpenState === 'fail';
+    const rsaChapter = Math.max(0, Math.min(2, Number(st.rsaChapter) || 0));
+    const rsaBeatDefs = [
+      ['00','TWO POWERS','LOCKING ISN’T UNLOCKING.','Anyone can snap this padlock shut with the PUBLIC key. But that same key can’t open it again — only the PRIVATE key can. Two different keys, two different powers.','Press USE PUBLIC KEY to snap it shut, then press it again — it refuses to open. Then press USE PRIVATE KEY.'],
+      ['01','SEAL FOR A STRANGER','A SECRET FOR SOMEONE YOU’VE NEVER MET.','Seal your message with the server’s PUBLIC key, which they handed out freely. Only their PRIVATE key, which never left their hands, can open it — so you need no shared secret.','Press SEAL, then try OPEN WITH PUBLIC (it fails), then OPEN WITH PRIVATE.'],
+      ['02','PUBLISH THE LOCK','HAND THE LOCK TO EVERYONE.','Throw the public key onto the open wire — even to the eavesdropper. Because it only closes locks, it’s useless to them. That is the whole trick of public-key crypto.','Press PUBLISH, then let the EAVESDROPPER try an intercepted box.'],
+    ];
+    const rsaCur = rsaBeatDefs[rsaChapter];
+    const rsaTabs = rsaBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === rsaChapter ? ' on' : '') }));
 
     // ---- SIGNATURES (CR-04) ----
     const sgMessage = st.sgMessage || '';
@@ -2508,14 +2381,20 @@ class Component extends DCLogic {
     // ---- POST-QUANTUM / LATTICE (FR-03) ----
     const pqBad = st.pqBasis !== 'good';
     const pqChapter = Math.max(0, Math.min(2, Number(st.pqChapter) || 0));
-    const pqNoise = Math.max(0, Math.min(9, Number(st.pqNoise) || 0));
-    const pqDimension = Math.max(2, Math.min(12, Number(st.pqDimension) || 2));
+    // chapter 00 // WHY A NEW LOCK: a no-interaction anchor shown before the lattice,
+    // so the learner knows why they're staring at a grid before they touch it
+    const pqIntroOpen = !st.pqIntroSeen;
+    // auto-advance: when a chapter's DO THIS is done, pulse the tab that comes next
+    const pqCh0Done = !!st.pqCh0Done;                              // dragged an arrow
+    const pqCh1Done = !!st.pqTriedGood && !!st.pqTriedBad;         // tried both keys
+    const pqPulse = pqChapter === 0 ? (pqCh0Done ? 1 : -1)
+                  : pqChapter === 1 ? (pqCh1Done ? 2 : -1) : -1;
     const pqChapterDefs = [
       ['01','THE GRID','Two arrows build an endless grid of dots. Drag an arrow tip — the whole grid follows. The arrows ARE the description of the grid.'],
       ['02','TWO KEYS','The same dots can be described two ways. The private key uses short, tidy arrows. The public key uses long, skewed ones — same grid, far harder to read.'],
       ['03','THE ATTACK','A message is a point knocked off the grid by noise — the ◆. To read it you find the nearest dot. The private key snaps to it; the public key lands on the wrong one. A quantum computer cannot shortcut this.'],
     ];
-    const pqChapters = pqChapterDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'pq-tab' + (i === pqChapter ? ' on' : '') }));
+    const pqChapters = pqChapterDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'pq-tab' + (i === pqChapter ? ' on' : '') + (i === pqPulse ? ' pulse' : '') }));
     const pqChapterTitle = pqChapterDefs[pqChapter][1] + ' // ' + pqChapterDefs[pqChapter][0];
     const pqChapterCopy = pqChapterDefs[pqChapter][2];
     const pqTodo = [
@@ -2533,12 +2412,6 @@ class Component extends DCLogic {
     const pqDragHint = this._pqDrag ? ('DRAGGING ' + this._pqDrag.kind.toUpperCase()) : 'DRAG HANDLES // ORBIT EMPTY SPACE';
     const pqView = this._pqView || { yaw:-0.68, pitch:0.86, zoom:1 };
     const pqCameraReadout = 'YAW ' + Math.round(pqView.yaw * 57.2958) + ' // PITCH ' + Math.round(pqView.pitch * 57.2958);
-    const pqCipher = st.pqCipher;
-    const pqDecodedLwe = st.pqLweDecoded;
-    const pqDialValue = pqDecodedLwe ? (pqDecodedLwe.d / 97 * 100) : (pqCipher ? (pqCipher.v / 97 * 100) : 50);
-    const pqLweReadout = pqDecodedLwe
-      ? ('DECODED BIT ' + pqDecodedLwe.bit + ' // EXPECTED ' + (st.pqMessageBit ? 1 : 0) + ' // ' + (pqDecodedLwe.ok ? 'PASS' : 'FAIL') + ' // d=' + pqDecodedLwe.d)
-      : (pqCipher ? ('CIPHERTEXT READY // u=[' + pqCipher.u.join(',') + '] // v=' + pqCipher.v + ' // decrypt to test the noise') : 'NO CIPHERTEXT // pick a bit, set noise, then encrypt.');
 
     const hidden = (extra) => ({ opacity:0, transform:'translateY(8px)', transition:'opacity .5s steps(4), transform .5s steps(4)', ...extra });
     const shown  = (extra) => ({ opacity:1, transform:'translateY(0)', transition:'opacity .5s steps(4), transform .5s steps(4)', ...extra });
@@ -2613,26 +2486,17 @@ class Component extends DCLogic {
       bitsEnd:!!st.bitsEnd, bitsEfficiency,
       bitsMeterStyle:{ position:'absolute', left:0, top:0, bottom:0, width:(bitsCode/255*100).toFixed(1)+'%', background:'var(--bb-hud)' },
 
-      internetOpen: st.stubId === 'internet', internetUrl: st.internetUrl,
-      internetStage, internetStageLabel:'STEP ' + String(internetStage).padStart(2,'0') + '/10',
-      internetScan:internetStageData[0], internetStatement:internetStageData[1], internetCaption:internetStageData[2],
-      internetObjectType:internetObjectTypes[internetStage], internetObject:internetObjects[internetStage],
-      internetProtocol:internetParsedUrl.protocol, internetDomain:internetParsedUrl.domain, internetPath:internetParsedUrl.path, internetIp,
-      internetParsed:internetStage >= 1, internetDnsReady:internetStage >= 2, internetRequestReady:internetStage >= 3,
-      internetResponseReady:internetStage >= 9, internetPageReady:internetStage >= 10,
-      internetHop:String(internetHop).padStart(2,'0'), internetRoute,
-      internetRouteReadout:internetStage < 4 ? 'ROUTE READY // SCRUB FORWARD TO LAUNCH' : (internetStage < 9 ? ('HOP_0' + internetHop + ' LOCKED // NEXT HOP SELECTED // ' + (7+internetHop*3) + 'ms') : (internetStage === 9 ? 'RETURN_PATH_ACTIVE // PACKET_GROUP 03 // REASSEMBLY_PENDING' : 'REASSEMBLY COMPLETE // PAGE READY')),
-      internetRequestFace:st.internetRequestBack ? 'REQUEST BACK // MACHINE DETAILS' : 'REQUEST FRONT // HUMAN ASK',
-      internetRequestMain:st.internetRequestBack ? ('DEST ' + internetIp + ':443') : ('GET ' + internetParsedUrl.path),
-      internetRequestSub:st.internetRequestBack ? ('HOST ' + internetParsedUrl.domain + ' · HTTPS · ACCEPT HTML') : ('Please send ' + internetParsedUrl.path),
-      internetResources, internetTraceOpen:!!st.internetTrace || !!st.internetFailure,
-      internetTraceTitle, internetTracePath,
-      internetFailures,
-      internetImageClass:'iw-page-el' + (st.internetFailure === 'image' ? ' fail' : ''),
-      internetImageLabel:st.internetFailure === 'image' ? 'BROKEN IMAGE' : 'IMAGE',
-      internetPresets:[{url:'shop.site'},{url:'news.site'},{url:'uni.edu'}],
-      internetStatus:internetStage === 0 ? 'AWAITING URL' : (internetStage < 9 ? 'REQUEST IN FLIGHT' : (internetStage < 10 ? 'RETURN PATH ACTIVE' : 'PAGE RESOLVED')),
-      internetHud:internetStage < 2 ? 'NO DESTINATION' : ('DEST ' + internetIp + ' · ' + (internetStage >= 9 ? '200 OK' : 'ACTIVE')),
+      internetOpen: st.stubId === 'internet',
+      iwMsg: st.iwMsg != null ? st.iwMsg : '',
+      iwStarted, iwDone, iwMoving,
+      iwSendLabel: iwStarted ? 'RESEND' : 'SEND ▶',
+      iwBeatTag: iwCur[0], iwBeatTitle: iwCur[1], iwBeatBody: iwCur[2],
+      iwDots,
+      iwShowActions: iwStarted && !iwDone,
+      iwContinueLabel: iwMoving ? 'IN FLIGHT…' : (iwBeat >= 6 ? 'ARRIVED' : 'CONTINUE ▶'),
+      iwBeatCount: String(iwBeat).padStart(2,'0'),
+      iwStatus: !iwStarted ? 'AWAITING MESSAGE' : (iwMoving ? 'PACKET IN FLIGHT' : (iwDone ? 'ROUND TRIP COMPLETE' : 'HELD // ' + iwCur[0])),
+      iwHud: iwStarted ? ('BEAT ' + iwBeat + '/6 · bob.host') : 'NO PACKET SENT',
 
       symmetricOpen:st.stubId === 'symmetric', symMessage, symKey, symReady,
       symHasMessage:!!symMessage, symByteCount:symMessage.length,
@@ -2654,25 +2518,25 @@ class Component extends DCLogic {
 
       // ---- HASHING ----
       hashingOpen:st.stubId === 'hashing', haText,
-      haDigestA, haDigestB, haAvalanche,
-      haTargetPrint, haHasCandidate:haAttempts > 0, haCandidateText, haCandidatePrint,
-      haAttempts, haGaveUp:haAttempts >= 6,
-      haSecretPrint, haRecover:st.haRecover, haRecoverTried:!!st.haRecoverTried,
-      haOriginal, haOrigPrint, haReceived, haRecvPrint, haIntact, haTampered:!haIntact,
-      haStatus:!haIntact ? 'INTEGRITY VIOLATION' : (haAttempts > 0 ? 'COLLISION HUNT' : 'FINGERPRINTING'),
-      haHud:'AVALANCHE ' + haAvalanche + '% · MATCHES 0',
+      haTabs, haAvalanche,
+      haGrindLabel: st.haGround ? 'RE-GRIND' : 'GRIND ▶',
+      haBeatTag: haCur[0] + ' // ' + haCur[1], haBeatTitle: haCur[2], haBeatBody: haCur[3], haTodo: haCur[4],
+      haChapterGrind: haChapter === 0, haChapterAval: haChapter === 1, haChapterOneWay: haChapter === 2,
+      haNudged: !!st.haNudged, haReversed: !!st.haReversed,
+      haStatus: st.haBusy ? 'GRINDING' : (st.haReversed ? 'JAMMED // NO INVERSE' : (st.haGround ? 'FINGERPRINT SET' : 'HOPPER LOADED')),
+      haHud: st.haGround ? ('AVALANCHE ' + haAvalanche + '%') : 'NOT YET GROUND',
+      haHud2: 'CH ' + (haChapter + 1) + '/3',
 
       // ---- PUBLIC-KEY / RSA ----
       rsaOpen:st.stubId === 'rsa',
-      rsaLockClass:'pk-lock' + (rsaLatch === 'open' ? ' open' : ''),
-      rsaLockGlyph:rsaLatch === 'closed' ? '●' : '○',
-      rsaLockTelemetry:st.rsaLockTelemetry || '',
+      rsaTabs, rsaBeatTag:rsaCur[0] + ' // ' + rsaCur[1], rsaBeatTitle:rsaCur[2], rsaBeatBody:rsaCur[3], rsaTodo:rsaCur[4],
+      rsaChapterKeys:rsaChapter === 0, rsaChapterSeal:rsaChapter === 1, rsaChapterPublish:rsaChapter === 2,
+      rsaRejectShown:!!st.rsaReject,
       rsaBoxContent:'MEET AT PIER 9 // 8PM',
       rsaSealed:!!st.rsaSealed, rsaOpenFail, rsaOpened,
       rsaPublished:!!st.rsaPublished, rsaEaves:st.rsaEaves || 0,
-      rsaWireLabel:st.rsaPublished ? 'PUBLIC KEY IS NOW ON THE OPEN WIRE // ANYONE CAN GRAB IT' : 'THE OPEN WIRE // OBSERVER PRESENT',
-      rsaStatus:st.rsaSealed ? (rsaOpened ? 'BOX OPENED' : (rsaOpenFail ? 'SEALED — WRONG KEY' : 'BOX SEALED')) : (rsaLatch === 'closed' ? 'PADLOCK SHUT' : 'PADLOCK OPEN'),
-      rsaHud:st.rsaPublished ? ('KEY PUBLISHED · ' + (st.rsaEaves || 0) + ' SEALED') : 'ASYMMETRIC // 2 KEYS',
+      rsaStatus:st.rsaSealed ? (rsaOpened ? 'BOX OPENED' : (rsaOpenFail ? 'SEALED — WRONG KEY' : 'BOX SEALED')) : (st.rsaShut ? 'PADLOCK SHUT' : 'PADLOCK OPEN'),
+      rsaHud:st.rsaPublished ? ('KEY PUBLISHED · ' + (st.rsaEaves || 0) + ' SEALED') : 'TWO KEYS // ONE LOCK',
 
       // ---- SIGNATURES ----
       sigOpen:st.stubId === 'sig', sgMessage,
@@ -2692,19 +2556,19 @@ class Component extends DCLogic {
       tlStatus:st.tlSecure ? (st.tlAttacker ? 'ATTACKER — LOCKED OUT' : 'SECURE') : (st.tlFailed ? 'HANDSHAKE FAILED' : 'ORDERING'),
       tlHud:st.tlSecure ? 'CHANNEL SECURE · ATTACKER LOCKED OUT' : ('STEPS ' + tlSeq.length + '/4'),
 
-      haInput:(e) => this.setState({ haText:e.currentTarget.value || '' }),
-      haCollide:() => this.setState({ haAttempts:(this.state.haAttempts || 0) + 1 }),
-      haRecoverInput:(e) => this.setState({ haRecover:e.currentTarget.value || '' }),
-      haTryRecover:() => this.setState({ haRecoverTried:true }),
-      haReceivedInput:(e) => this.setState({ haReceived:e.currentTarget.value || '' }),
-      rsaClickShut:() => this.setState({ rsaLatch:'closed', rsaLockTelemetry:'CLICKED SHUT // no key was needed to close it. Anyone can do this.' }),
-      rsaClickOpen:() => this.setState(this.state.rsaLatch === 'closed' ? { rsaLockTelemetry:'STILL SHUT // clicking will not open it. Only the key opens it.' } : { rsaLockTelemetry:'ALREADY OPEN.' }),
-      rsaUseKey:() => this.setState({ rsaLatch:'open', rsaLockTelemetry:'KEY TURNED // open. Locking and unlocking are genuinely different powers.' }),
-      rsaSeal:() => this.setState({ rsaSealed:true, rsaOpenState:null }),
-      rsaOpenPub:() => this.setState({ rsaOpenState:'fail' }),
-      rsaOpenPriv:() => this.setState({ rsaOpenState:'ok' }),
-      rsaPublish:() => this.setState({ rsaPublished:true }),
-      rsaEavesTry:() => this.setState({ rsaEaves:(this.state.rsaEaves || 0) + 1 }),
+      haInput:(e) => this.haInput(e),
+      haGrind:() => this.haGrind(),
+      haPickChapter:(e) => this.setState({ haChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      haNudge:() => this.haNudge(),
+      haReverse:() => this.haReverse(),
+      rsaPickChapter:(e) => this.setState({ rsaChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      rsaUsePublic:() => this.rsaUsePublic(),
+      rsaUsePrivate:() => this.rsaUsePrivate(),
+      rsaSeal:() => { this.pkAnim('lock'); this.setState({ rsaSealed:true, rsaOpenState:null, rsaShut:true }); },
+      rsaOpenPub:() => { this.pkAnim('reject'); this.setState({ rsaOpenState:'fail' }); },
+      rsaOpenPriv:() => { this.pkAnim('unlock'); this.setState({ rsaOpenState:'ok', rsaShut:false }); },
+      rsaPublish:() => { this.pkAnim('publish'); this.setState({ rsaPublished:true }); },
+      rsaEavesTry:() => { this.pkAnim('eaves'); this.setState({ rsaEaves:(this.state.rsaEaves || 0) + 1 }); },
       sgInput:(e) => this.setState({ sgMessage:e.currentTarget.value || '', sgVerifyResult:null }),
       sgSign:() => { const m = this.state.sgMessage || ''; this.setState({ sgSigned:true, sgSignedMessage:m, sgSignedHash:this.learningDigest(m), sgVerifyResult:null, sgForgeTried:false }); },
       sgPickAlice:() => this.setState({ sgVerifier:'alice', sgVerifyResult:null }),
@@ -2750,14 +2614,13 @@ class Component extends DCLogic {
 
       // ---- POST-QUANTUM ----
       pqcOpen:st.stubId === 'pqc',
+      pqIntroOpen,
       pqChapters, pqChapterTitle, pqChapterCopy, pqStageTag, pqDragHint, pqCameraReadout,
       pqTodo, pqShowKeys, pqShowSkew, pqShowAttack,
-      pqSkew:String(Math.max(0, Math.min(6, Number(st.pqSkew) || 0))), pqNoise:String(pqNoise), pqDimension:String(pqDimension),
+      pqSkew:String(Math.max(0, Math.min(6, Number(st.pqSkew) || 0))),
       pqBasisLabel:pqBad ? 'PUBLIC' : 'PRIVATE',
       pqGoodClass:'pq-pill' + (!pqBad ? ' on' : ''), pqBadClass:'pq-pill' + (pqBad ? ' on' : ''),
-      pqBit0Class:'pq-pill' + (!st.pqMessageBit ? ' on' : ''), pqBit1Class:'pq-pill' + (st.pqMessageBit ? ' on' : ''),
-      pqCvpLabel, pqSolveButtonLabel, pqTruthLabel, pqDialStyle:{ left:Math.max(0, Math.min(100, pqDialValue)).toFixed(1) + '%' },
-      pqLweReadout,
+      pqCvpLabel, pqSolveButtonLabel, pqTruthLabel,
       pqGuessWrong:!!st.pqGuessWrong, pqDecoded:!!st.pqDecoded, pqQuantumFizzled:!!st.pqQuantumFizzled,
       pqStatus:st.pqDecoded ? 'DECODED' : (st.pqQuantumFizzled ? 'QUANTUM FIZZLED' : (st.pqGuessWrong ? 'WRONG POINT' : 'LATTICE LOADED')),
       pqHud:st.pqQuantumFizzled ? 'QUANTUM: NO ADVANTAGE' : (pqBad ? 'PUBLIC BASIS · HARD' : 'PRIVATE BASIS · EASY'),
@@ -2778,17 +2641,13 @@ class Component extends DCLogic {
       pqCanvasMove:(e) => this.pqCanvasMove(e),
       pqCanvasUp:(e) => this.pqCanvasUp(e),
       pqPickChapter:(e) => this.pqPickChapter(e),
+      pqBeginTour:() => this.setState({ pqIntroSeen:true }),
       pqUseGood:() => this.pqUseGood(),
       pqUseBad:() => this.pqUseBad(),
       pqSetSkew:(e) => this.pqSetSkew(e),
       pqSnap:() => this.pqSnap(),
       pqToggleTruth:() => this.pqToggleTruth(),
       pqResetLab:() => this.pqResetLab(),
-      pqSetNoise:(e) => this.pqSetNoise(e),
-      pqSetBit:(e) => this.pqSetBit(e),
-      pqEncrypt:() => this.pqEncrypt(),
-      pqDecrypt:() => this.pqDecrypt(),
-      pqSetDimension:(e) => this.pqSetDimension(e),
       pqQuantumTry:() => this.pqQuantumTry(),
 
       initiateScan: () => this.initiateScan(),
@@ -2801,13 +2660,10 @@ class Component extends DCLogic {
       nextBitsRound: () => this.nextBitsRound(), reacquireBits: () => this.reacquireBits(),
       selectCorruptChar: (e) => this.selectCorruptChar(e),
       restartBits: () => this.restartBits(), openBitsBridge: (e) => this.openInternetBridge(e),
-      internetUrlInput: (e) => this.updateInternetUrl(e),
-      chooseInternetPreset: (e) => this.chooseInternetPreset(e),
-      loadInternet: () => this.loadInternet(),
-      scrubInternet: (e) => this.scrubInternet(e),
-      flipInternetRequest: () => this.setState({ internetRequestBack:!this.state.internetRequestBack }),
-      traceInternetResource: (e) => this.traceInternetResource(e),
-      setInternetFailure: (e) => this.setInternetFailure(e),
+      iwMsgInput: (e) => this.iwMsgInput(e),
+      iwSend: () => this.iwSend(),
+      iwContinue: () => this.iwContinue(),
+      iwReplay: () => this.iwReplay(),
       openInternetBridge: (e) => this.openInternetBridge(e),
       symMessageInput: (e) => this.updateSymMessage(e),
       symKeyInput: (e) => this.updateSymKey(e),
@@ -2941,26 +2797,425 @@ class Component extends DCLogic {
       bitsTimer:0, bitsElapsed:0, bitsTimedIndex:0, bitsLastFlip:'AWAITING FIRST FLIP', bitsMessageReceived:'PAY BOB $900',
       bitsCorruptIndex:-1, bitsCorruptionLevel:0, bitsEnd:false, bitsHint:false, bitsRoundElapsed:0 });
   }
-  updateInternetUrl(e) {
-    this.setState({ internetUrl:e.currentTarget.value || '', internetStage:0, internetTrace:null, internetFailure:null, internetRequestBack:false });
+  // ---------- FD-02 // the message's slow-mo journey across the internet ----------
+  iwMsgInput(e) {
+    clearTimeout(this._iwTimer); this._iwSeg = null;
+    this.setState({ iwMsg:e.currentTarget.value || '', iwStarted:false, iwDone:false, iwMoving:false, iwBeat:0 });
   }
-  chooseInternetPreset(e) {
-    this.setState({ internetUrl:e.currentTarget.dataset.url || 'shop.site', internetStage:1, internetTrace:null, internetFailure:null, internetRequestBack:false });
+  iwSend() {
+    clearTimeout(this._iwTimer); this._iwSeg = null;
+    this.setState({ iwStarted:true, iwDone:false, iwMoving:false, iwBeat:0 });
   }
-  loadInternet() {
-    this.setState({ internetUrl:(this.state.internetUrl || '').trim() || 'shop.site', internetStage:1, internetTrace:null, internetFailure:null, internetRequestBack:false });
+  iwContinue() {
+    if (this.state.iwMoving) return;
+    const next = Math.min(6, (Number(this.state.iwBeat) || 0) + 1);
+    if (next === this.state.iwBeat) return;
+    const dur = next === 6 ? 2400 : (next === 4 ? 1900 : 1500); // the backbone & return legs run longer
+    this._iwSeg = { toBeat:next, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur };
+    this.setState({ iwMoving:true });
+    clearTimeout(this._iwTimer);
+    this._iwTimer = setTimeout(() => {
+      this._iwSeg = null;
+      this.setState({ iwBeat:next, iwMoving:false, iwDone:next >= 6 });
+    }, dur + 40);
   }
-  scrubInternet(e) {
-    const stage = Math.max(0, Math.min(10, Number(e.currentTarget.value) || 0));
-    this.setState({ internetUrl:(this.state.internetUrl || '').trim() || 'shop.site', internetStage:stage, internetTrace:stage < 10 ? null : this.state.internetTrace });
+  iwReplay() {
+    clearTimeout(this._iwTimer); this._iwSeg = null;
+    this.setState({ iwStarted:true, iwDone:false, iwMoving:false, iwBeat:0 });
   }
-  traceInternetResource(e) {
-    this.setState({ internetTrace:e.currentTarget.dataset.resource || 'html' });
+  // fixed machine layout in normalised 0..1 stage space
+  iwNodes() { return { you:[0.09,0.72], router:[0.28,0.72], dns:[0.28,0.17], isp:[0.50,0.72], bb:[0.71,0.50], server:[0.91,0.72] }; }
+  iwNodeForBeat(b) { return ['you','router','dns','isp','bb','server','you'][Math.max(0,Math.min(6,b))]; }
+  // waypoints the packet travels through to REACH a given beat
+  iwWaypoints(toBeat) {
+    const map = {
+      1:['you','router'], 2:['router','dns'], 3:['dns','router','isp'],
+      4:['isp','bb'], 5:['bb','server'], 6:['server','bb','isp','router','you'],
+    };
+    return (map[toBeat] || ['you','you']);
   }
-  setInternetFailure(e) {
-    const chosen = e.currentTarget.dataset.failure;
-    this.setState({ internetFailure:this.state.internetFailure === chosen ? null : chosen, internetTrace:null });
+  iwPointAlong(nodes, N, keys, W, H, t) {
+    const pts = keys.map(k => [N[k][0]*W, N[k][1]*H]);
+    let total = 0; const segs = [];
+    for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0]-pts[i-1][0], pts[i][1]-pts[i-1][1]); segs.push(d); total += d; }
+    let want = t * total;
+    for (let i = 0; i < segs.length; i++) {
+      if (want <= segs[i] || i === segs.length-1) {
+        const f = segs[i] ? Math.max(0,Math.min(1, want/segs[i])) : 1;
+        return [pts[i][0] + (pts[i+1][0]-pts[i][0])*f, pts[i][1] + (pts[i+1][1]-pts[i][1])*f];
+      }
+      want -= segs[i];
+    }
+    return pts[pts.length-1];
   }
+  iwColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawIwCanvas() {
+    const canvas = document.getElementById('iw-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(320, rect.width || 1000), H = Math.max(240, rect.height || W*0.62);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.iwColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.iwColor(canvas,'--bb-ink','#171717');
+    const bg = this.iwColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.iwColor(canvas,'--bb-muted','#555');
+    const N = this.iwNodes();
+    const P = (k) => [N[k][0]*W, N[k][1]*H];
+    const st = this.state;
+    const started = !!st.iwStarted;
+    const seg = this._iwSeg;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+
+    // --- roads between machines ---
+    const road = (a, b, dashed) => {
+      const A = P(a), B = P(b);
+      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .3; ctx.lineWidth = 1.5; if (dashed) ctx.setLineDash([5,5]);
+      ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke(); ctx.restore();
+    };
+    road('you','router'); road('router','isp'); road('isp','bb'); road('bb','server'); road('router','dns', true);
+
+    // --- backbone flavour: a little bundle of cables behind the bb node ---
+    { const B = P('bb'); ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .22; ctx.lineWidth = 1;
+      for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(B[0]-46, B[1]+i*4); ctx.bezierCurveTo(B[0]-14,B[1]+i*10, B[0]+14,B[1]-i*10, B[0]+46,B[1]+i*4); ctx.stroke(); } ctx.restore(); }
+
+    // active node = where the packet is holding (or heading, faintly, while moving)
+    const activeKey = seg ? this.iwNodeForBeat(seg.toBeat) : (started ? this.iwNodeForBeat(Number(st.iwBeat)||0) : 'you');
+
+    // --- machines ---
+    const machine = (key, label, sub, glyph) => {
+      const [x,y] = P(key); const active = key === activeKey;
+      const rw = Math.max(30, W*0.052), rh = Math.max(24, W*0.04);
+      ctx.save();
+      if (active && !seg) { // pulsing lock ring on the machine we've stopped at
+        const pulse = 0.5 + 0.5*Math.sin(now/220);
+        ctx.strokeStyle = hud; ctx.globalAlpha = .35 + .3*pulse; ctx.lineWidth = 2;
+        ctx.strokeRect(x-rw/2-7-pulse*4, y-rh/2-7-pulse*4, rw+14+pulse*8, rh+14+pulse*8);
+      }
+      ctx.globalAlpha = 1; ctx.fillStyle = active ? hud : bg; ctx.strokeStyle = hud; ctx.lineWidth = 1.5;
+      ctx.fillRect(x-rw/2, y-rh/2, rw, rh); ctx.strokeRect(x-rw/2, y-rh/2, rw, rh);
+      // little screen
+      ctx.fillStyle = active ? bg : hud; ctx.globalAlpha = active ? .9 : .25;
+      ctx.fillRect(x-rw/2+4, y-rh/2+4, rw-8, rh-11);
+      ctx.globalAlpha = 1; ctx.fillStyle = active ? bg : ink;
+      ctx.font = "900 12px 'Archivo', sans-serif"; ctx.textAlign = 'center';
+      ctx.fillText(glyph, x, y+rh/2-3);
+      ctx.fillStyle = ink; ctx.font = "800 10px 'Archivo', sans-serif";
+      ctx.fillText(label, x, y+rh/2+15);
+      ctx.fillStyle = hud; ctx.font = "6px 'IBM Plex Mono', monospace";
+      ctx.fillText(sub, x, y+rh/2+25);
+      ctx.restore();
+    };
+    machine('you','YOU','your device','◻');
+    machine('router','ROUTER','LOCAL','⌂');
+    machine('dns','DNS','PHONE-BOOK','☎');
+    machine('isp','ISP','PROVIDER','▤');
+    machine('bb','BACKBONE','GLOBAL','∞');
+    machine('server','BOB','203.0.113.18','▣');
+
+    // --- the packet ---
+    let speedTxt = 'ARRIVED';
+    if (started) {
+      let pos, resolved, isReturn, speedFrac = 0;
+      if (seg) {
+        const k = Math.max(0, Math.min(1, (now - seg.t0)/seg.dur));
+        const e = 1 - Math.pow(1 - k, 4); // easeOutQuart — coasts to a slow-mo stop
+        pos = this.iwPointAlong(N, N, this.iwWaypoints(seg.toBeat), W, H, e);
+        speedFrac = Math.pow(1 - k, 3);
+        resolved = seg.toBeat >= 3; isReturn = seg.toBeat === 6;
+        speedTxt = 'SPEED ' + (speedFrac*2.4).toFixed(2) + 'c';
+      } else {
+        pos = P(this.iwNodeForBeat(Number(st.iwBeat)||0));
+        resolved = (Number(st.iwBeat)||0) >= 3; isReturn = (Number(st.iwBeat)||0) === 6;
+        speedTxt = 'HELD // 0.00c';
+      }
+      // motion trail
+      if (speedFrac > 0.02) {
+        ctx.save(); ctx.strokeStyle = isReturn ? ink : hud; ctx.lineWidth = 2; ctx.globalAlpha = .25;
+        ctx.beginPath(); ctx.moveTo(pos[0]-speedFrac*40, pos[1]); ctx.lineTo(pos[0], pos[1]); ctx.stroke(); ctx.restore();
+      }
+      // envelope
+      const pw = 40, ph = 26;
+      ctx.save(); ctx.translate(pos[0], pos[1]);
+      ctx.fillStyle = bg; ctx.strokeStyle = isReturn ? ink : hud; ctx.lineWidth = 2;
+      ctx.fillRect(-pw/2,-ph/2,pw,ph); ctx.strokeRect(-pw/2,-ph/2,pw,ph);
+      ctx.beginPath(); ctx.moveTo(-pw/2,-ph/2); ctx.lineTo(0,2); ctx.lineTo(pw/2,-ph/2); ctx.stroke();
+      ctx.fillStyle = isReturn ? ink : hud; ctx.font = "900 7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center';
+      const tag = isReturn ? 'REPLY' : (resolved ? '203.0.113.18' : 'bob.host');
+      ctx.fillText(tag, 0, ph/2-4);
+      ctx.restore();
+      // the human message riding above the envelope, before it resolves to a number
+      if (!isReturn) {
+        const msg = (st.iwMsg || '').slice(0, 22);
+        if (msg) { ctx.save(); ctx.fillStyle = muted; ctx.font = "10px 'Archivo', sans-serif"; ctx.textAlign = 'center';
+          ctx.fillText('“' + msg + '”', pos[0], pos[1]-ph/2-8); ctx.restore(); }
+      }
+    }
+    const sp = document.getElementById('iw-speed'); if (sp) sp.textContent = started ? speedTxt : 'READY // PRESS SEND';
+  }
+  // ---------- CR-02 // the grinder ----------
+  haBumpLast(text) {
+    const t = (text || '').replace(/\s+$/,'') || 'x';
+    const last = t.charCodeAt(t.length - 1);
+    return t.slice(0, -1) + String.fromCharCode(last === 122 ? 97 : last + 1);
+  }
+  haInput(e) {
+    clearTimeout(this._haTimer); this._ha = null;
+    this.setState({ haText:e.currentTarget.value || '', haGround:false, haNudged:false, haReversed:false, haBusy:false });
+  }
+  haStartAnim(mode, dur, after) {
+    this._ha = { mode, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur };
+    clearTimeout(this._haTimer);
+    this._haTimer = setTimeout(() => { this._ha = null; if (after) after(); }, dur + 40);
+  }
+  haGrind() {
+    this.setState({ haChapter:0, haGround:false, haNudged:false, haReversed:false, haBusy:true });
+    this.haStartAnim('grind', 1700, () => this.setState({ haGround:true, haBusy:false }));
+  }
+  haNudge() {
+    const done = () => this.setState({ haBusy:false });
+    this.setState({ haChapter:1, haGround:true, haNudged:true, haReversed:false, haBusy:true });
+    this.haStartAnim('avalanche', 1500, done);
+  }
+  haReverse() {
+    this.setState({ haChapter:2, haReversed:true, haBusy:true });
+    this.haStartAnim('reverse', 1500, () => this.setState({ haBusy:false }));
+  }
+  haColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawHaCanvas() {
+    const canvas = document.getElementById('ha-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(360, rect.height || W*920/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.haColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.haColor(canvas,'--bb-ink','#171717');
+    const bg = this.haColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.haColor(canvas,'--bb-muted','#555');
+    const alarm = '#ff2a22';
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const anim = this._ha;
+    const digest = this.learningDigest(st.haText || '');
+    const nudged = this.learningDigest(this.haBumpLast(st.haText || ''));
+
+    // animation progress + state
+    let grindP = st.haGround ? 1 : 0;   // how full the fingerprint tray is
+    let spin = now / 900;               // roller rotation
+    let spinDir = 1, jam = 0, avalancheP = -1, reverseShake = 0;
+    if (anim) {
+      const k = Math.max(0, Math.min(1, (now - anim.t0)/anim.dur));
+      if (anim.mode === 'grind') { grindP = 1 - Math.pow(1 - k, 3); spin = now/120; }
+      else if (anim.mode === 'avalanche') { grindP = 1; spin = now/200; avalancheP = k; }
+      else if (anim.mode === 'reverse') { grindP = 1; spinDir = -1; spin = -now/160; reverseShake = Math.sin(now/40)*3*(1-k); jam = k > 0.35 ? 1 : 0; }
+    }
+
+    const cx = W/2;
+    // --- hopper (message tiles) ---
+    const hopY = H*0.10, hopH = H*0.11;
+    ctx.save(); ctx.strokeStyle = hud; ctx.lineWidth = 1.5; ctx.strokeRect(W*0.10, hopY, W*0.80, hopH); ctx.restore();
+    const msg = (st.haText || '').slice(0, 20) || '—';
+    ctx.save(); ctx.fillStyle = ink; ctx.font = "800 " + Math.round(W*0.045) + "px 'Archivo', sans-serif"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(msg, cx, hopY + hopH/2); ctx.restore();
+    ctx.save(); ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'left';
+    ctx.fillText('HOPPER // ANY LENGTH IN', W*0.10, hopY - 6); ctx.restore();
+
+    // --- funnel + one-way valve ---
+    const funTop = hopY + hopH, funBot = funTop + H*0.06, valveY = funBot + 6;
+    ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .5; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(W*0.10, funTop); ctx.lineTo(cx - W*0.09, funBot); ctx.moveTo(W*0.90, funTop); ctx.lineTo(cx + W*0.09, funBot); ctx.stroke();
+    // valve chevron (down = allowed). jams red on reverse.
+    ctx.globalAlpha = 1; ctx.strokeStyle = jam ? alarm : hud; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx - 12, valveY); ctx.lineTo(cx, valveY + 9); ctx.lineTo(cx + 12, valveY); ctx.stroke();
+    ctx.restore();
+
+    // --- three roller rows (meshing gears) ---
+    const gear = (gx, gy, r, phase) => {
+      ctx.save(); ctx.translate(gx, gy); ctx.rotate(spin*phase);
+      ctx.strokeStyle = jam ? alarm : hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      for (let i = 0; i < 8; i++) { ctx.save(); ctx.rotate(i/8*Math.PI*2); ctx.fillStyle = jam ? alarm : hud; ctx.fillRect(-2, -r-4, 4, 6); ctx.restore(); }
+      ctx.beginPath(); ctx.arc(0,0,r*0.28,0,Math.PI*2); ctx.strokeStyle = jam ? alarm : hud; ctx.stroke();
+      ctx.restore();
+    };
+    const rowYs = [valveY + H*0.09, valveY + H*0.19, valveY + H*0.29];
+    const gr = W*0.075;
+    rowYs.forEach((gy, ri) => {
+      const sh = ri === 1 ? reverseShake : -reverseShake;
+      gear(cx - gr - 4 + sh, gy, gr, spinDir * (ri%2? 1 : -1));
+      gear(cx + gr + 4 + sh, gy, gr, spinDir * (ri%2? -1 : 1));
+    });
+
+    // --- falling pulp stream during grind ---
+    if (anim && anim.mode === 'grind') {
+      const k = Math.max(0, Math.min(1, (now - anim.t0)/anim.dur));
+      ctx.save(); ctx.fillStyle = hud;
+      for (let i = 0; i < 14; i++) {
+        const ph = (k*2.4 + i*0.17) % 1;
+        const y = funTop + ph*(rowYs[2]+H*0.06 - funTop);
+        ctx.globalAlpha = .6*(1-ph);
+        ctx.fillRect(cx - 6 + Math.sin(i*3+ph*10)*W*0.06, y, 4, 4);
+      }
+      ctx.restore();
+    }
+    // reverse sparks near valve
+    if (anim && anim.mode === 'reverse' && jam) {
+      ctx.save(); ctx.strokeStyle = alarm; ctx.lineWidth = 1.5;
+      for (let i = 0; i < 6; i++) { const a = Math.random()*Math.PI*2, len = 6 + Math.random()*12; ctx.globalAlpha = Math.random(); ctx.beginPath(); ctx.moveTo(cx, valveY+9); ctx.lineTo(cx + Math.cos(a)*len, valveY+9 + Math.sin(a)*len); ctx.stroke(); }
+      ctx.restore();
+    }
+
+    // --- fingerprint tray (32 cells, 16x2) ---
+    const trayY = rowYs[2] + H*0.075, cols = 16, rows = 2;
+    const pad = W*0.06, cw = (W - pad*2)/cols, ch = cw*1.15, gap = 2;
+    ctx.save(); ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'left';
+    ctx.fillText('FINGERPRINT // ALWAYS 32 CELLS OUT', pad, trayY - 6); ctx.restore();
+    for (let i = 0; i < 32; i++) {
+      const c = i % cols, r = Math.floor(i / cols);
+      const x = pad + c*cw, y = trayY + r*ch;
+      const filled = (i / 32) <= grindP;
+      let diff = false;
+      if (avalancheP >= 0) { // avalanche cascade: differing cells flash in, left-to-right
+        const isDiff = digest[i] !== nudged[i];
+        diff = isDiff && avalancheP > (i / 40);
+      }
+      ctx.save();
+      ctx.strokeStyle = hud; ctx.globalAlpha = filled ? 1 : .25; ctx.lineWidth = 1;
+      ctx.strokeRect(x+gap/2, y+gap/2, cw-gap, ch-gap);
+      if (filled) {
+        ctx.fillStyle = diff ? alarm : ink; ctx.globalAlpha = diff ? .9 : .14;
+        ctx.fillRect(x+gap/2, y+gap/2, cw-gap, ch-gap);
+        ctx.globalAlpha = 1; ctx.fillStyle = diff ? bg : ink;
+        ctx.font = "700 " + Math.round(cw*0.5) + "px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText((diff ? nudged[i] : digest[i]) || '', x + cw/2, y + ch/2);
+      }
+      ctx.restore();
+    }
+
+    const tag = document.getElementById('ha-tag');
+    if (tag) tag.textContent = st.haBusy ? (anim ? anim.mode.toUpperCase() + '…' : 'WORKING…') : (jam ? 'JAMMED' : (st.haGround ? 'FORWARD OK' : 'READY'));
+  }
+  // ---------- CR-03 // the public-key bench ----------
+  pkAnim(mode) { this._pk = { mode, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur:mode === 'publish' ? 1100 : 900 }; }
+  rsaUsePublic() {
+    if (this.state.rsaShut) { this.pkAnim('reject'); this.setState({ rsaReject:true }); }   // public key can't open
+    else { this.pkAnim('lock'); this.setState({ rsaShut:true, rsaReject:false }); }
+  }
+  rsaUsePrivate() {
+    if (this.state.rsaShut) { this.pkAnim('unlock'); this.setState({ rsaShut:false, rsaReject:false }); }
+    else this.setState({ rsaReject:false });
+  }
+  pkColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawPkCanvas() {
+    const canvas = document.getElementById('pk-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(280, rect.height || W*720/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.pkColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.pkColor(canvas,'--bb-ink','#171717');
+    const bg = this.pkColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.pkColor(canvas,'--bb-muted','#555');
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const anim = this._pk;
+    let k = 1; if (anim) { k = Math.max(0, Math.min(1, (now - anim.t0)/anim.dur)); if (k >= 1) this._pk = null; }
+    const mode = anim ? anim.mode : null;
+
+    // shackle openness 0=closed .. 1=open ; key turn angle ; shudder shake
+    let shackle = st.rsaShut ? 0 : 1;
+    let keyTurn = 0, shake = 0, whichKey = null;
+    if (mode === 'lock') { shackle = 1 - this.easeOut(k); keyTurn = k*Math.PI/2; whichKey = 'pub'; }
+    else if (mode === 'unlock') { shackle = this.easeOut(k); keyTurn = k*Math.PI/2; whichKey = 'priv'; }
+    else if (mode === 'reject') { shackle = 0; keyTurn = Math.sin(k*Math.PI)*0.5; shake = Math.sin(now/28)*4*(1-k); whichKey = 'pub'; }
+
+    const cx = W*0.5, bodyW = W*0.34, bodyH = H*0.30, bodyY = H*0.44;
+    // shackle (U bar) — lifts up + pivots as it opens
+    const sx = cx, sTop = bodyY - bodyH*0.05;
+    const lift = shackle * bodyH*0.34;
+    ctx.save(); ctx.translate(shake, 0);
+    ctx.strokeStyle = hud; ctx.lineWidth = Math.max(10, W*0.022); ctx.lineCap = 'round';
+    const r = bodyW*0.32;
+    ctx.beginPath();
+    ctx.moveTo(cx - r, bodyY + bodyH*0.15);
+    ctx.lineTo(cx - r, sTop - lift);
+    ctx.arc(cx, sTop - lift, r, Math.PI, 0);
+    ctx.lineTo(cx + r, bodyY + bodyH*0.15 - shackle*2);
+    ctx.stroke();
+    ctx.restore();
+
+    // lock body
+    ctx.save(); ctx.translate(shake, 0);
+    ctx.fillStyle = bg; ctx.strokeStyle = hud; ctx.lineWidth = 2;
+    this.roundRect(ctx, cx - bodyW/2, bodyY, bodyW, bodyH, 10); ctx.fill(); ctx.stroke();
+    // keyhole
+    const khY = bodyY + bodyH*0.44;
+    ctx.fillStyle = st.rsaShut ? hud : muted;
+    ctx.beginPath(); ctx.arc(cx, khY, bodyW*0.09, 0, Math.PI*2); ctx.fill();
+    ctx.fillRect(cx - bodyW*0.03, khY, bodyW*0.06, bodyH*0.22);
+    // status glyph
+    ctx.fillStyle = ink; ctx.font = "900 " + Math.round(bodyW*0.16) + "px 'Archivo', sans-serif"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(st.rsaShut ? 'SHUT' : 'OPEN', cx, bodyY + bodyH*0.80);
+    ctx.restore();
+
+    // the two keys on a ring at the bottom, one glows when in use
+    const drawKey = (kx, ky, label, col, active) => {
+      ctx.save(); ctx.translate(kx, ky);
+      if (active && whichKey) ctx.rotate(keyTurn*0.3);
+      ctx.strokeStyle = col; ctx.fillStyle = active ? col : bg; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI*2); ctx.stroke();   // bow
+      ctx.fillRect(-2, 10, 4, 34);                                      // shaft
+      ctx.fillRect(-2, 34, 10, 4); ctx.fillRect(-2, 40, 7, 4);         // teeth
+      ctx.fillStyle = col; ctx.font = "800 9px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center';
+      ctx.fillText(label, 0, -18); ctx.restore();
+    };
+    const kY = H*0.90;
+    drawKey(cx - bodyW*0.5, kY, 'PUBLIC', hud, whichKey === 'pub');
+    drawKey(cx + bodyW*0.5, kY, 'PRIVATE', ink, whichKey === 'priv');
+
+    // chapter 1: the sealed message box sits in front of the lock
+    if (st.rsaChapter === 1) {
+      const boxW = bodyW*0.7, boxX = cx - boxW/2, boxY = bodyY + bodyH*1.15, boxH = H*0.10;
+      ctx.save(); ctx.strokeStyle = hud; ctx.lineWidth = 2; ctx.fillStyle = bg;
+      ctx.strokeRect(boxX, boxY, boxW, boxH);
+      ctx.fillStyle = st.rsaOpenState === 'ok' ? ink : muted;
+      ctx.font = "800 " + Math.round(boxW*0.07) + "px 'Archivo', sans-serif"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(st.rsaOpenState === 'ok' ? 'MEET AT PIER 9 · 8PM' : (st.rsaSealed ? '████ ███ ████' : 'MEET AT PIER 9 · 8PM'), cx, boxY + boxH/2);
+      ctx.restore();
+    }
+
+    // chapter 2: publish — public key copies fly out along a wire to an eavesdropper
+    if (st.rsaChapter === 2) {
+      const wireY = H*0.90;
+      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .4; ctx.setLineDash([5,5]); ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(W*0.14, wireY); ctx.lineTo(W*0.86, wireY); ctx.stroke(); ctx.restore();
+      if (st.rsaPublished) {
+        const t = mode === 'publish' ? this.easeOut(k) : 1;
+        for (let i = 0; i < 3; i++) { const px = W*0.24 + (W*0.5)*((t + i*0.2)%1); ctx.save(); ctx.fillStyle = hud; ctx.fillRect(px-3, wireY-3, 6, 6); ctx.restore(); }
+        // eavesdropper figure at the end
+        ctx.save(); ctx.strokeStyle = mode === 'eaves' ? '#ff2a22' : hud; ctx.lineWidth = 2;
+        ctx.strokeRect(W*0.80, wireY-14, 22, 22);
+        ctx.fillStyle = mode === 'eaves' ? '#ff2a22' : hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center';
+        ctx.fillText('EVE', W*0.80+11, wireY+20); ctx.restore();
+      }
+    }
+
+    const tag = document.getElementById('pk-tag');
+    if (tag) tag.textContent = mode ? mode.toUpperCase() + '…' : (st.rsaShut ? 'LOCKED' : 'OPEN');
+  }
+  easeOut(k) { return 1 - Math.pow(1 - k, 3); }
+  roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
   openInternetBridge(e) {
     const id = e.currentTarget.dataset.node;
     if (!id || !this.g().byId[id]) return;
@@ -3149,7 +3404,7 @@ class Component extends DCLogic {
     const active = this.state.pqBasis === 'good' ? good : bad;
     const target = this.state.pqTarget || [2.3, 1.4];
     const chapter = Number(this.state.pqChapter) || 0;
-    const range = Math.max(4, Math.min(7, 4 + Math.floor((Number(this.state.pqDimension) || 2) / 4)));
+    const range = 5;
     const view = this.pqView();
     if (!this._pqDrag && !this._reduceMotion) view.yaw += 0.00075 * Math.max(0.25, (this.mi || 45) / 45);
 
@@ -3212,8 +3467,18 @@ class Component extends DCLogic {
     const landed = this.state.pqLanded;
     const nearest = this.state.pqNearest;
     if (landed) {
-      drawLine([target[0], target[1], .25], [landed[0], landed[1], .25], this.state.pqGuessWrong ? '#ff2a22' : hud, .8, 2, [4, 4]);
-      const L = this.pqProject([landed[0], landed[1], .32], W, H);
+      // the landing marker travels from the ◆ to its rounded dot over ~200ms
+      const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+      const an = this._pqSnapAnim;
+      let lx = landed[0], ly = landed[1];
+      if (an && an.to && an.to[0] === landed[0] && an.to[1] === landed[1]) {
+        const k = Math.min(1, (now - an.t0) / 200), e2 = 1 - Math.pow(1 - k, 3); // easeOutCubic
+        lx = an.from[0] + (an.to[0] - an.from[0]) * e2;
+        ly = an.from[1] + (an.to[1] - an.from[1]) * e2;
+        if (k >= 1) this._pqSnapAnim = null;
+      }
+      drawLine([target[0], target[1], .25], [lx, ly, .25], this.state.pqGuessWrong ? '#ff2a22' : hud, .8, 2, [4, 4]);
+      const L = this.pqProject([lx, ly, .32], W, H);
       ctx.save(); ctx.strokeStyle = this.state.pqGuessWrong ? '#ff2a22' : hud; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(L.x, L.y, 12, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
     }
     if ((this.state.pqShowTruth || chapter >= 2) && nearest) {
@@ -3221,18 +3486,16 @@ class Component extends DCLogic {
       ctx.save(); ctx.strokeStyle = ink; ctx.fillStyle = bg; ctx.lineWidth = 2; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.rect(N.x - 9, N.y - 9, 18, 18); ctx.stroke(); ctx.fillText('TRUE', N.x + 12, N.y + 3); ctx.restore();
     }
 
-    if (chapter >= 4 || this.state.pqCipher) {
-      const noise = Number(this.state.pqNoise) || 0, tq = this.pqProject([target[0], target[1], .22], W, H);
-      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .12 + noise * .035; ctx.lineWidth = 1;
-      for (let i = 1; i <= 4; i++) { ctx.beginPath(); ctx.arc(tq.x, tq.y, 9 + i * (5 + noise), 0, Math.PI * 2); ctx.stroke(); }
-      ctx.restore();
-    }
-    if (chapter >= 5) {
-      const dim = Number(this.state.pqDimension) || 2;
-      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .18; ctx.lineWidth = 1;
-      for (let i = 0; i < dim; i++) {
-        const x = 18 + i * Math.min(16, (W - 44) / Math.max(1, dim - 1)), h = 18 + i * 8;
-        ctx.strokeRect(x, H - 34 - h, 8, h);
+    // quantum fizzle: rings pulse out from the message and find nothing to lock onto
+    if (this.state.pqQuantumFizzled) {
+      const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+      const tq = this.pqProject([target[0], target[1], .22], W, H);
+      const phase = ((now - (this._pqFizzleAt || 0)) / 1400) % 1;
+      ctx.save(); ctx.strokeStyle = hud; ctx.lineWidth = 1.4;
+      for (let i = 0; i < 3; i++) {
+        const p = (phase + i / 3) % 1;
+        ctx.globalAlpha = 0.5 * (1 - p);
+        ctx.beginPath(); ctx.arc(tq.x, tq.y, 6 + p * 120, 0, Math.PI * 2); ctx.stroke();
       }
       ctx.restore();
     }
@@ -3276,7 +3539,7 @@ class Component extends DCLogic {
     const s = len > 4.2 ? 4.2 / len : 1;
     good[d.kind === 'b1' ? 0 : 1] = [p[0] * s, p[1] * s];
     if (Math.abs(this.pqDet(good)) < .15) return;
-    this.setState({ pqGoodBasis:good, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false });
+    this.setState({ pqGoodBasis:good, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false, pqCh0Done:true });
   }
   pqCanvasUp() { this._pqDrag = null; }
   pqPickChapter(e) {
@@ -3287,8 +3550,8 @@ class Component extends DCLogic {
     if (n === 2) patch.pqBasis = this.state.pqBasis || 'bad';
     this.setState(patch);
   }
-  pqUseGood() { this.setState({ pqBasis:'good', pqGuessWrong:false }); }
-  pqUseBad() { this.setState({ pqBasis:'bad', pqDecoded:false }); }
+  pqUseGood() { this.setState({ pqBasis:'good', pqGuessWrong:false, pqTriedGood:true }); }
+  pqUseBad() { this.setState({ pqBasis:'bad', pqDecoded:false, pqTriedBad:true }); }
   pqSetSkew(e) { this.setState({ pqSkew:Number(e.currentTarget.value) || 0, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false }); }
   pqToggleTruth() {
     const target = this.state.pqTarget || [2.3, 1.4];
@@ -3297,76 +3560,22 @@ class Component extends DCLogic {
   }
   pqResetLab() {
     this._pqView = { yaw:-0.68, pitch:0.86, zoom:1 };
-    this._pqDrag = null;
-    this.setState({ pqBasis:'good', pqChapter:0, pqSkew:3, pqGoodBasis:this.pqDefaultGood(), pqTarget:[2.3,1.4], pqShowTruth:false, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false, pqQuantumFizzled:false, pqNoise:2, pqMessageBit:1, pqCipher:null, pqLweDecoded:null, pqDimension:2 });
+    this._pqDrag = null; this._pqSnapAnim = null; this._pqFizzleAt = 0;
+    this.setState({ pqBasis:'good', pqChapter:0, pqSkew:3, pqGoodBasis:this.pqDefaultGood(), pqTarget:[2.3,1.4], pqShowTruth:false, pqLanded:null, pqNearest:null, pqGuessWrong:false, pqDecoded:false, pqQuantumFizzled:false, pqCh0Done:false, pqTriedGood:false, pqTriedBad:false });
   }
   pqSnap() {
     const target = this.state.pqTarget || [2.3, 1.4];
     const landed = this.pqBabai(target, this.pqActiveBasis()).landed;
     const nearest = this.pqNearest(target, this.pqGenerateLattice(this.pqGoodBasis(), 7));
     const correct = this.pqDist(landed, nearest) < 1e-6;
+    // animate the marker travelling from the ◆ message to the dot it rounds to,
+    // so private-snaps-right vs public-lands-near is watchable, not a teleport
+    this._pqSnapAnim = { from:target.slice(), to:landed, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()) };
     this.setState({ pqChapter:2, pqLanded:landed, pqNearest:nearest, pqDecoded:correct, pqGuessWrong:!correct, pqShowTruth:true });
   }
-  pqLweBase() {
-    if (!this._pqLweBase) this._pqLweBase = {
-      q:97, n:4, m:8, s:[17, 42, 8, 63],
-      A:[[11,7,31,5],[19,23,3,41],[29,13,17,37],[43,2,47,11],[5,53,7,19],[61,31,2,29],[3,71,43,13],[37,5,59,23]],
-      eBase:[1.45,-.72,2.05,-1.2,.35,1.78,-.55,.96],
-      r:[1,0,1,1,0,1,0,0],
-    };
-    return this._pqLweBase;
-  }
-  pqMod(x, q) { return ((x % q) + q) % q; }
-  pqRingDist(a, b, q) { const d = Math.abs(this.pqMod(a, q) - this.pqMod(b, q)); return Math.min(d, q - d); }
-  pqLweDerived(base, sigma) {
-    const e = base.eBase.map(x => Math.round(x * sigma));
-    const b = base.A.map((row, i) => this.pqMod(row.reduce((acc, aij, j) => acc + aij * base.s[j], 0) + e[i], base.q));
-    return { e, b };
-  }
-  pqEncryptBit(base, derived, r, bit) {
-    const u = Array.from({ length:base.n }, (_, j) => {
-      let acc = 0; for (let i = 0; i < base.m; i++) acc += base.A[i][j] * r[i];
-      return this.pqMod(acc, base.q);
-    });
-    const v = this.pqMod(derived.b.reduce((acc, bi, i) => acc + bi * r[i], 0) + bit * Math.floor(base.q / 2), base.q);
-    return { r:r.slice(), u, v, bit };
-  }
-  pqDecryptBit(base, ct) {
-    const d = this.pqMod(ct.v - ct.u.reduce((acc, ui, j) => acc + ui * base.s[j], 0), base.q);
-    const bit = this.pqRingDist(d, Math.floor(base.q / 2), base.q) < this.pqRingDist(d, 0, base.q) ? 1 : 0;
-    return { d, bit, ok:bit === ct.bit };
-  }
-  pqSetNoise(e) {
-    const noise = Number(e.currentTarget.value) || 0;
-    const patch = { pqNoise:noise };
-    if (this.state.pqCipher) {
-      const base = this.pqLweBase(), derived = this.pqLweDerived(base, noise);
-      const ct = this.pqEncryptBit(base, derived, this.state.pqCipher.r, this.state.pqMessageBit ? 1 : 0);
-      patch.pqCipher = ct;
-      patch.pqLweDecoded = this.state.pqLweDecoded ? this.pqDecryptBit(base, ct) : null;
-    }
-    this.setState(patch);
-  }
-  pqSetBit(e) {
-    const bit = Number(e.currentTarget.dataset.bit) ? 1 : 0;
-    const patch = { pqMessageBit:bit, pqLweDecoded:null };
-    if (this.state.pqCipher) {
-      const base = this.pqLweBase(), derived = this.pqLweDerived(base, Number(this.state.pqNoise) || 0);
-      patch.pqCipher = this.pqEncryptBit(base, derived, this.state.pqCipher.r, bit);
-    }
-    this.setState(patch);
-  }
-  pqEncrypt() {
-    const base = this.pqLweBase(), derived = this.pqLweDerived(base, Number(this.state.pqNoise) || 0);
-    this.setState({ pqChapter:4, pqCipher:this.pqEncryptBit(base, derived, base.r, this.state.pqMessageBit ? 1 : 0), pqLweDecoded:null });
-  }
-  pqDecrypt() {
-    const base = this.pqLweBase();
-    const ct = this.state.pqCipher || this.pqEncryptBit(base, this.pqLweDerived(base, Number(this.state.pqNoise) || 0), base.r, this.state.pqMessageBit ? 1 : 0);
-    this.setState({ pqChapter:4, pqCipher:ct, pqLweDecoded:this.pqDecryptBit(base, ct) });
-  }
-  pqSetDimension(e) { this.setState({ pqChapter:5, pqDimension:Math.max(2, Math.min(12, Number(e.currentTarget.value) || 2)) }); }
-  pqQuantumTry() { this.setState({ pqChapter:5, pqQuantumFizzled:true, pqDimension:Math.max(8, Number(this.state.pqDimension) || 2) }); }
+  // the quantum attack finds nothing to lock onto — stay on THE ATTACK and fire a
+  // scan-ring pulse from the message that dissipates without resolving to a dot
+  pqQuantumTry() { this._pqFizzleAt = (typeof performance !== 'undefined' ? performance.now() : Date.now()); this.setState({ pqQuantumFizzled:true }); }
 
   // ---------- day / night sensor mode (corner-to-corner square-flip wipe) ----------
   toggleTheme() {
