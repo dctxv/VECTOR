@@ -294,6 +294,8 @@
   .qb-stage-wrap canvas{aspect-ratio:820/740;}
   .qr-stage-wrap:before{content:'PERIOD-FINDING // TUNE THE COMB';}
   .qr-stage-wrap canvas{aspect-ratio:820/600;}
+  .sy-stage-wrap:before{content:'CIPHER MACHINE // SCRUB THE MESSAGE THROUGH';}
+  .sy-stage-wrap canvas{aspect-ratio:820/560;}
 
   /* TLS step-order puzzle */
   .tl-steps{display:grid;gap:6px;margin-top:14px;}
@@ -899,7 +901,7 @@
       <div class="bb-hud">
         <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
         <span class="bb-corner bl"></span><span class="bb-corner br"></span>
-        <div style="position:absolute;left:22px;top:20px;">CR-01 // SHARED-KEY CHAMBER</div>
+        <div style="position:absolute;left:22px;top:20px;">CR-01 // THE ROTOR MACHINE</div>
         <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
           <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
             <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
@@ -908,116 +910,63 @@
           <div>{{ symHud }}</div>
         </div>
         <div style="position:absolute;left:22px;bottom:20px;">{{ symStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
-        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">KEY {{ symKeyId }}</div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">CH {{ symChapterNum }}/3</div>
       </div>
 
       <main class="bb-shell">
         <div class="bb-kicker">MODULE 02 // CRYPTOGRAPHY</div>
-        <h1 class="bb-title" style="font-size:clamp(45px,15vw,76px);">THE SAME<br>KEY</h1>
-        <p class="bb-friendly">One shared secret locks the message. The same shared secret brings it back.</p>
+        <h1 class="bb-title" style="font-size:clamp(48px,16vw,80px);">THE ROTOR<br>MACHINE</h1>
+        <p class="bb-friendly">One shared key both scrambles the message and brings it back. Feed a message in, crank it through the rotors, and watch it come out unreadable — then run the same crank backward with the same key and read it again.</p>
 
-        <div class="iw-control">
-          <div class="sy-inputs">
-            <div class="sy-field">
-              <label>PLAINTEXT // READABLE</label>
-              <input id="sy-message" data-reticle-target="input" value="{{ symMessage }}" onChange="{{ symMessageInput }}" maxlength="32" autocomplete="off" placeholder="meet me at 8">
-            </div>
-            <div class="sy-field">
-              <label>SHARED LEARNING KEY</label>
-              <input id="sy-key" data-reticle-target="input" value="{{ symKey }}" onChange="{{ symKeyInput }}" maxlength="24" autocomplete="off" spellcheck="false" placeholder="rose-742">
-            </div>
-          </div>
-          <button class="sy-seal" data-reticle-target="seal" onPointerDown="{{ startSymSeal }}" onPointerUp="{{ cancelSymSeal }}" onPointerLeave="{{ cancelSymSeal }}" onPointerCancel="{{ cancelSymSeal }}">
-            <span class="sy-seal-fill" style="{{ symSealStyle }}"></span><span class="sy-seal-label">{{ symSealLabel }}</span>
-          </button>
+        <div class="ha-compose" style="grid-template-columns:1fr;">
+          <input id="sy-message" class="ha-msg" data-reticle-target="input" value="{{ symMessage }}" onChange="{{ symMessageInput }}" maxlength="26" autocomplete="off" placeholder="meet me at 8">
+        </div>
+        <div class="ha-compose" style="grid-template-columns:auto 1fr;align-items:center;margin-top:6px;">
+          <span style="color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;">SHARED KEY</span>
+          <input id="sy-key" class="ha-msg" style="font-size:15px;" data-reticle-target="input" value="{{ symKey }}" onChange="{{ symKeyInput }}" maxlength="20" autocomplete="off" spellcheck="false" placeholder="rose-742">
         </div>
 
-        <section class="bb-section">
-          <div class="bb-kicker">KEY SCAN // {{ symKeyId }}</div>
-          <h2 class="bb-statement">THE KEY CHANGES THE MACHINE.</h2>
-          <p class="bb-friendly">Edit one character. The red lock profile re-snaps into a different shape.</p>
-          <div class="sy-keyprint">
-            <sc-for list="{{ symFingerprint }}" as="bar" hint-placeholder-count="16">
-              <span class="sy-keybar" style="{{ bar.style }}"></span>
-            </sc-for>
-          </div>
-          <div class="bb-readout">KEYPRINT GENERATED // DIFFUSION ARMED<br>KEY TEXT IS FOR LEARNING ONLY</div>
+        <section class="ha-stage-wrap sy-stage-wrap">
+          <canvas id="sy-canvas" width="820" height="560" aria-label="A cutaway cipher machine turning a message into ciphertext through three rotors"></canvas>
+          <div class="ha-stage-tag" id="sy-tag"></div>
         </section>
 
-        <sc-if value="{{ symHasMessage }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">PLAINTEXT INPUT // {{ symByteCount }} BYTES</div>
-            <div class="sy-tiles">
-              <sc-for list="{{ symTiles }}" as="tile" hint-placeholder-count="10"><span class="sy-tile">{{ tile.glyph }}</span></sc-for>
-            </div>
-            <p class="bb-friendly">Right now the secret is exposed. Anyone who can see it can read it.</p>
-          </section>
+        <div class="ha-tabs"><sc-for list="{{ symTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ symPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ symBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ symBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ symBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ symTodo }}</div>
+
+        <sc-if value="{{ symChapterMachine }}" hint-placeholder-val="{{ true }}">
+          <input class="qb-slider" data-reticle-target="scrub" type="range" min="0" max="100" step="1" value="{{ symScrub }}" onChange="{{ symSetScrub }}" aria-label="Scrub the message through the machine" style="margin-top:12px;">
+          <div class="bb-readout">SCRUB FORWARD to push the message through the rotors // {{ symScrubLabel }}. Each character is transformed by the rotor teeth the key cut.</div>
         </sc-if>
 
-        <sc-if value="{{ symSealed }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">OUTPUT CLASS // CIPHERTEXT</div>
-            <h2 class="bb-statement">NOW THE MESSAGE IS UNREADABLE.</h2>
-            <p class="bb-friendly">Encryption did not put a curtain over the words. It transformed them using the key.</p>
-            <div class="{{ symCipherClass }}">{{ symCiphertext }}</div>
-            <button data-reticle-target="intercept" onClick="{{ interceptSymCipher }}" style="width:100%;margin-top:8px;border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);padding:12px;font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;">PASS THROUGH HOSTILE SCANNER</button>
-            <sc-if value="{{ symIntercepted }}" hint-placeholder-val="{{ false }}">
-              <div class="bb-readout">INTERCEPT_ATTEMPT // CONTENT_READABILITY: 0%<br>SCANNER OUTPUT / ?? {{ symCipherPreview }} ??</div>
-            </sc-if>
-          </section>
-
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">DECRYPT CHAMBER // APPLY CURRENT KEY</div>
-            <h2 class="bb-statement">SAME KEY IN. MESSAGE BACK.</h2>
-            <p class="bb-friendly">The key field stays live. Keep it the same, or change one character and see what happens.</p>
-            <div class="sy-chamber">
-              <div class="sy-attempt"><strong>{{ symKey }}</strong><span>CURRENT KEY</span></div>
-              <div class="bb-arrow"></div>
-              <button class="sy-attempt" data-reticle-target="decrypt" onClick="{{ decryptSym }}"><strong>DECRYPT</strong><span>APPLY KEY</span></button>
-            </div>
-            <sc-if value="{{ symHasResult }}" hint-placeholder-val="{{ false }}">
-              <div class="{{ symResultClass }}">{{ symResult }}</div>
-              <div class="bb-readout">{{ symResultTelemetry }}</div>
-            </sc-if>
-          </section>
-
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">AVALANCHE TOY // ONE-CHARACTER DELTA</div>
-            <h2 class="bb-statement">TINY KEY CHANGE. DIFFERENT LOCK.</h2>
-            <p class="bb-friendly">Move the dial by one tick. The message stays the same while nearly every ciphertext block changes.</p>
-            <input class="sy-dial" data-reticle-target="scrub" type="range" min="0" max="9" step="1" value="{{ symMutation }}" onChange="{{ mutateSymKey }}" aria-label="Mutate one key character">
-            <div class="sy-compare">
-              <div class="sy-compare-card"><strong>{{ symSealedKey }}</strong><code>{{ symCiphertext }}</code></div>
-              <div class="sy-compare-card"><strong>{{ symMutatedKey }}</strong><code>{{ symMutatedCipher }}</code></div>
-            </div>
-            <div class="bb-readout">SAME_PLAINTEXT: TRUE // KEY_DIFFERENCE: {{ symMutationLabel }}<br>CIPHERTEXT_DELTA: {{ symCipherDelta }}%</div>
-          </section>
-
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">REVERSE MODE // FIND THE SHARED KEY</div>
-            <h2 class="bb-statement">CAN YOU BRING THE MESSAGE BACK?</h2>
-            <p class="bb-friendly">Start from the scrambled thing. Try each key card against it.</p>
-            <div class="sy-keys">
-              <sc-for list="{{ symKeyCards }}" as="card" hint-placeholder-count="3">
-                <button class="sy-keycard" data-reticle-target="keycard" data-key="{{ card.key }}" onClick="{{ trySymKey }}">{{ card.label }}</button>
-              </sc-for>
-            </div>
-          </section>
-
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">SHARED KEY HANDOFF</div>
-            <h2 class="bb-statement">BOTH SIDES NEED THE SECRET.</h2>
-            <div class="sy-handoff"><div class="sy-person">YOU</div><div class="sy-gap"></div><div class="sy-person">FRIEND</div></div>
-            <button class="{{ symFriendClass }}" data-reticle-target="handoff" onClick="{{ toggleSymFriend }}">FRIEND HAS KEY // {{ symFriendLabel }}</button>
-            <div class="bb-readout">{{ symFriendTelemetry }}</div>
-          </section>
-
-          <section class="bb-payoff">
-            <h2 class="bb-statement" style="max-width:12ch;">LOCK IT. SEND IT. UNLOCK IT.</h2>
-            <p class="bb-friendly" style="margin-bottom:0;">The message is what you protect. The shared key is what makes the transformation work. Close does not count. But both sides had to share that secret first — and the eavesdropper watched that conversation too.</p>
-            <button class="cx-btn solid" data-reticle-target="next" data-node="hashing" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: HASHING // TAMPER DETECTION</button>
-          </section>
+        <sc-if value="{{ symChapterKey }}" hint-placeholder-val="{{ false }}">
+          <div class="bb-readout" style="margin-top:12px;">Edit the SHARED KEY above by one character. The rotor teeth re-cut and the SAME message now scrambles completely differently.<br>SAME PLAINTEXT · ONE-CHARACTER KEY CHANGE → CIPHERTEXT DELTA / <strong>{{ symDelta }}%</strong></div>
         </sc-if>
+
+        <sc-if value="{{ symChapterReturn }}" hint-placeholder-val="{{ false }}">
+          <div class="cx-grid2" style="margin-top:12px;">
+            <button class="{{ symRightClass }}" data-reticle-target="right" onClick="{{ symUseRight }}"><strong>SAME KEY</strong><span>the one you sealed with</span></button>
+            <button class="{{ symWrongClass }}" data-reticle-target="wrong" onClick="{{ symUseWrong }}"><strong>WRONG KEY</strong><span>one character off</span></button>
+          </div>
+          <input class="qb-slider" data-reticle-target="scrub" type="range" min="0" max="100" step="1" value="{{ symScrub }}" onChange="{{ symSetScrub }}" aria-label="Scrub the message back out of the machine" style="margin-top:8px;">
+          <div class="{{ symReturnReadoutClass }}">SCRUB BACKWARD to run the crank in reverse // {{ symReturnLabel }}</div>
+          <div class="bb-readout">HOSTILE SCANNER // CONTENT READABILITY WITHOUT THE KEY: 0%. The eavesdropper sees the ciphertext and gets nothing — but both sides had to share that key first, and the eavesdropper watched that conversation too.</div>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:12ch;">LOCK IT. SEND IT. UNLOCK IT.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">The message is what you protect; the shared key is what makes the transformation work — and reverse. But both sides needed that same secret first. How do you share a key with someone you've never met, over a wire an eavesdropper is watching?</p>
+          <button class="cx-btn solid" data-reticle-target="next" data-node="hashing" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: HASHING // TAMPER DETECTION</button>
+        </section>
 
         <div class="bb-scope">LEARNING SIMULATION // This is not real AES and must not be used to protect sensitive data. Real AES uses fixed 128, 192, or 256-bit keys and authenticated systems add integrity checks. No files, cracking, brute force, or live cryptographic operations happen here.</div>
       </main>
@@ -1593,7 +1542,7 @@ class Component extends DCLogic {
     bitsTimedIndex:0, bitsLastFlip:'AWAITING FIRST FLIP', bitsMessageReceived:'PAY BOB $900', bitsCorruptIndex:-1,
     bitsCorruptionLevel:0, bitsEnd:false, bitsHint:false, bitsRoundElapsed:0,
     iwMsg: 'hi bob, meet at 8?', iwBeat: 0, iwStarted: false, iwMoving: false, iwDone: false,
-    symMessage:'', symKey:'', symSealed:false, symSealedMessage:'', symSealedKey:'', symSealProgress:0,
+    symMessage:'meet me at 8', symKey:'rose-742', symChapter:0, symScrub:100, symDecKey:'right', symSealProgress:0,
     symResult:'', symFailure:false, symIntercepted:false, symMutation:1, symFriendHasKey:true,
     haText:'PAY BOB $100', haChapter:0, haGround:false, haNudged:false, haReversed:false, haBusy:false,
     rsaChapter:0, rsaShut:false, rsaReject:false, rsaSealed:false, rsaOpenState:null, rsaPublished:false, rsaEaves:0,
@@ -1940,6 +1889,7 @@ class Component extends DCLogic {
       if (this.state.stubId === 'quantum') this.drawQbCanvas();
       if (this.state.stubId === 'quantum-rsa') this.drawQrCanvas();
       if (this.state.stubId === 'bits') this.drawBitsCanvas();
+      if (this.state.stubId === 'symmetric') this.drawSyCanvas();
       requestAnimationFrame(this._loop);
     };
     requestAnimationFrame(this._loop);
@@ -2294,26 +2244,23 @@ class Component extends DCLogic {
     const iwStarted = !!st.iwStarted, iwDone = !!st.iwDone, iwMoving = !!st.iwMoving;
     const iwCur = iwBeatDefs[iwBeat];
     const iwDots = iwBeatDefs.map((_, i) => ({ className:'iw-dot' + (i <= iwBeat ? ' on' : '') + (i === iwBeat && !iwMoving ? ' cur' : '') }));
+    // ---- SYMMETRIC (CR-01) — the rotor machine ----
     const symMessage = st.symMessage || '', symKey = st.symKey || '';
-    const symReady = !!symMessage && !!symKey;
-    const symKeyHash = this.hashLearningText(symKey || 'empty');
-    const symKeyId = 'K-' + (symKeyHash & 0xffff).toString(16).toUpperCase().padStart(4,'0');
-    let fpSeed = symKeyHash || 1;
-    const symFingerprint = Array.from({length:16}, (_, idx) => {
-      fpSeed ^= fpSeed << 13; fpSeed ^= fpSeed >>> 17; fpSeed ^= fpSeed << 5; fpSeed >>>= 0;
-      return { style:{ height:(18 + fpSeed % 62)+'px', transform:'rotate(' + ((fpSeed >>> 8)%19-9) + 'deg)', opacity:.55 + (idx%4)*.12 } };
-    });
-    const symSealedMessage = st.symSealedMessage || '', symSealedKey = st.symSealedKey || '';
-    const symCiphertext = st.symSealed ? this.learningCipher(symSealedMessage, symSealedKey) : '';
-    const symMutation = Number(st.symMutation) || 0;
-    const symMutatedKey = this.mutateLearningKey(symSealedKey, symMutation);
-    const symMutatedCipher = st.symSealed ? this.learningCipher(symSealedMessage, symMutatedKey) : '';
-    const baseBlocks = symCiphertext ? symCiphertext.split(' ') : [], changedBlocks = symMutatedCipher ? symMutatedCipher.split(' ') : [];
-    const changed = baseBlocks.reduce((n, block, i) => n + (block !== changedBlocks[i] ? 1 : 0), 0);
-    const symCipherDelta = baseBlocks.length ? (changed/baseBlocks.length*100).toFixed(1) : '0.0';
-    const wrongKey = this.mutateLearningKey(symSealedKey, 1);
-    const blueKey = 'blue-' + (symSealedKey.match(/\d+$/)?.[0] || '742');
-    const symKeyCards = [symSealedKey, wrongKey, blueKey].map((key, i) => ({ key, label:i===0 ? key : key })).filter(c => c.key);
+    const symChapter = Math.max(0, Math.min(2, Number(st.symChapter) || 0));
+    const symScrub = Math.max(0, Math.min(100, Number(st.symScrub == null ? 100 : st.symScrub)));
+    const symDecKey = st.symDecKey === 'wrong' ? 'wrong' : 'right';
+    // one-character key change → how much of the ciphertext flips (avalanche)
+    const symCipherA = this.learningCipher(symMessage, symKey).split(' ');
+    const symCipherB = this.learningCipher(symMessage, this.haBumpLast(symKey)).split(' ');
+    const symChanged = symCipherA.reduce((n, b, i) => n + (b !== symCipherB[i] ? 1 : 0), 0);
+    const symDelta = symCipherA.length ? (symChanged / symCipherA.length * 100).toFixed(0) : '0';
+    const symBeatDefs = [
+      ['01','THE MACHINE','SCRUB IT THROUGH.','Your message queues on the left. Scrub it through the three rotors — the key cut their teeth — and each character is transformed on the way out into unreadable ciphertext. Encryption isn’t a curtain over the words; it’s this transformation.','Drag the scrub slider to push the message through the rotors and watch it turn to ciphertext.'],
+      ['02','THE KEY IS THE MACHINE','THE KEY CUTS THE TEETH.','Change one character of the shared key. The rotor teeth re-cut, and the exact same message now comes out completely different. The key isn’t a password checked at the door — it literally is the machine.','Edit the SHARED KEY above by one character and watch the rotors re-cut and the ciphertext change.'],
+      ['03','THE RETURN TRIP','SAME KEY, RUN BACKWARD.','Now reverse the crank. With the same key the rotors run backward and the plaintext comes back clean. With a key one character off, the teeth don’t line up and you get garbage. That symmetry — same key both ways — is the whole idea, and its catch.','Pick SAME KEY, scrub backward to recover the message. Then pick WRONG KEY and scrub again — garbage.'],
+    ];
+    const symCur = symBeatDefs[symChapter];
+    const symTabs = symBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === symChapter ? ' on' : '') }));
 
     // ---- HASHING (CR-02) — the grinder ----
     const haText = st.haText || '';
@@ -2526,23 +2473,16 @@ class Component extends DCLogic {
       iwStatus: !iwStarted ? 'AWAITING MESSAGE' : (iwMoving ? 'PACKET IN FLIGHT' : (iwDone ? 'ROUND TRIP COMPLETE' : 'HELD // ' + iwCur[0])),
       iwHud: iwStarted ? ('BEAT ' + iwBeat + '/6 · bob.host') : 'NO PACKET SENT',
 
-      symmetricOpen:st.stubId === 'symmetric', symMessage, symKey, symReady,
-      symHasMessage:!!symMessage, symByteCount:symMessage.length,
-      symTiles:Array.from(symMessage).slice(0,16).map(ch => ({ glyph:ch === ' ' ? '·' : ch })),
-      symKeyId, symFingerprint, symSealed:!!st.symSealed, symSealedKey,
-      symCiphertext, symCipherPreview:symCiphertext.split(' ').slice(0,5).join(' '), symCipherClass:'sy-cipher',
-      symSealStyle:{ width:Math.max(0, Math.min(100, st.symSealProgress || 0))+'%' },
-      symSealLabel:st.symSealed ? 'MESSAGE SEALED // HOLD TO RE-SEAL' : ((st.symSealProgress || 0) > 0 ? ('SEALING ' + String(st.symSealProgress).padStart(3,'0') + '%') : (symReady ? 'PRESS AND HOLD // SEAL MESSAGE' : 'MESSAGE + KEY REQUIRED')),
-      symIntercepted:!!st.symIntercepted,
-      symHasResult:!!st.symResult, symResult:st.symResult,
-      symResultClass:'sy-result' + (st.symFailure ? ' fail' : ''),
-      symResultTelemetry:st.symFailure ? 'KEY_MATCH: FALSE // OUTPUT_CLASS: GARBAGE // FAILURE_REASON: WRONG_KEY' : 'KEY_MATCH: TRUE // PLAINTEXT_RECOVERED // INTEGRITY: PASS',
-      symMutation, symMutationLabel:symMutation ? '1 CHAR' : 'NONE', symMutatedKey, symMutatedCipher, symCipherDelta,
-      symKeyCards,
-      symFriendClass:'sy-toggle' + (st.symFriendHasKey ? ' on' : ''), symFriendLabel:st.symFriendHasKey ? 'YES' : 'NO',
-      symFriendTelemetry:st.symFriendHasKey ? 'SENDER_KEY: PRESENT // RECEIVER_KEY: PRESENT // SYMMETRIC_STATE: VALID' : 'SENDER_KEY: PRESENT // RECEIVER_KEY: MISSING // SYMMETRIC_STATE: BROKEN',
-      symStatus:st.symFailure ? 'WRONG KEY' : (st.symSealed ? 'CIPHERTEXT LOCKED' : (symReady ? 'LOCK STATE READY' : 'PLAINTEXT EXPOSED')),
-      symHud:symReady ? ('PLAINTEXT ' + symMessage.length + 'B · ' + (st.symSealed ? 'READABLE FALSE' : 'READABLE TRUE')) : 'KEY SLOT EMPTY',
+      symmetricOpen:st.stubId === 'symmetric', symMessage, symKey,
+      symTabs, symBeatTag:symCur[0] + ' // ' + symCur[1], symBeatTitle:symCur[2], symBeatBody:symCur[3], symTodo:symCur[4],
+      symChapterMachine:symChapter === 0, symChapterKey:symChapter === 1, symChapterReturn:symChapter === 2,
+      symScrub:String(symScrub), symDelta, symChapterNum:symChapter + 1,
+      symScrubLabel:symScrub >= 98 ? 'FULLY CIPHERTEXT' : (symScrub <= 2 ? 'STILL PLAINTEXT' : 'PASSING THROUGH… ' + symScrub + '%'),
+      symRightClass:'sy-attempt' + (symDecKey === 'right' ? ' on' : ''), symWrongClass:'sy-attempt' + (symDecKey === 'wrong' ? ' on' : ''),
+      symReturnReadoutClass:'bb-readout' + (symDecKey === 'wrong' && symScrub < 50 ? ' ' : ''),
+      symReturnLabel:symDecKey === 'right' ? (symScrub <= 5 ? 'RECOVERED: the message is back, clean.' : 'unwinding with the correct key…') : 'WRONG KEY: the teeth miss — this comes out as garbage, not your message.',
+      symStatus:symChapter === 2 ? (symDecKey === 'wrong' ? 'WRONG KEY — GARBAGE' : 'DECRYPTING') : (symScrub >= 98 ? 'CIPHERTEXT' : (symScrub <= 2 ? 'PLAINTEXT' : 'TRANSFORMING')),
+      symHud:'KEY ' + (symKey ? '· ' + symKey.length + ' CHARS' : 'EMPTY') + ' · AVALANCHE ' + symDelta + '%',
 
       // ---- HASHING ----
       hashingOpen:st.stubId === 'hashing', haText,
@@ -2702,14 +2642,12 @@ class Component extends DCLogic {
       iwContinue: () => this.iwContinue(),
       iwReplay: () => this.iwReplay(),
       openInternetBridge: (e) => this.openInternetBridge(e),
-      symMessageInput: (e) => this.updateSymMessage(e),
-      symKeyInput: (e) => this.updateSymKey(e),
-      startSymSeal: () => this.startSymSeal(), cancelSymSeal: () => this.cancelSymSeal(),
-      interceptSymCipher: () => this.setState({ symIntercepted:true }),
-      decryptSym: () => this.decryptSym(),
-      mutateSymKey: (e) => this.setState({ symMutation:Number(e.currentTarget.value) || 0 }),
-      trySymKey: (e) => this.trySymKey(e),
-      toggleSymFriend: () => this.setState({ symFriendHasKey:!this.state.symFriendHasKey }),
+      symMessageInput: (e) => this.setState({ symMessage:e.currentTarget.value || '' }),
+      symKeyInput: (e) => this.setState({ symKey:e.currentTarget.value || '' }),
+      symPickChapter: (e) => this.setState({ symChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      symSetScrub: (e) => this.setState({ symScrub:Math.max(0, Math.min(100, Number(e.currentTarget.value) || 0)) }),
+      symUseRight: () => this.setState({ symDecKey:'right' }),
+      symUseWrong: () => this.setState({ symDecKey:'wrong' }),
       ctaEnter: () => this.setState({ ctaHover: true }),
       ctaLeave: () => this.setState({ ctaHover: false }),
       toggleLegend: () => this.setState({ legendOpen: !this.state.legendOpen }),
@@ -3699,6 +3637,85 @@ class Component extends DCLogic {
     const tag = document.getElementById('qr-tag');
     if (tag) tag.textContent = shor ? 'FACTORED' : (spacing === truePeriod && revealed ? 'RESONANT' : (revealed ? 'SEARCHING' : 'SEALED'));
   }
+  // ---------- CR-01 // the rotor machine ----------
+  drawSyCanvas() {
+    const canvas = document.getElementById('sy-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(220, rect.height || W*560/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.syColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.syColor(canvas,'--bb-ink','#171717');
+    const bg = this.syColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.syColor(canvas,'--bb-muted','#555');
+    const alarm = '#ff2a22';
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const chapter = Math.max(0, Math.min(2, Number(st.symChapter) || 0));
+    const scrub = Math.max(0, Math.min(100, Number(st.symScrub == null ? 100 : st.symScrub))) / 100;
+    const decRight = st.symDecKey !== 'wrong';
+    const msg = (st.symMessage || '').slice(0, 18) || '—';
+    const key = st.symKey || 'rose-742';
+    const cipher = this.learningCipher(msg, key).split(' ');
+    const wrongCipher = this.learningCipher(msg, this.haBumpLast(key)).split(' ');
+    const n = msg.length;
+    const reverse = chapter === 2;              // decrypt mode runs the machine backward
+    const front = reverse ? (1 - scrub) : scrub; // fraction converted
+
+    // rotor teeth cut from the key
+    let seed = this.hashLearningText('key:' + key) || 1;
+    const teeth = Array.from({length:12}, () => { seed ^= seed<<13; seed^=seed>>>17; seed^=seed<<5; seed>>>=0; return (seed % 100)/100; });
+
+    // layout: plaintext row (top), rotors (mid), ciphertext row (bottom)
+    const topY = H*0.16, midY = H*0.50, botY = H*0.84, cw = Math.min(30, (W-40)/Math.max(8,n)), x0 = (W - cw*n)/2;
+    // three rotors
+    const rcx = [W*0.30, W*0.50, W*0.70], rr = Math.min(W*0.075, H*0.13);
+    const spin = (reverse ? -1 : 1) * (front * 6 + now/2200);
+    rcx.forEach((gx, gi) => {
+      ctx.save(); ctx.translate(gx, midY); ctx.rotate(spin*(gi%2?-1:1));
+      ctx.strokeStyle = hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0,0,rr,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      for (let i=0;i<12;i++){ ctx.save(); ctx.rotate(i/12*Math.PI*2); const t = teeth[(i+gi*4)%12]; ctx.fillStyle = hud; ctx.fillRect(-2, -rr-3-t*7, 4, 5+t*7); ctx.restore(); }
+      ctx.beginPath(); ctx.arc(0,0,rr*0.3,0,Math.PI*2); ctx.stroke(); ctx.restore();
+    });
+    // connective belts
+    ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha=.3; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(x0, midY); ctx.lineTo(W-x0, midY); ctx.stroke(); ctx.restore();
+
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.save(); ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace";
+    ctx.fillText(reverse ? 'CIPHERTEXT IN' : 'PLAINTEXT IN', W/2, topY - cw*0.7);
+    ctx.fillText(reverse ? (decRight ? 'PLAINTEXT OUT' : 'GARBAGE OUT') : 'CIPHERTEXT OUT', W/2, botY + cw*0.7); ctx.restore();
+
+    for (let i=0;i<n;i++){
+      const cx = x0 + i*cw + cw/2;
+      const converted = (i/n) < front;
+      // input tile (top)
+      const inCh = reverse ? (cipher[i]||'··') : (msg[i]===' '?'␣':msg[i]);
+      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = converted?0.3:1; ctx.lineWidth=1; ctx.strokeRect(cx-cw*0.42, topY-cw*0.42, cw*0.84, cw*0.84);
+      ctx.globalAlpha=converted?0.3:1; ctx.fillStyle = ink; ctx.font = "700 " + Math.round(cw*0.45) + "px 'IBM Plex Mono', monospace"; ctx.fillText(String(inCh).slice(0,2), cx, topY); ctx.restore();
+      // output tile (bottom) — appears once converted
+      if (converted){
+        let outCh;
+        if (!reverse) outCh = cipher[i] || '··';
+        else outCh = decRight ? (msg[i]===' '?'␣':msg[i]) : String.fromCharCode(33 + (Math.abs(this.hashLearningText('g'+i+key)) % 90));
+        const good = reverse && decRight;
+        ctx.save(); ctx.strokeStyle = good?hud:(reverse?alarm:hud); ctx.lineWidth=1.5; ctx.fillStyle=bg;
+        ctx.fillRect(cx-cw*0.42, botY-cw*0.42, cw*0.84, cw*0.84); ctx.strokeRect(cx-cw*0.42, botY-cw*0.42, cw*0.84, cw*0.84);
+        ctx.fillStyle = good?ink:(reverse?alarm:hud); ctx.font = "700 " + Math.round(cw*0.42) + "px 'IBM Plex Mono', monospace"; ctx.fillText(String(outCh).slice(0,2), cx, botY); ctx.restore();
+      }
+    }
+    // the read-head sweeping through the machine
+    const hx = x0 + front*cw*n;
+    ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha=.5; ctx.lineWidth=2; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(hx, topY); ctx.lineTo(hx, botY); ctx.stroke(); ctx.restore();
+
+    const tag = document.getElementById('sy-tag');
+    if (tag) tag.textContent = reverse ? (decRight ? 'DECRYPTING' : 'WRONG KEY') : (front>=0.98?'ENCRYPTED':(front<=0.02?'PLAINTEXT':'ENCRYPTING'));
+  }
+  syColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
   // ---------- FD-01 // the signal wire (oscilloscope over the byte game) ----------
   drawBitsCanvas() {
     const canvas = document.getElementById('bits-canvas');
