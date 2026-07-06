@@ -280,6 +280,8 @@
   .ha-tab span{display:block;color:var(--bb-hud);font-size:6px;letter-spacing:.7px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .ha-tab.on{background:var(--bb-ink);color:var(--bb-bg);}
   .ha-tab.on span{color:var(--bb-bg);opacity:.7;}
+  .pk-stage-wrap:before{content:'PUBLIC-KEY BENCH // ONE LOCK, TWO KEYS';}
+  .pk-stage-wrap canvas{aspect-ratio:820/720;}
 
   /* TLS step-order puzzle */
   .tl-steps{display:grid;gap:6px;margin-top:14px;}
@@ -1084,7 +1086,7 @@
       <div class="bb-hud">
         <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
         <span class="bb-corner bl"></span><span class="bb-corner br"></span>
-        <div style="position:absolute;left:22px;top:20px;">CR-03 // ASYMMETRIC</div>
+        <div style="position:absolute;left:22px;top:20px;">CR-03 // THE BENCH</div>
         <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
           <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
             <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
@@ -1098,56 +1100,55 @@
 
       <main class="bb-shell">
         <div class="bb-kicker">MODULE 04 // CRYPTOGRAPHY</div>
-        <h1 class="bb-title" style="font-size:clamp(42px,13vw,68px);">A LOCK<br>YOU CAN'T<br>OPEN</h1>
-        <p class="bb-friendly">Send a secret to a stranger you've never shared a key with — by discovering that the lock and the key can be two different objects.</p>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,74px);">TWO<br>KEYS</h1>
+        <p class="bb-friendly">Every lock you've ever used, one key both locks and unlocks. This one is stranger: the key that snaps it shut can't open it. Send a secret to a stranger you've never shared a key with — and watch why that's possible.</p>
 
-        <section class="bb-section">
-          <div class="bb-kicker">SCAN 00 // THE PADLOCK</div>
-          <h2 class="bb-statement">ANYONE CLICKS IT SHUT. ONLY THE KEY OPENS IT.</h2>
-          <div class="{{ rsaLockClass }}">
-            <div class="pk-shackle"></div>
-            <div class="pk-body"><strong>{{ rsaLockGlyph }}</strong></div>
-          </div>
-          <div class="cx-grid2">
-            <button class="cx-btn" data-reticle-target="padlock" onClick="{{ rsaClickShut }}">CLICK SHUT</button>
-            <button class="cx-btn" data-reticle-target="padlock" onClick="{{ rsaClickOpen }}">CLICK TO OPEN</button>
-          </div>
-          <button class="cx-btn solid" data-reticle-target="usekey" onClick="{{ rsaUseKey }}">USE THE KEY</button>
-          <div class="bb-readout">{{ rsaLockTelemetry }}</div>
+        <section class="ha-stage-wrap pk-stage-wrap">
+          <canvas id="pk-canvas" width="820" height="720" aria-label="A padlock with a public key that only locks and a private key that only opens"></canvas>
+          <div class="ha-stage-tag" id="pk-tag"></div>
         </section>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 01 // TWO DIFFERENT KEYS</div>
-          <h2 class="bb-statement">ONE KEY LOCKS. A DIFFERENT KEY UNLOCKS.</h2>
-          <p class="bb-friendly">Lock this message with the server's PUBLIC key. Then try to open it — first with that same public key.</p>
-          <div class="cx-plain">{{ rsaBoxContent }}</div>
-          <div class="pk-keys">
-            <div class="pk-key pub"><strong>PUBLIC KEY</strong><span>SERVER // LOCKS ONLY</span></div>
-            <div class="pk-key"><strong>PRIVATE KEY</strong><span>SERVER // UNLOCKS ONLY</span></div>
+        <div class="ha-tabs"><sc-for list="{{ rsaTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ rsaPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ rsaBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ rsaBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ rsaBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ rsaTodo }}</div>
+
+        <sc-if value="{{ rsaChapterKeys }}" hint-placeholder-val="{{ true }}">
+          <div class="cx-grid2" style="margin-top:12px;">
+            <button class="cx-btn solid" data-reticle-target="pub" onClick="{{ rsaUsePublic }}">USE PUBLIC KEY</button>
+            <button class="cx-btn" data-reticle-target="priv" onClick="{{ rsaUsePrivate }}">USE PRIVATE KEY</button>
           </div>
-          <button class="cx-btn solid" data-reticle-target="lockmsg" onClick="{{ rsaSeal }}">&gt; LOCK WITH PUBLIC KEY</button>
+          <sc-if value="{{ rsaRejectShown }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">REFUSED // the PUBLIC key only closes. It physically cannot turn the other way. Locking and unlocking are genuinely different powers.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ rsaChapterSeal }}" hint-placeholder-val="{{ false }}">
+          <div class="cx-plain">{{ rsaBoxContent }}</div>
+          <button class="cx-btn solid" data-reticle-target="lockmsg" onClick="{{ rsaSeal }}" style="margin-top:8px;">&gt; SEAL THE BOX WITH THE PUBLIC KEY</button>
           <sc-if value="{{ rsaSealed }}" hint-placeholder-val="{{ false }}">
-            <div class="cx-grid2">
+            <div class="cx-grid2" style="margin-top:8px;">
               <button class="cx-btn" data-reticle-target="openpub" onClick="{{ rsaOpenPub }}">OPEN WITH PUBLIC</button>
               <button class="cx-btn" data-reticle-target="openpriv" onClick="{{ rsaOpenPriv }}">OPEN WITH PRIVATE</button>
             </div>
           </sc-if>
-          <sc-if value="{{ rsaOpenFail }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">SEALED // THAT KEY ONLY CLOSES. IT CANNOT OPEN. Look for the other one — locking and unlocking are genuinely different powers.</div></sc-if>
+          <sc-if value="{{ rsaOpenFail }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">SEALED // THAT KEY ONLY CLOSES. Look for the other one — the PRIVATE key never left the server's hands.</div></sc-if>
           <sc-if value="{{ rsaOpened }}" hint-placeholder-val="{{ false }}"><div class="cx-ok">OPENED // "{{ rsaBoxContent }}" — only the PRIVATE key could do this.</div></sc-if>
-        </section>
+        </sc-if>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 02 // PUBLISH THE LOCK</div>
-          <h2 class="bb-statement">THROW YOUR PUBLIC KEY INTO THE OPEN.</h2>
-          <p class="bb-friendly">Here's the wild part. Hand your lock to everyone — including the eavesdropper on the wire. Watch them stay stuck anyway.</p>
-          <div class="pk-wire">{{ rsaWireLabel }}</div>
-          <button class="cx-btn solid" data-reticle-target="publish" onClick="{{ rsaPublish }}">&gt; PUBLISH PUBLIC KEY TO THE WIRE</button>
+        <sc-if value="{{ rsaChapterPublish }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="publish" onClick="{{ rsaPublish }}" style="margin-top:12px;">&gt; PUBLISH PUBLIC KEY TO THE WIRE</button>
           <sc-if value="{{ rsaPublished }}" hint-placeholder-val="{{ false }}">
-            <button class="cx-btn" data-reticle-target="eaves" onClick="{{ rsaEavesTry }}">EAVESDROPPER: OPEN AN INTERCEPTED BOX WITH IT</button>
-            <div class="cx-counter">{{ rsaEaves }}<span> SEALED</span></div>
-            <div class="bb-readout">A <strong>public</strong> key is safe to publish because it only closes locks. Attempts {{ rsaEaves }} // opened 0. This is the moment RSA stops sounding impossible.</div>
+            <button class="cx-btn" data-reticle-target="eaves" onClick="{{ rsaEavesTry }}" style="margin-top:8px;">EAVESDROPPER: TRY AN INTERCEPTED BOX</button>
+            <div class="cx-counter">{{ rsaEaves }}<span> STILL SEALED</span></div>
+            <div class="bb-readout">A <strong>public</strong> key is safe to publish because it only closes locks. Attempts {{ rsaEaves }} // opened 0. This is the moment public-key crypto stops sounding impossible.</div>
           </sc-if>
-        </section>
+        </sc-if>
 
         <section class="bb-payoff">
           <h2 class="bb-statement" style="max-width:13ch;">SECRECY WITHOUT A SHARED SECRET.</h2>
@@ -1602,7 +1603,7 @@ class Component extends DCLogic {
     symMessage:'', symKey:'', symSealed:false, symSealedMessage:'', symSealedKey:'', symSealProgress:0,
     symResult:'', symFailure:false, symIntercepted:false, symMutation:1, symFriendHasKey:true,
     haText:'PAY BOB $100', haChapter:0, haGround:false, haNudged:false, haReversed:false, haBusy:false,
-    rsaLatch:'open', rsaLockTelemetry:'The shackle is open. Try clicking it shut — no key needed.', rsaSealed:false, rsaOpenState:null, rsaPublished:false, rsaEaves:0,
+    rsaChapter:0, rsaShut:false, rsaReject:false, rsaSealed:false, rsaOpenState:null, rsaPublished:false, rsaEaves:0,
     sgMessage:'ALICE: SEND $500 TO BOB', sgSigned:false, sgSignedHash:'', sgSignedMessage:'', sgVerifier:'alice', sgVerifyResult:null, sgForgeTried:false,
     tlSequence:[], tlFailed:null, tlSecure:false, tlAttacker:false, tlMitm:false,
     qbBit:0, qbAngle:90, qbZeros:0, qbOnes:0, qbTrapSprung:false, qbPhase:180, qbClassicalTries:0, qbClassicalResult:'—', qbQuantumSolved:false,
@@ -1940,6 +1941,7 @@ class Component extends DCLogic {
       if (this.state.stubId === 'pqc') this.drawPqCanvas();
       if (this.state.stubId === 'internet') this.drawIwCanvas();
       if (this.state.stubId === 'hashing') this.drawHaCanvas();
+      if (this.state.stubId === 'rsa') this.drawPkCanvas();
       requestAnimationFrame(this._loop);
     };
     requestAnimationFrame(this._loop);
@@ -2330,8 +2332,15 @@ class Component extends DCLogic {
     const haTabs = haBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === haChapter ? ' on' : '') }));
 
     // ---- PUBLIC-KEY / RSA (CR-03) ----
-    const rsaLatch = st.rsaLatch || 'open';
     const rsaOpened = st.rsaOpenState === 'ok', rsaOpenFail = !!st.rsaSealed && st.rsaOpenState === 'fail';
+    const rsaChapter = Math.max(0, Math.min(2, Number(st.rsaChapter) || 0));
+    const rsaBeatDefs = [
+      ['00','TWO POWERS','LOCKING ISN’T UNLOCKING.','Anyone can snap this padlock shut with the PUBLIC key. But that same key can’t open it again — only the PRIVATE key can. Two different keys, two different powers.','Press USE PUBLIC KEY to snap it shut, then press it again — it refuses to open. Then press USE PRIVATE KEY.'],
+      ['01','SEAL FOR A STRANGER','A SECRET FOR SOMEONE YOU’VE NEVER MET.','Seal your message with the server’s PUBLIC key, which they handed out freely. Only their PRIVATE key, which never left their hands, can open it — so you need no shared secret.','Press SEAL, then try OPEN WITH PUBLIC (it fails), then OPEN WITH PRIVATE.'],
+      ['02','PUBLISH THE LOCK','HAND THE LOCK TO EVERYONE.','Throw the public key onto the open wire — even to the eavesdropper. Because it only closes locks, it’s useless to them. That is the whole trick of public-key crypto.','Press PUBLISH, then let the EAVESDROPPER try an intercepted box.'],
+    ];
+    const rsaCur = rsaBeatDefs[rsaChapter];
+    const rsaTabs = rsaBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === rsaChapter ? ' on' : '') }));
 
     // ---- SIGNATURES (CR-04) ----
     const sgMessage = st.sgMessage || '';
@@ -2520,15 +2529,14 @@ class Component extends DCLogic {
 
       // ---- PUBLIC-KEY / RSA ----
       rsaOpen:st.stubId === 'rsa',
-      rsaLockClass:'pk-lock' + (rsaLatch === 'open' ? ' open' : ''),
-      rsaLockGlyph:rsaLatch === 'closed' ? '●' : '○',
-      rsaLockTelemetry:st.rsaLockTelemetry || '',
+      rsaTabs, rsaBeatTag:rsaCur[0] + ' // ' + rsaCur[1], rsaBeatTitle:rsaCur[2], rsaBeatBody:rsaCur[3], rsaTodo:rsaCur[4],
+      rsaChapterKeys:rsaChapter === 0, rsaChapterSeal:rsaChapter === 1, rsaChapterPublish:rsaChapter === 2,
+      rsaRejectShown:!!st.rsaReject,
       rsaBoxContent:'MEET AT PIER 9 // 8PM',
       rsaSealed:!!st.rsaSealed, rsaOpenFail, rsaOpened,
       rsaPublished:!!st.rsaPublished, rsaEaves:st.rsaEaves || 0,
-      rsaWireLabel:st.rsaPublished ? 'PUBLIC KEY IS NOW ON THE OPEN WIRE // ANYONE CAN GRAB IT' : 'THE OPEN WIRE // OBSERVER PRESENT',
-      rsaStatus:st.rsaSealed ? (rsaOpened ? 'BOX OPENED' : (rsaOpenFail ? 'SEALED — WRONG KEY' : 'BOX SEALED')) : (rsaLatch === 'closed' ? 'PADLOCK SHUT' : 'PADLOCK OPEN'),
-      rsaHud:st.rsaPublished ? ('KEY PUBLISHED · ' + (st.rsaEaves || 0) + ' SEALED') : 'ASYMMETRIC // 2 KEYS',
+      rsaStatus:st.rsaSealed ? (rsaOpened ? 'BOX OPENED' : (rsaOpenFail ? 'SEALED — WRONG KEY' : 'BOX SEALED')) : (st.rsaShut ? 'PADLOCK SHUT' : 'PADLOCK OPEN'),
+      rsaHud:st.rsaPublished ? ('KEY PUBLISHED · ' + (st.rsaEaves || 0) + ' SEALED') : 'TWO KEYS // ONE LOCK',
 
       // ---- SIGNATURES ----
       sigOpen:st.stubId === 'sig', sgMessage,
@@ -2553,14 +2561,14 @@ class Component extends DCLogic {
       haPickChapter:(e) => this.setState({ haChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
       haNudge:() => this.haNudge(),
       haReverse:() => this.haReverse(),
-      rsaClickShut:() => this.setState({ rsaLatch:'closed', rsaLockTelemetry:'CLICKED SHUT // no key was needed to close it. Anyone can do this.' }),
-      rsaClickOpen:() => this.setState(this.state.rsaLatch === 'closed' ? { rsaLockTelemetry:'STILL SHUT // clicking will not open it. Only the key opens it.' } : { rsaLockTelemetry:'ALREADY OPEN.' }),
-      rsaUseKey:() => this.setState({ rsaLatch:'open', rsaLockTelemetry:'KEY TURNED // open. Locking and unlocking are genuinely different powers.' }),
-      rsaSeal:() => this.setState({ rsaSealed:true, rsaOpenState:null }),
-      rsaOpenPub:() => this.setState({ rsaOpenState:'fail' }),
-      rsaOpenPriv:() => this.setState({ rsaOpenState:'ok' }),
-      rsaPublish:() => this.setState({ rsaPublished:true }),
-      rsaEavesTry:() => this.setState({ rsaEaves:(this.state.rsaEaves || 0) + 1 }),
+      rsaPickChapter:(e) => this.setState({ rsaChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      rsaUsePublic:() => this.rsaUsePublic(),
+      rsaUsePrivate:() => this.rsaUsePrivate(),
+      rsaSeal:() => { this.pkAnim('lock'); this.setState({ rsaSealed:true, rsaOpenState:null, rsaShut:true }); },
+      rsaOpenPub:() => { this.pkAnim('reject'); this.setState({ rsaOpenState:'fail' }); },
+      rsaOpenPriv:() => { this.pkAnim('unlock'); this.setState({ rsaOpenState:'ok', rsaShut:false }); },
+      rsaPublish:() => { this.pkAnim('publish'); this.setState({ rsaPublished:true }); },
+      rsaEavesTry:() => { this.pkAnim('eaves'); this.setState({ rsaEaves:(this.state.rsaEaves || 0) + 1 }); },
       sgInput:(e) => this.setState({ sgMessage:e.currentTarget.value || '', sgVerifyResult:null }),
       sgSign:() => { const m = this.state.sgMessage || ''; this.setState({ sgSigned:true, sgSignedMessage:m, sgSignedHash:this.learningDigest(m), sgVerifyResult:null, sgForgeTried:false }); },
       sgPickAlice:() => this.setState({ sgVerifier:'alice', sgVerifyResult:null }),
@@ -3094,6 +3102,120 @@ class Component extends DCLogic {
     const tag = document.getElementById('ha-tag');
     if (tag) tag.textContent = st.haBusy ? (anim ? anim.mode.toUpperCase() + '…' : 'WORKING…') : (jam ? 'JAMMED' : (st.haGround ? 'FORWARD OK' : 'READY'));
   }
+  // ---------- CR-03 // the public-key bench ----------
+  pkAnim(mode) { this._pk = { mode, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur:mode === 'publish' ? 1100 : 900 }; }
+  rsaUsePublic() {
+    if (this.state.rsaShut) { this.pkAnim('reject'); this.setState({ rsaReject:true }); }   // public key can't open
+    else { this.pkAnim('lock'); this.setState({ rsaShut:true, rsaReject:false }); }
+  }
+  rsaUsePrivate() {
+    if (this.state.rsaShut) { this.pkAnim('unlock'); this.setState({ rsaShut:false, rsaReject:false }); }
+    else this.setState({ rsaReject:false });
+  }
+  pkColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawPkCanvas() {
+    const canvas = document.getElementById('pk-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(280, rect.height || W*720/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.pkColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.pkColor(canvas,'--bb-ink','#171717');
+    const bg = this.pkColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.pkColor(canvas,'--bb-muted','#555');
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const anim = this._pk;
+    let k = 1; if (anim) { k = Math.max(0, Math.min(1, (now - anim.t0)/anim.dur)); if (k >= 1) this._pk = null; }
+    const mode = anim ? anim.mode : null;
+
+    // shackle openness 0=closed .. 1=open ; key turn angle ; shudder shake
+    let shackle = st.rsaShut ? 0 : 1;
+    let keyTurn = 0, shake = 0, whichKey = null;
+    if (mode === 'lock') { shackle = 1 - this.easeOut(k); keyTurn = k*Math.PI/2; whichKey = 'pub'; }
+    else if (mode === 'unlock') { shackle = this.easeOut(k); keyTurn = k*Math.PI/2; whichKey = 'priv'; }
+    else if (mode === 'reject') { shackle = 0; keyTurn = Math.sin(k*Math.PI)*0.5; shake = Math.sin(now/28)*4*(1-k); whichKey = 'pub'; }
+
+    const cx = W*0.5, bodyW = W*0.34, bodyH = H*0.30, bodyY = H*0.44;
+    // shackle (U bar) — lifts up + pivots as it opens
+    const sx = cx, sTop = bodyY - bodyH*0.05;
+    const lift = shackle * bodyH*0.34;
+    ctx.save(); ctx.translate(shake, 0);
+    ctx.strokeStyle = hud; ctx.lineWidth = Math.max(10, W*0.022); ctx.lineCap = 'round';
+    const r = bodyW*0.32;
+    ctx.beginPath();
+    ctx.moveTo(cx - r, bodyY + bodyH*0.15);
+    ctx.lineTo(cx - r, sTop - lift);
+    ctx.arc(cx, sTop - lift, r, Math.PI, 0);
+    ctx.lineTo(cx + r, bodyY + bodyH*0.15 - shackle*2);
+    ctx.stroke();
+    ctx.restore();
+
+    // lock body
+    ctx.save(); ctx.translate(shake, 0);
+    ctx.fillStyle = bg; ctx.strokeStyle = hud; ctx.lineWidth = 2;
+    this.roundRect(ctx, cx - bodyW/2, bodyY, bodyW, bodyH, 10); ctx.fill(); ctx.stroke();
+    // keyhole
+    const khY = bodyY + bodyH*0.44;
+    ctx.fillStyle = st.rsaShut ? hud : muted;
+    ctx.beginPath(); ctx.arc(cx, khY, bodyW*0.09, 0, Math.PI*2); ctx.fill();
+    ctx.fillRect(cx - bodyW*0.03, khY, bodyW*0.06, bodyH*0.22);
+    // status glyph
+    ctx.fillStyle = ink; ctx.font = "900 " + Math.round(bodyW*0.16) + "px 'Archivo', sans-serif"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(st.rsaShut ? 'SHUT' : 'OPEN', cx, bodyY + bodyH*0.80);
+    ctx.restore();
+
+    // the two keys on a ring at the bottom, one glows when in use
+    const drawKey = (kx, ky, label, col, active) => {
+      ctx.save(); ctx.translate(kx, ky);
+      if (active && whichKey) ctx.rotate(keyTurn*0.3);
+      ctx.strokeStyle = col; ctx.fillStyle = active ? col : bg; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI*2); ctx.stroke();   // bow
+      ctx.fillRect(-2, 10, 4, 34);                                      // shaft
+      ctx.fillRect(-2, 34, 10, 4); ctx.fillRect(-2, 40, 7, 4);         // teeth
+      ctx.fillStyle = col; ctx.font = "800 9px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center';
+      ctx.fillText(label, 0, -18); ctx.restore();
+    };
+    const kY = H*0.90;
+    drawKey(cx - bodyW*0.5, kY, 'PUBLIC', hud, whichKey === 'pub');
+    drawKey(cx + bodyW*0.5, kY, 'PRIVATE', ink, whichKey === 'priv');
+
+    // chapter 1: the sealed message box sits in front of the lock
+    if (st.rsaChapter === 1) {
+      const boxW = bodyW*0.7, boxX = cx - boxW/2, boxY = bodyY + bodyH*1.15, boxH = H*0.10;
+      ctx.save(); ctx.strokeStyle = hud; ctx.lineWidth = 2; ctx.fillStyle = bg;
+      ctx.strokeRect(boxX, boxY, boxW, boxH);
+      ctx.fillStyle = st.rsaOpenState === 'ok' ? ink : muted;
+      ctx.font = "800 " + Math.round(boxW*0.07) + "px 'Archivo', sans-serif"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(st.rsaOpenState === 'ok' ? 'MEET AT PIER 9 · 8PM' : (st.rsaSealed ? '████ ███ ████' : 'MEET AT PIER 9 · 8PM'), cx, boxY + boxH/2);
+      ctx.restore();
+    }
+
+    // chapter 2: publish — public key copies fly out along a wire to an eavesdropper
+    if (st.rsaChapter === 2) {
+      const wireY = H*0.90;
+      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .4; ctx.setLineDash([5,5]); ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(W*0.14, wireY); ctx.lineTo(W*0.86, wireY); ctx.stroke(); ctx.restore();
+      if (st.rsaPublished) {
+        const t = mode === 'publish' ? this.easeOut(k) : 1;
+        for (let i = 0; i < 3; i++) { const px = W*0.24 + (W*0.5)*((t + i*0.2)%1); ctx.save(); ctx.fillStyle = hud; ctx.fillRect(px-3, wireY-3, 6, 6); ctx.restore(); }
+        // eavesdropper figure at the end
+        ctx.save(); ctx.strokeStyle = mode === 'eaves' ? '#ff2a22' : hud; ctx.lineWidth = 2;
+        ctx.strokeRect(W*0.80, wireY-14, 22, 22);
+        ctx.fillStyle = mode === 'eaves' ? '#ff2a22' : hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center';
+        ctx.fillText('EVE', W*0.80+11, wireY+20); ctx.restore();
+      }
+    }
+
+    const tag = document.getElementById('pk-tag');
+    if (tag) tag.textContent = mode ? mode.toUpperCase() + '…' : (st.rsaShut ? 'LOCKED' : 'OPEN');
+  }
+  easeOut(k) { return 1 - Math.pow(1 - k, 3); }
+  roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
   openInternetBridge(e) {
     const id = e.currentTarget.dataset.node;
     if (!id || !this.g().byId[id]) return;
