@@ -266,6 +266,21 @@
   .pk-key.pub{box-shadow:inset 0 0 0 2px rgba(245,21,14,.16);}
   .pk-wire{border:1px dashed var(--bb-hud);padding:14px 10px;margin-top:14px;text-align:center;color:var(--bb-hud);font-size:9px;letter-spacing:1px;line-height:1.5;}
 
+  /* Hashing: the grinder */
+  .ha-compose{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:6px;}
+  .ha-msg{width:100%;min-width:0;border:1px solid var(--bb-hud);outline:0;background:var(--bb-bg);color:var(--bb-ink);font:700 17px 'Archivo',sans-serif;padding:12px;caret-color:var(--bb-hud);}
+  .ha-feed{border:1px solid var(--bb-hud);background:var(--bb-hud);color:var(--bb-bg);font:900 10px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:0 15px;white-space:nowrap;}
+  .ha-stage-wrap{position:relative;margin:16px 0 12px;border:1px solid var(--bb-hud);background:var(--bb-bg);overflow:hidden;}
+  .ha-stage-wrap:before{content:'ONE-WAY GRINDER // FORWARD ONLY';position:absolute;left:10px;top:-7px;background:var(--bb-bg);color:var(--bb-hud);font:7px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:0 6px;z-index:2;}
+  .ha-stage-wrap canvas{display:block;width:100%;height:auto;aspect-ratio:820/920;touch-action:none;}
+  .ha-stage-tag{position:absolute;right:10px;top:10px;color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;background:var(--bb-bg);padding:2px 5px;pointer-events:none;}
+  .ha-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:12px;}
+  .ha-tab{border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-ink);padding:9px 6px;text-align:left;min-width:0;}
+  .ha-tab strong{display:block;font:900 11px 'Archivo',sans-serif;line-height:1;text-transform:uppercase;}
+  .ha-tab span{display:block;color:var(--bb-hud);font-size:6px;letter-spacing:.7px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ha-tab.on{background:var(--bb-ink);color:var(--bb-bg);}
+  .ha-tab.on span{color:var(--bb-bg);opacity:.7;}
+
   /* TLS step-order puzzle */
   .tl-steps{display:grid;gap:6px;margin-top:14px;}
   .tl-step{border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-ink);padding:13px 12px;text-align:left;min-width:0;position:relative;}
@@ -1000,7 +1015,7 @@
       <div class="bb-hud">
         <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
         <span class="bb-corner bl"></span><span class="bb-corner br"></span>
-        <div style="position:absolute;left:22px;top:20px;">CR-02 // FINGERPRINT</div>
+        <div style="position:absolute;left:22px;top:20px;">CR-02 // THE GRINDER</div>
         <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
           <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
             <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
@@ -1009,87 +1024,53 @@
           <div>{{ haHud }}</div>
         </div>
         <div style="position:absolute;left:22px;bottom:20px;">{{ haStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
-        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">ATT {{ haAttempts }}</div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">{{ haHud2 }}</div>
       </div>
 
       <main class="bb-shell">
         <div class="bb-kicker">MODULE 03 // CRYPTOGRAPHY</div>
-        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">THE<br>FINGERPRINT</h1>
-        <p class="bb-friendly">Every message has a fingerprint. Try to change a message without changing its print. You can't — and that impossibility is the whole tool.</p>
+        <h1 class="bb-title" style="font-size:clamp(52px,17vw,84px);">THE<br>GRINDER</h1>
+        <p class="bb-friendly">A hash is a meat-grinder for data. Whatever you feed it — a word, a whole book — falls through and comes out as one fixed-size fingerprint. Feed it something and watch.</p>
 
-        <div class="iw-control">
-          <div class="cx-field">
-            <label>MESSAGE // TYPE ANYTHING</label>
-            <input id="ha-input" data-reticle-target="input" value="{{ haText }}" onChange="{{ haInput }}" maxlength="40" autocomplete="off" spellcheck="false" placeholder="pay bob $100">
-          </div>
+        <div class="ha-compose">
+          <input id="ha-input" class="ha-msg" data-reticle-target="input" value="{{ haText }}" onChange="{{ haInput }}" maxlength="40" autocomplete="off" spellcheck="false" placeholder="pay bob $100">
+          <button class="ha-feed" data-reticle-target="grind" onClick="{{ haGrind }}">{{ haGrindLabel }}</button>
         </div>
 
-        <section class="bb-section">
-          <div class="bb-kicker">SCAN 01 // AVALANCHE</div>
-          <h2 class="bb-statement">CHANGE ONE LETTER. WATCH IT DETONATE.</h2>
-          <p class="bb-friendly">The top print is your message's fingerprint. The bottom is the same message with the last character nudged by one. Nearly half the print flips — a tiny lie makes a totally different fingerprint.</p>
-          <div class="cx-card"><div class="cx-lab">YOUR MESSAGE → FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haDigestA }}" as="n" hint-placeholder-count="32"><span class="{{ n.className }}">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <div class="cx-card"><div class="cx-lab">ONE CHARACTER CHANGED → FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haDigestB }}" as="n" hint-placeholder-count="32"><span class="{{ n.className }}">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <div class="bb-readout">INPUT DELTA / <strong>1 CHARACTER</strong><br>FINGERPRINT DELTA / <strong>{{ haAvalanche }}%</strong> OF NIBBLES CHANGED</div>
+        <section class="ha-stage-wrap">
+          <canvas id="ha-canvas" width="820" height="920" aria-label="A grinder turning your message into a fixed-size fingerprint"></canvas>
+          <div class="ha-stage-tag" id="ha-tag"></div>
         </section>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 02 // COLLISION HUNT</div>
-          <h2 class="bb-statement">FORGE A DIFFERENT MESSAGE WITH THE SAME PRINT.</h2>
-          <p class="bb-friendly">Target fingerprint sits below. Keep generating messages and try to make one land on it.</p>
-          <div class="cx-card"><div class="cx-lab">TARGET FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haTargetPrint }}" as="n" hint-placeholder-count="32"><span class="cx-nib">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <sc-if value="{{ haHasCandidate }}" hint-placeholder-val="{{ false }}">
-            <div class="cx-card"><div class="cx-lab">CANDIDATE // "{{ haCandidateText }}"</div>
-              <div class="cx-fp"><sc-for list="{{ haCandidatePrint }}" as="n" hint-placeholder-count="32"><span class="{{ n.className }}">{{ n.ch }}</span></sc-for></div>
-            </div>
-          </sc-if>
-          <div class="cx-counter">{{ haAttempts }}<span> ATTEMPTS</span></div>
-          <div style="color:var(--bb-hud);font-size:8px;letter-spacing:1px;">MATCHES 0 // COLLISION SPACE UNREACHABLE</div>
-          <button class="cx-btn solid" data-reticle-target="collide" onClick="{{ haCollide }}">&gt; GENERATE ANOTHER MESSAGE</button>
-          <sc-if value="{{ haGaveUp }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">You can't. Nobody can, in any reasonable time. Hashing's value <strong>is</strong> the wall you just hit.</div></sc-if>
+        <div class="ha-tabs"><sc-for list="{{ haTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ haPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ haBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ haBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ haBeatBody }}</p>
         </section>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 03 // ONE-WAY</div>
-          <h2 class="bb-statement">NOW RUN IT BACKWARDS.</h2>
-          <p class="bb-friendly">Here is a fingerprint. Recover the message that made it. There is no undo button, no inverse.</p>
-          <div class="cx-card"><div class="cx-lab">UNKNOWN INPUT → FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haSecretPrint }}" as="n" hint-placeholder-count="32"><span class="cx-nib">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <div class="cx-field"><label>RECOVERED MESSAGE?</label>
-            <input id="ha-recover" data-reticle-target="input" value="{{ haRecover }}" onChange="{{ haRecoverInput }}" maxlength="40" autocomplete="off" placeholder="type your guess">
-          </div>
-          <button class="cx-btn" data-reticle-target="recover" onClick="{{ haTryRecover }}">&gt; CHECK GUESS</button>
-          <sc-if value="{{ haRecoverTried }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">NO MATCH // A FINGERPRINT REVEALS NOTHING ABOUT ITS INPUT. It only runs forwards. That is why passwords are stored this way — steal the prints, still can't get the passwords.</div></sc-if>
-        </section>
+        <div class="pq-todo"><span>DO THIS</span>{{ haTodo }}</div>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 04 // THE DETECTOR</div>
-          <h2 class="bb-statement">YOU ARE THE TAMPER ALARM.</h2>
-          <p class="bb-friendly">Original on top, received copy below. Edit the received copy — the prints diverge instantly. Put it back — they re-align.</p>
-          <div class="cx-card"><div class="cx-lab">ORIGINAL</div>
-            <div style="font:800 15px 'Archivo',sans-serif;color:var(--bb-ink);">{{ haOriginal }}</div>
-            <div class="cx-fp"><sc-for list="{{ haOrigPrint }}" as="n" hint-placeholder-count="32"><span class="cx-nib">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <div class="cx-field"><label>RECEIVED // EDIT ME</label>
-            <input id="ha-received" data-reticle-target="input" value="{{ haReceived }}" onChange="{{ haReceivedInput }}" maxlength="40" autocomplete="off">
-          </div>
-          <div class="cx-card"><div class="cx-lab">RECEIVED → FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ haRecvPrint }}" as="n" hint-placeholder-count="32"><span class="{{ n.className }}">{{ n.ch }}</span></sc-for></div>
-          </div>
-          <sc-if value="{{ haIntact }}" hint-placeholder-val="{{ true }}"><div class="cx-ok">INTEGRITY OK // FINGERPRINTS MATCH // NOTHING WAS CHANGED.</div></sc-if>
-          <sc-if value="{{ haTampered }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">INTEGRITY VIOLATION // FINGERPRINTS DIVERGE // THE RECEIVED COPY WAS ALTERED.</div></sc-if>
-        </section>
+        <sc-if value="{{ haChapterGrind }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="grind" onClick="{{ haGrind }}" style="margin-top:12px;">&gt; GRIND IT</button>
+        </sc-if>
+
+        <sc-if value="{{ haChapterAval }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="nudge" onClick="{{ haNudge }}" style="margin-top:12px;">&gt; NUDGE ONE LETTER &amp; RE-GRIND</button>
+          <sc-if value="{{ haNudged }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">SAME MESSAGE, ONE LETTER MOVED // FINGERPRINT DELTA / <strong>{{ haAvalanche }}%</strong> OF THE PRINT FLIPPED. A tiny lie makes a totally different fingerprint — that is what makes it a tamper detector.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ haChapterOneWay }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="reverse" onClick="{{ haReverse }}" style="margin-top:12px;">&gt; RUN IT BACKWARDS</button>
+          <sc-if value="{{ haReversed }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">JAMMED // A FINGERPRINT REVEALS NOTHING ABOUT ITS INPUT. The grinder has no reverse. That is why passwords are stored as hashes — steal the prints, you still can't get the passwords back.</div></sc-if>
+        </sc-if>
 
         <section class="bb-payoff">
           <h2 class="bb-statement" style="max-width:13ch;">IT CATCHES ANY CHANGE.</h2>
-          <p class="bb-friendly" style="margin-bottom:0;">But a fingerprint can't tell you WHO sent a message — an attacker could change it and recompute a fresh print. You need a fingerprint only one specific person could have produced. Hold that thought.</p>
+          <p class="bb-friendly" style="margin-bottom:0;">But a fingerprint can't tell you WHO sent a message — an attacker could change it and grind a fresh print. You need a fingerprint only one specific person could have produced. Hold that thought.</p>
           <button class="cx-btn solid" data-reticle-target="next" data-node="rsa" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: PUBLIC-KEY CRYPTOGRAPHY</button>
         </section>
         <div class="bb-scope">LEARNING SIMULATION // This is an illustrative hash, not real SHA-256. Real hashes are longer and battle-tested; the behaviour you felt — avalanche, no inverse, no collisions — is identical.</div>
@@ -1620,7 +1601,7 @@ class Component extends DCLogic {
     iwMsg: 'hi bob, meet at 8?', iwBeat: 0, iwStarted: false, iwMoving: false, iwDone: false,
     symMessage:'', symKey:'', symSealed:false, symSealedMessage:'', symSealedKey:'', symSealProgress:0,
     symResult:'', symFailure:false, symIntercepted:false, symMutation:1, symFriendHasKey:true,
-    haText:'PAY BOB $100', haAttempts:0, haRecover:'', haRecoverTried:false, haReceived:'PAY BOB $100',
+    haText:'PAY BOB $100', haChapter:0, haGround:false, haNudged:false, haReversed:false, haBusy:false,
     rsaLatch:'open', rsaLockTelemetry:'The shackle is open. Try clicking it shut — no key needed.', rsaSealed:false, rsaOpenState:null, rsaPublished:false, rsaEaves:0,
     sgMessage:'ALICE: SEND $500 TO BOB', sgSigned:false, sgSignedHash:'', sgSignedMessage:'', sgVerifier:'alice', sgVerifyResult:null, sgForgeTried:false,
     tlSequence:[], tlFailed:null, tlSecure:false, tlAttacker:false, tlMitm:false,
@@ -1958,6 +1939,7 @@ class Component extends DCLogic {
       this.updateScanners();
       if (this.state.stubId === 'pqc') this.drawPqCanvas();
       if (this.state.stubId === 'internet') this.drawIwCanvas();
+      if (this.state.stubId === 'hashing') this.drawHaCanvas();
       requestAnimationFrame(this._loop);
     };
     requestAnimationFrame(this._loop);
@@ -2333,29 +2315,19 @@ class Component extends DCLogic {
     const blueKey = 'blue-' + (symSealedKey.match(/\d+$/)?.[0] || '742');
     const symKeyCards = [symSealedKey, wrongKey, blueKey].map((key, i) => ({ key, label:i===0 ? key : key })).filter(c => c.key);
 
-    // ---- HASHING (CR-02) ----
+    // ---- HASHING (CR-02) — the grinder ----
     const haText = st.haText || '';
-    const haBumped = haText ? this.mutateLearningKey(haText, 1) : haText;
-    const haDA = this.learningDigest(haText), haDB = this.learningDigest(haBumped);
-    const haDigestA = haDA.split('').map((ch, i) => ({ ch, className:'cx-nib' + (haText && ch !== haDB[i] ? ' diff' : '') }));
-    const haDigestB = haDB.split('').map((ch, i) => ({ ch, className:'cx-nib' + (haText && ch !== haDA[i] ? ' diff' : '') }));
-    const haAvChanged = haText ? haDA.split('').reduce((n, ch, i) => n + (ch !== haDB[i] ? 1 : 0), 0) : 0;
+    const haDA = this.learningDigest(haText), haDN = this.learningDigest(this.haBumpLast(haText));
+    const haAvChanged = haText ? haDA.split('').reduce((n, ch, i) => n + (ch !== haDN[i] ? 1 : 0), 0) : 0;
     const haAvalanche = ((haAvChanged / 32) * 100).toFixed(0);
-    const haOriginal = 'PAY BOB $100';
-    const haCollideSamples = ['SEND $9000','PAY EVE $500','WIRE $100.00','pay bob $100','PAY  BOB $100','Pay Bob $100','PAY BOB $1O0','TRANSFER NOW','pay bob $101','APPROVE XFER','PAY BOB $100!','ok pay $100'];
-    const haAttempts = st.haAttempts || 0;
-    const haCandidateText = haAttempts > 0 ? haCollideSamples[(haAttempts - 1) % haCollideSamples.length] : '';
-    const haTargetStr = this.learningDigest(haOriginal);
-    const haTargetPrint = haTargetStr.split('').map(ch => ({ ch }));
-    const haCandStr = haCandidateText ? this.learningDigest(haCandidateText) : '';
-    const haCandidatePrint = haCandStr.split('').map((ch, i) => ({ ch, className:'cx-nib' + (ch !== haTargetStr[i] ? ' diff' : '') }));
-    const haSecret = 'the-2019-budget-memo';
-    const haSecretPrint = this.learningDigest(haSecret).split('').map(ch => ({ ch }));
-    const haReceived = st.haReceived || '';
-    const haOrigStr = this.learningDigest(haOriginal), haRecvStr = this.learningDigest(haReceived);
-    const haOrigPrint = haOrigStr.split('').map(ch => ({ ch }));
-    const haRecvPrint = haRecvStr.split('').map((ch, i) => ({ ch, className:'cx-nib' + (ch !== haOrigStr[i] ? ' diff' : '') }));
-    const haIntact = haReceived === haOriginal;
+    const haChapter = Math.max(0, Math.min(2, Number(st.haChapter) || 0));
+    const haBeatDefs = [
+      ['01','GRIND','CHEW IT UP.','Whatever you type falls through the rollers and comes out the bottom as a 32-cell fingerprint. Feed it a word or a whole paragraph — the fingerprint is always the same size.','Type a message above and press GRIND. Watch your text drop through the rollers and the fingerprint crystallise cell by cell.'],
+      ['02','AVALANCHE','ONE LETTER. TOTAL DETONATION.','Move a single character and grind again. Nearly half the fingerprint cells flip. A tiny change to the input scrambles the whole output — no way to nudge the print a little.','Press NUDGE ONE LETTER & RE-GRIND and watch the changed cells flash red across the tray.'],
+      ['03','ONE-WAY','NO REVERSE GEAR.','Try to feed a fingerprint back in and get the message out. The grinder jams — it only runs forward. That is exactly why passwords are stored as fingerprints.','Press RUN IT BACKWARDS and watch the rollers seize up.'],
+    ];
+    const haCur = haBeatDefs[haChapter];
+    const haTabs = haBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === haChapter ? ' on' : '') }));
 
     // ---- PUBLIC-KEY / RSA (CR-03) ----
     const rsaLatch = st.rsaLatch || 'open';
@@ -2537,13 +2509,14 @@ class Component extends DCLogic {
 
       // ---- HASHING ----
       hashingOpen:st.stubId === 'hashing', haText,
-      haDigestA, haDigestB, haAvalanche,
-      haTargetPrint, haHasCandidate:haAttempts > 0, haCandidateText, haCandidatePrint,
-      haAttempts, haGaveUp:haAttempts >= 6,
-      haSecretPrint, haRecover:st.haRecover, haRecoverTried:!!st.haRecoverTried,
-      haOriginal, haOrigPrint, haReceived, haRecvPrint, haIntact, haTampered:!haIntact,
-      haStatus:!haIntact ? 'INTEGRITY VIOLATION' : (haAttempts > 0 ? 'COLLISION HUNT' : 'FINGERPRINTING'),
-      haHud:'AVALANCHE ' + haAvalanche + '% · MATCHES 0',
+      haTabs, haAvalanche,
+      haGrindLabel: st.haGround ? 'RE-GRIND' : 'GRIND ▶',
+      haBeatTag: haCur[0] + ' // ' + haCur[1], haBeatTitle: haCur[2], haBeatBody: haCur[3], haTodo: haCur[4],
+      haChapterGrind: haChapter === 0, haChapterAval: haChapter === 1, haChapterOneWay: haChapter === 2,
+      haNudged: !!st.haNudged, haReversed: !!st.haReversed,
+      haStatus: st.haBusy ? 'GRINDING' : (st.haReversed ? 'JAMMED // NO INVERSE' : (st.haGround ? 'FINGERPRINT SET' : 'HOPPER LOADED')),
+      haHud: st.haGround ? ('AVALANCHE ' + haAvalanche + '%') : 'NOT YET GROUND',
+      haHud2: 'CH ' + (haChapter + 1) + '/3',
 
       // ---- PUBLIC-KEY / RSA ----
       rsaOpen:st.stubId === 'rsa',
@@ -2575,11 +2548,11 @@ class Component extends DCLogic {
       tlStatus:st.tlSecure ? (st.tlAttacker ? 'ATTACKER — LOCKED OUT' : 'SECURE') : (st.tlFailed ? 'HANDSHAKE FAILED' : 'ORDERING'),
       tlHud:st.tlSecure ? 'CHANNEL SECURE · ATTACKER LOCKED OUT' : ('STEPS ' + tlSeq.length + '/4'),
 
-      haInput:(e) => this.setState({ haText:e.currentTarget.value || '' }),
-      haCollide:() => this.setState({ haAttempts:(this.state.haAttempts || 0) + 1 }),
-      haRecoverInput:(e) => this.setState({ haRecover:e.currentTarget.value || '' }),
-      haTryRecover:() => this.setState({ haRecoverTried:true }),
-      haReceivedInput:(e) => this.setState({ haReceived:e.currentTarget.value || '' }),
+      haInput:(e) => this.haInput(e),
+      haGrind:() => this.haGrind(),
+      haPickChapter:(e) => this.setState({ haChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      haNudge:() => this.haNudge(),
+      haReverse:() => this.haReverse(),
       rsaClickShut:() => this.setState({ rsaLatch:'closed', rsaLockTelemetry:'CLICKED SHUT // no key was needed to close it. Anyone can do this.' }),
       rsaClickOpen:() => this.setState(this.state.rsaLatch === 'closed' ? { rsaLockTelemetry:'STILL SHUT // clicking will not open it. Only the key opens it.' } : { rsaLockTelemetry:'ALREADY OPEN.' }),
       rsaUseKey:() => this.setState({ rsaLatch:'open', rsaLockTelemetry:'KEY TURNED // open. Locking and unlocking are genuinely different powers.' }),
@@ -2974,6 +2947,152 @@ class Component extends DCLogic {
       }
     }
     const sp = document.getElementById('iw-speed'); if (sp) sp.textContent = started ? speedTxt : 'READY // PRESS SEND';
+  }
+  // ---------- CR-02 // the grinder ----------
+  haBumpLast(text) {
+    const t = (text || '').replace(/\s+$/,'') || 'x';
+    const last = t.charCodeAt(t.length - 1);
+    return t.slice(0, -1) + String.fromCharCode(last === 122 ? 97 : last + 1);
+  }
+  haInput(e) {
+    clearTimeout(this._haTimer); this._ha = null;
+    this.setState({ haText:e.currentTarget.value || '', haGround:false, haNudged:false, haReversed:false, haBusy:false });
+  }
+  haStartAnim(mode, dur, after) {
+    this._ha = { mode, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur };
+    clearTimeout(this._haTimer);
+    this._haTimer = setTimeout(() => { this._ha = null; if (after) after(); }, dur + 40);
+  }
+  haGrind() {
+    this.setState({ haChapter:0, haGround:false, haNudged:false, haReversed:false, haBusy:true });
+    this.haStartAnim('grind', 1700, () => this.setState({ haGround:true, haBusy:false }));
+  }
+  haNudge() {
+    const done = () => this.setState({ haBusy:false });
+    this.setState({ haChapter:1, haGround:true, haNudged:true, haReversed:false, haBusy:true });
+    this.haStartAnim('avalanche', 1500, done);
+  }
+  haReverse() {
+    this.setState({ haChapter:2, haReversed:true, haBusy:true });
+    this.haStartAnim('reverse', 1500, () => this.setState({ haBusy:false }));
+  }
+  haColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawHaCanvas() {
+    const canvas = document.getElementById('ha-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(360, rect.height || W*920/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.haColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.haColor(canvas,'--bb-ink','#171717');
+    const bg = this.haColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.haColor(canvas,'--bb-muted','#555');
+    const alarm = '#ff2a22';
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const anim = this._ha;
+    const digest = this.learningDigest(st.haText || '');
+    const nudged = this.learningDigest(this.haBumpLast(st.haText || ''));
+
+    // animation progress + state
+    let grindP = st.haGround ? 1 : 0;   // how full the fingerprint tray is
+    let spin = now / 900;               // roller rotation
+    let spinDir = 1, jam = 0, avalancheP = -1, reverseShake = 0;
+    if (anim) {
+      const k = Math.max(0, Math.min(1, (now - anim.t0)/anim.dur));
+      if (anim.mode === 'grind') { grindP = 1 - Math.pow(1 - k, 3); spin = now/120; }
+      else if (anim.mode === 'avalanche') { grindP = 1; spin = now/200; avalancheP = k; }
+      else if (anim.mode === 'reverse') { grindP = 1; spinDir = -1; spin = -now/160; reverseShake = Math.sin(now/40)*3*(1-k); jam = k > 0.35 ? 1 : 0; }
+    }
+
+    const cx = W/2;
+    // --- hopper (message tiles) ---
+    const hopY = H*0.10, hopH = H*0.11;
+    ctx.save(); ctx.strokeStyle = hud; ctx.lineWidth = 1.5; ctx.strokeRect(W*0.10, hopY, W*0.80, hopH); ctx.restore();
+    const msg = (st.haText || '').slice(0, 20) || '—';
+    ctx.save(); ctx.fillStyle = ink; ctx.font = "800 " + Math.round(W*0.045) + "px 'Archivo', sans-serif"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(msg, cx, hopY + hopH/2); ctx.restore();
+    ctx.save(); ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'left';
+    ctx.fillText('HOPPER // ANY LENGTH IN', W*0.10, hopY - 6); ctx.restore();
+
+    // --- funnel + one-way valve ---
+    const funTop = hopY + hopH, funBot = funTop + H*0.06, valveY = funBot + 6;
+    ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .5; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(W*0.10, funTop); ctx.lineTo(cx - W*0.09, funBot); ctx.moveTo(W*0.90, funTop); ctx.lineTo(cx + W*0.09, funBot); ctx.stroke();
+    // valve chevron (down = allowed). jams red on reverse.
+    ctx.globalAlpha = 1; ctx.strokeStyle = jam ? alarm : hud; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx - 12, valveY); ctx.lineTo(cx, valveY + 9); ctx.lineTo(cx + 12, valveY); ctx.stroke();
+    ctx.restore();
+
+    // --- three roller rows (meshing gears) ---
+    const gear = (gx, gy, r, phase) => {
+      ctx.save(); ctx.translate(gx, gy); ctx.rotate(spin*phase);
+      ctx.strokeStyle = jam ? alarm : hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+      for (let i = 0; i < 8; i++) { ctx.save(); ctx.rotate(i/8*Math.PI*2); ctx.fillStyle = jam ? alarm : hud; ctx.fillRect(-2, -r-4, 4, 6); ctx.restore(); }
+      ctx.beginPath(); ctx.arc(0,0,r*0.28,0,Math.PI*2); ctx.strokeStyle = jam ? alarm : hud; ctx.stroke();
+      ctx.restore();
+    };
+    const rowYs = [valveY + H*0.09, valveY + H*0.19, valveY + H*0.29];
+    const gr = W*0.075;
+    rowYs.forEach((gy, ri) => {
+      const sh = ri === 1 ? reverseShake : -reverseShake;
+      gear(cx - gr - 4 + sh, gy, gr, spinDir * (ri%2? 1 : -1));
+      gear(cx + gr + 4 + sh, gy, gr, spinDir * (ri%2? -1 : 1));
+    });
+
+    // --- falling pulp stream during grind ---
+    if (anim && anim.mode === 'grind') {
+      const k = Math.max(0, Math.min(1, (now - anim.t0)/anim.dur));
+      ctx.save(); ctx.fillStyle = hud;
+      for (let i = 0; i < 14; i++) {
+        const ph = (k*2.4 + i*0.17) % 1;
+        const y = funTop + ph*(rowYs[2]+H*0.06 - funTop);
+        ctx.globalAlpha = .6*(1-ph);
+        ctx.fillRect(cx - 6 + Math.sin(i*3+ph*10)*W*0.06, y, 4, 4);
+      }
+      ctx.restore();
+    }
+    // reverse sparks near valve
+    if (anim && anim.mode === 'reverse' && jam) {
+      ctx.save(); ctx.strokeStyle = alarm; ctx.lineWidth = 1.5;
+      for (let i = 0; i < 6; i++) { const a = Math.random()*Math.PI*2, len = 6 + Math.random()*12; ctx.globalAlpha = Math.random(); ctx.beginPath(); ctx.moveTo(cx, valveY+9); ctx.lineTo(cx + Math.cos(a)*len, valveY+9 + Math.sin(a)*len); ctx.stroke(); }
+      ctx.restore();
+    }
+
+    // --- fingerprint tray (32 cells, 16x2) ---
+    const trayY = rowYs[2] + H*0.075, cols = 16, rows = 2;
+    const pad = W*0.06, cw = (W - pad*2)/cols, ch = cw*1.15, gap = 2;
+    ctx.save(); ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'left';
+    ctx.fillText('FINGERPRINT // ALWAYS 32 CELLS OUT', pad, trayY - 6); ctx.restore();
+    for (let i = 0; i < 32; i++) {
+      const c = i % cols, r = Math.floor(i / cols);
+      const x = pad + c*cw, y = trayY + r*ch;
+      const filled = (i / 32) <= grindP;
+      let diff = false;
+      if (avalancheP >= 0) { // avalanche cascade: differing cells flash in, left-to-right
+        const isDiff = digest[i] !== nudged[i];
+        diff = isDiff && avalancheP > (i / 40);
+      }
+      ctx.save();
+      ctx.strokeStyle = hud; ctx.globalAlpha = filled ? 1 : .25; ctx.lineWidth = 1;
+      ctx.strokeRect(x+gap/2, y+gap/2, cw-gap, ch-gap);
+      if (filled) {
+        ctx.fillStyle = diff ? alarm : ink; ctx.globalAlpha = diff ? .9 : .14;
+        ctx.fillRect(x+gap/2, y+gap/2, cw-gap, ch-gap);
+        ctx.globalAlpha = 1; ctx.fillStyle = diff ? bg : ink;
+        ctx.font = "700 " + Math.round(cw*0.5) + "px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText((diff ? nudged[i] : digest[i]) || '', x + cw/2, y + ch/2);
+      }
+      ctx.restore();
+    }
+
+    const tag = document.getElementById('ha-tag');
+    if (tag) tag.textContent = st.haBusy ? (anim ? anim.mode.toUpperCase() + '…' : 'WORKING…') : (jam ? 'JAMMED' : (st.haGround ? 'FORWARD OK' : 'READY'));
   }
   openInternetBridge(e) {
     const id = e.currentTarget.dataset.node;
