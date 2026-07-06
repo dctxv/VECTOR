@@ -282,6 +282,8 @@
   .ha-tab.on span{color:var(--bb-bg);opacity:.7;}
   .pk-stage-wrap:before{content:'PUBLIC-KEY BENCH // ONE LOCK, TWO KEYS';}
   .pk-stage-wrap canvas{aspect-ratio:820/720;}
+  .sg-stage-wrap:before{content:'SEAL DESK // PRESSED WITH A PRIVATE KEY';}
+  .sg-stage-wrap canvas{aspect-ratio:820/680;}
 
   /* TLS step-order puzzle */
   .tl-steps{display:grid;gap:6px;margin-top:14px;}
@@ -1166,7 +1168,7 @@
       <div class="bb-hud">
         <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
         <span class="bb-corner bl"></span><span class="bb-corner br"></span>
-        <div style="position:absolute;left:22px;top:20px;">CR-04 // SIGN &amp; VERIFY</div>
+        <div style="position:absolute;left:22px;top:20px;">CR-04 // THE SEAL</div>
         <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
           <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
             <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
@@ -1180,44 +1182,51 @@
 
       <main class="bb-shell">
         <div class="bb-kicker">MODULE 05 // CRYPTOGRAPHY</div>
-        <h1 class="bb-title" style="font-size:clamp(50px,16vw,80px);">SIGN &amp;<br>VERIFY</h1>
-        <p class="bb-friendly">A signature proves two things at once: who wrote it, and that not one character changed. Try to forge one — every way — and get caught.</p>
+        <h1 class="bb-title" style="font-size:clamp(52px,17vw,84px);">THE<br>SEAL</h1>
+        <p class="bb-friendly">A signature is a wax seal pressed with your PRIVATE key — and its pattern is baked from the exact words of the letter. It proves two things at once: who wrote it, and that not one character changed since.</p>
 
-        <div class="iw-control">
-          <div class="cx-field">
-            <label>MESSAGE FROM ALICE</label>
-            <input id="sg-input" data-reticle-target="input" value="{{ sgMessage }}" onChange="{{ sgInput }}" maxlength="48" autocomplete="off" spellcheck="false">
-          </div>
-          <button class="cx-btn solid" data-reticle-target="sign" onClick="{{ sgSign }}">SIGN WITH ALICE'S PRIVATE KEY</button>
+        <div class="ha-compose">
+          <input id="sg-input" class="ha-msg" data-reticle-target="input" value="{{ sgMessage }}" onChange="{{ sgInput }}" maxlength="40" autocomplete="off" spellcheck="false">
+          <button class="ha-feed" data-reticle-target="sign" onClick="{{ sgSign }}">{{ sgSignLabel }}</button>
         </div>
 
-        <sc-if value="{{ sgSigned }}" hint-placeholder-val="{{ false }}">
-          <div class="cx-card"><div class="cx-lab">SIGNATURE // BOUND TO THE MESSAGE FINGERPRINT</div>
-            <div class="cx-fp"><sc-for list="{{ sgSigNibbles }}" as="n" hint-placeholder-count="32"><span class="cx-nib">{{ n.ch }}</span></sc-for></div>
-          </div>
+        <section class="ha-stage-wrap sg-stage-wrap">
+          <canvas id="sg-canvas" width="820" height="680" aria-label="A letter with a wax seal that cracks if the letter is altered"></canvas>
+          <div class="ha-stage-tag" id="sg-tag"></div>
+        </section>
+
+        <div class="ha-tabs"><sc-for list="{{ sgTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ sgPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ sgBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ sgBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ sgBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ sgTodo }}</div>
+
+        <sc-if value="{{ sgChapterSeal }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="sign" onClick="{{ sgSign }}" style="margin-top:12px;">&gt; PRESS THE SEAL // SIGN WITH ALICE'S PRIVATE KEY</button>
         </sc-if>
 
-        <section class="bb-section">
-          <div class="bb-kicker">SCAN 01 // VERIFY</div>
-          <h2 class="bb-statement">CHECK IT AGAINST A PUBLIC KEY.</h2>
-          <p class="bb-friendly">Two claims get checked at once: it really came from Alice, and nobody touched it. Pick a public key, then verify.</p>
-          <div class="pk-keys">
-            <button class="{{ sgAliceKeyClass }}" data-reticle-target="step" onClick="{{ sgPickAlice }}"><strong>ALICE'S PUBLIC KEY</strong><span>THE REAL SENDER</span></button>
-            <button class="{{ sgMalloryKeyClass }}" data-reticle-target="step" onClick="{{ sgPickMallory }}"><strong>MALLORY'S PUBLIC KEY</strong><span>THE IMPOSTER</span></button>
+        <sc-if value="{{ sgChapterVerify }}" hint-placeholder-val="{{ false }}">
+          <div class="pk-keys" style="margin-top:12px;">
+            <button class="{{ sgAliceKeyClass }}" data-reticle-target="step" onClick="{{ sgPickAlice }}"><strong>ALICE'S LENS</strong><span>THE REAL SENDER</span></button>
+            <button class="{{ sgMalloryKeyClass }}" data-reticle-target="step" onClick="{{ sgPickMallory }}"><strong>MALLORY'S LENS</strong><span>THE IMPOSTER</span></button>
           </div>
-          <button class="cx-btn" data-reticle-target="verify" onClick="{{ sgVerify }}">&gt; VERIFY SIGNATURE</button>
+          <button class="cx-btn solid" data-reticle-target="verify" onClick="{{ sgVerify }}" style="margin-top:8px;">&gt; HOLD THE LENS OVER THE SEAL</button>
           <sc-if value="{{ sgVerified }}" hint-placeholder-val="{{ false }}"><div class="cx-ok">VERIFIED // ALICE // UNALTERED — identity and integrity confirmed in one move.</div></sc-if>
-          <sc-if value="{{ sgContentBad }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">SIGNATURE INVALID // CONTENT ALTERED — the message fingerprint no longer matches the one sealed in the signature. Change the content, break the seal.</div></sc-if>
-          <sc-if value="{{ sgIdentityBad }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">IDENTITY MISMATCH // KEY DOES NOT VERIFY — the signature made with Alice's private key won't verify against the imposter's public key.</div></sc-if>
-        </section>
+          <sc-if value="{{ sgContentBad }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">SEAL CRACKED // CONTENT ALTERED — the letter's fingerprint no longer matches the one baked into the wax. Edit it back and the crack heals.</div></sc-if>
+          <sc-if value="{{ sgIdentityBad }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">IDENTITY MISMATCH // Mallory's lens can't read a seal Alice's private key pressed. Wrong sender.</div></sc-if>
+          <div class="bb-readout">TRY IT // edit one letter of the message above, then verify — the wax cracks. Put it back — it heals.</div>
+        </sc-if>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 02 // FORGERY</div>
-          <h2 class="bb-statement">SIGN A FAKE MESSAGE AS ALICE.</h2>
-          <p class="bb-friendly">You only hold Alice's PUBLIC key, not her private one. Try to sign as her anyway.</p>
-          <button class="cx-btn" data-reticle-target="forge" onClick="{{ sgForge }}">&gt; FORGE ALICE'S SIGNATURE</button>
-          <sc-if value="{{ sgForgeTried }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">PRIVATE KEY REQUIRED // NOT HELD — only the holder of the private key can produce a signature. The public key can only <strong>check</strong> it. This is RSA run in reverse.</div></sc-if>
-        </section>
+        <sc-if value="{{ sgChapterForge }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="forge" onClick="{{ sgForge }}" style="margin-top:12px;">&gt; FORGE ALICE'S SEAL (PUBLIC KEY ONLY)</button>
+          <sc-if value="{{ sgForgeTried }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">PRIVATE KEY REQUIRED // NOT HELD — the stamp bounces. Only the holder of the private key can press a seal; the public key can only <strong>check</strong> it. This is public-key crypto run in reverse.</div></sc-if>
+        </sc-if>
 
         <section class="bb-payoff">
           <h2 class="bb-statement" style="max-width:13ch;">IDENTITY AND INTEGRITY, TOGETHER.</h2>
@@ -1604,7 +1613,7 @@ class Component extends DCLogic {
     symResult:'', symFailure:false, symIntercepted:false, symMutation:1, symFriendHasKey:true,
     haText:'PAY BOB $100', haChapter:0, haGround:false, haNudged:false, haReversed:false, haBusy:false,
     rsaChapter:0, rsaShut:false, rsaReject:false, rsaSealed:false, rsaOpenState:null, rsaPublished:false, rsaEaves:0,
-    sgMessage:'ALICE: SEND $500 TO BOB', sgSigned:false, sgSignedHash:'', sgSignedMessage:'', sgVerifier:'alice', sgVerifyResult:null, sgForgeTried:false,
+    sgMessage:'ALICE: SEND $500 TO BOB', sgChapter:0, sgSigned:false, sgSignedHash:'', sgSignedMessage:'', sgVerifier:'alice', sgVerifyResult:null, sgForgeTried:false,
     tlSequence:[], tlFailed:null, tlSecure:false, tlAttacker:false, tlMitm:false,
     qbBit:0, qbAngle:90, qbZeros:0, qbOnes:0, qbTrapSprung:false, qbPhase:180, qbClassicalTries:0, qbClassicalResult:'—', qbQuantumSolved:false,
     qrRevealed:false, qrTries:0, qrBruteActive:false, qrQuantumRun:false, qrCascade:false,
@@ -1942,6 +1951,7 @@ class Component extends DCLogic {
       if (this.state.stubId === 'internet') this.drawIwCanvas();
       if (this.state.stubId === 'hashing') this.drawHaCanvas();
       if (this.state.stubId === 'rsa') this.drawPkCanvas();
+      if (this.state.stubId === 'sig') this.drawSgCanvas();
       requestAnimationFrame(this._loop);
     };
     requestAnimationFrame(this._loop);
@@ -2342,10 +2352,17 @@ class Component extends DCLogic {
     const rsaCur = rsaBeatDefs[rsaChapter];
     const rsaTabs = rsaBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === rsaChapter ? ' on' : '') }));
 
-    // ---- SIGNATURES (CR-04) ----
+    // ---- SIGNATURES (CR-04) — the seal desk ----
     const sgMessage = st.sgMessage || '';
     const sgVerifier = st.sgVerifier || 'alice';
-    const sgSigNibbles = st.sgSigned ? this.learningDigest(st.sgSignedMessage || '').split('').map(ch => ({ ch })) : [];
+    const sgChapter = Math.max(0, Math.min(2, Number(st.sgChapter) || 0));
+    const sgBeatDefs = [
+      ['01','SEAL','PRESS IT WITH YOUR PRIVATE KEY.','Signing melts a blob of wax onto the letter and stamps it with your PRIVATE key. The pattern in the wax is baked from the exact words — a fingerprint of the message, sealed in.','Type a message above and press PRESS THE SEAL.'],
+      ['02','VERIFY & CRACK','TWO CLAIMS, ONE LOOK.','Hold a public-key lens over the seal. Alice’s lens reads it as genuine and unaltered. Now edit one letter of the signed letter — the wax visibly cracks, because the pattern no longer matches the words.','Verify with ALICE’S LENS, then edit one letter above and verify again — watch the seal crack.'],
+      ['03','FORGE','YOU CAN’T FAKE THE PRESS.','Try to stamp a seal holding only Alice’s PUBLIC key. The stamp bounces — a public key can only CHECK a seal, never press one. Only the private key signs.','Press FORGE ALICE’S SEAL and watch the stamp refuse.'],
+    ];
+    const sgCur = sgBeatDefs[sgChapter];
+    const sgTabs = sgBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === sgChapter ? ' on' : '') }));
 
     // ---- TLS (CR-05) ----
     const tlDefs = { verify:['VERIFY IDENTITY','check the server certificate'], key:['AGREE ON A KEY','asymmetric key exchange over the open wire'], cipher:['SWITCH TO FAST CIPHER','hand off to symmetric encryption'], data:['EXCHANGE DATA','send the real request, now scrambled'] };
@@ -2540,7 +2557,10 @@ class Component extends DCLogic {
 
       // ---- SIGNATURES ----
       sigOpen:st.stubId === 'sig', sgMessage,
-      sgSigned:!!st.sgSigned, sgSigNibbles,
+      sgSigned:!!st.sgSigned,
+      sgTabs, sgBeatTag:sgCur[0] + ' // ' + sgCur[1], sgBeatTitle:sgCur[2], sgBeatBody:sgCur[3], sgTodo:sgCur[4],
+      sgChapterSeal:sgChapter === 0, sgChapterVerify:sgChapter === 1, sgChapterForge:sgChapter === 2,
+      sgSignLabel:st.sgSigned ? 'RE-SEAL' : 'SEAL ▶',
       sgAliceKeyClass:'pk-key' + (sgVerifier === 'alice' ? ' pub' : ''),
       sgMalloryKeyClass:'pk-key' + (sgVerifier === 'mallory' ? ' pub' : ''),
       sgVerified:st.sgVerifyResult === 'ok', sgContentBad:st.sgVerifyResult === 'content', sgIdentityBad:st.sgVerifyResult === 'identity',
@@ -2570,11 +2590,12 @@ class Component extends DCLogic {
       rsaPublish:() => { this.pkAnim('publish'); this.setState({ rsaPublished:true }); },
       rsaEavesTry:() => { this.pkAnim('eaves'); this.setState({ rsaEaves:(this.state.rsaEaves || 0) + 1 }); },
       sgInput:(e) => this.setState({ sgMessage:e.currentTarget.value || '', sgVerifyResult:null }),
-      sgSign:() => { const m = this.state.sgMessage || ''; this.setState({ sgSigned:true, sgSignedMessage:m, sgSignedHash:this.learningDigest(m), sgVerifyResult:null, sgForgeTried:false }); },
+      sgSign:() => { const m = this.state.sgMessage || ''; this.sgAnim('stamp'); this.setState({ sgSigned:true, sgSignedMessage:m, sgSignedHash:this.learningDigest(m), sgVerifyResult:null, sgForgeTried:false }); },
+      sgPickChapter:(e) => this.setState({ sgChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
       sgPickAlice:() => this.setState({ sgVerifier:'alice', sgVerifyResult:null }),
       sgPickMallory:() => this.setState({ sgVerifier:'mallory', sgVerifyResult:null }),
-      sgVerify:() => this.verifySignature(),
-      sgForge:() => this.setState({ sgForgeTried:true }),
+      sgVerify:() => { this.sgAnim('verify'); this.verifySignature(); },
+      sgForge:() => { this.sgAnim('forge'); this.setState({ sgForgeTried:true }); },
       tlPick:(e) => this.tlPick(e),
       tlReset:() => this.setState({ tlSequence:[], tlFailed:null, tlSecure:false, tlAttacker:false, tlMitm:false }),
       tlToggleAttacker:() => this.setState({ tlAttacker:!this.state.tlAttacker }),
@@ -3268,6 +3289,101 @@ class Component extends DCLogic {
     else if (this.state.sgVerifier !== 'alice') r = 'identity'; // wrong public key → identity fails
     else r = 'ok';
     this.setState({ sgVerifyResult:r });
+  }
+  // ---------- CR-04 // the seal desk ----------
+  sgAnim(mode) { this._sg = { mode, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur:900 }; }
+  sgColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawSgCanvas() {
+    const canvas = document.getElementById('sg-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(260, rect.height || W*680/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.sgColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.sgColor(canvas,'--bb-ink','#171717');
+    const bg = this.sgColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.sgColor(canvas,'--bb-muted','#555');
+    const alarm = '#ff2a22', okc = '#1fae53';
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const anim = this._sg; let k = 1, mode = null;
+    if (anim) { k = Math.max(0, Math.min(1, (now - anim.t0)/anim.dur)); mode = anim.mode; if (k >= 1) this._sg = null; }
+
+    // the letter (parchment)
+    const lx = W*0.14, ly = H*0.08, lw = W*0.72, lh = H*0.72;
+    ctx.save(); ctx.fillStyle = bg; ctx.strokeStyle = hud; ctx.lineWidth = 2;
+    this.roundRect(ctx, lx, ly, lw, lh, 6); ctx.fill(); ctx.stroke();
+    // header + message text
+    ctx.fillStyle = muted; ctx.font = "8px 'IBM Plex Mono', monospace"; ctx.textAlign = 'left';
+    ctx.fillText('FROM ALICE', lx + lw*0.08, ly + lh*0.13);
+    ctx.fillStyle = ink; ctx.font = "800 " + Math.round(lw*0.058) + "px 'Archivo', sans-serif";
+    const msg = (st.sgMessage || '').slice(0, 26);
+    this.wrapText(ctx, msg, lx + lw*0.08, ly + lh*0.30, lw*0.84, lw*0.075);
+    // ruled filler lines
+    ctx.strokeStyle = hud; ctx.globalAlpha = .16; ctx.lineWidth = 1;
+    for (let i = 0; i < 3; i++) { const yy = ly + lh*0.52 + i*lh*0.09; ctx.beginPath(); ctx.moveTo(lx+lw*0.08, yy); ctx.lineTo(lx+lw*0.62, yy); ctx.stroke(); }
+    ctx.restore();
+
+    // is the seal cracked? (signed, but the letter no longer matches the sealed words)
+    const cracked = st.sgSigned && this.learningDigest(st.sgMessage || '') !== st.sgSignedHash;
+    const verOk = st.sgVerifyResult === 'ok', verBad = st.sgVerifyResult === 'content' || st.sgVerifyResult === 'identity';
+
+    // wax seal, bottom-right of letter
+    const seX = lx + lw*0.72, seY = ly + lh*0.80, seR = lw*0.14;
+    if (st.sgSigned) {
+      // stamp descends on 'stamp'; bounces on 'forge'
+      let press = 1, forgeLift = 0;
+      if (mode === 'stamp') press = this.easeOut(k);
+      if (mode === 'forge') forgeLift = Math.sin(k*Math.PI) * seR * 1.6;
+      ctx.save(); ctx.translate(0, -forgeLift);
+      // wax blob
+      ctx.fillStyle = (cracked || verBad) ? alarm : hud; ctx.globalAlpha = 0.9*press;
+      ctx.beginPath();
+      for (let a = 0; a < Math.PI*2; a += Math.PI/9) { const rr = seR*(0.88 + 0.12*Math.sin(a*3)); ctx.lineTo(seX + Math.cos(a)*rr, seY + Math.sin(a)*rr); }
+      ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1;
+      // embossed fingerprint ring (pattern from the sealed hash)
+      const hsh = st.sgSignedHash || '00000000';
+      ctx.strokeStyle = bg; ctx.lineWidth = 1.5;
+      for (let i = 0; i < 16; i++) { const a = i/16*Math.PI*2, mag = 0.4 + (parseInt(hsh[i%hsh.length],16)||0)/15*0.5; ctx.beginPath(); ctx.moveTo(seX+Math.cos(a)*seR*0.35, seY+Math.sin(a)*seR*0.35); ctx.lineTo(seX+Math.cos(a)*seR*mag, seY+Math.sin(a)*seR*mag); ctx.stroke(); }
+      ctx.beginPath(); ctx.arc(seX, seY, seR*0.62, 0, Math.PI*2); ctx.stroke();
+      // the crack — a jagged seam when the letter was altered
+      if (cracked) {
+        ctx.strokeStyle = bg; ctx.lineWidth = 3;
+        ctx.beginPath(); let jx = seX - seR; ctx.moveTo(jx, seY - seR*0.6);
+        for (let s = 0; s <= 6; s++) { jx += seR*2/6; ctx.lineTo(jx, seY + (s%2? -1:1)*seR*0.35); } ctx.stroke();
+      }
+      ctx.restore();
+      // verify lens sweep
+      if (mode === 'verify') {
+        const lensX = lx + (seX - lx)*this.easeOut(k);
+        ctx.save(); ctx.strokeStyle = verOk ? okc : (verBad ? alarm : hud); ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(lensX, seY, seR*1.2, 0, Math.PI*2); ctx.stroke(); ctx.restore();
+      }
+      // verdict badge
+      if (!anim && st.sgVerifyResult) {
+        ctx.save(); ctx.fillStyle = verOk ? okc : alarm; ctx.font = "900 10px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center';
+        ctx.fillText(verOk ? '✓ VERIFIED' : (st.sgVerifyResult === 'identity' ? '✕ WRONG SENDER' : '✕ CRACKED'), seX, seY + seR + 16); ctx.restore();
+      }
+    } else {
+      // empty seal socket
+      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .4; ctx.setLineDash([4,4]); ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(seX, seY, seR, 0, Math.PI*2); ctx.stroke();
+      ctx.globalAlpha = 1; ctx.fillStyle = muted; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center'; ctx.setLineDash([]);
+      ctx.fillText('UNSEALED', seX, seY); ctx.restore();
+    }
+
+    const tag = document.getElementById('sg-tag');
+    if (tag) tag.textContent = mode ? mode.toUpperCase() + '…' : (cracked ? 'SEAL CRACKED' : (st.sgSigned ? 'SEALED' : 'UNSEALED'));
+  }
+  wrapText(ctx, text, x, y, maxW, lh) {
+    const words = String(text).split(' '); let line = '', yy = y;
+    for (const w of words) { const t = line ? line + ' ' + w : w; if (ctx.measureText(t).width > maxW && line) { ctx.fillText(line, x, yy); line = w; yy += lh; } else line = t; }
+    if (line) ctx.fillText(line, x, yy);
   }
   tlPick(e) {
     const id = e.currentTarget.dataset.step;
