@@ -284,6 +284,8 @@
   .pk-stage-wrap canvas{aspect-ratio:820/720;}
   .sg-stage-wrap:before{content:'SEAL DESK // PRESSED WITH A PRIVATE KEY';}
   .sg-stage-wrap canvas{aspect-ratio:820/680;}
+  .tl-stage-wrap:before{content:'HANDSHAKE THEATER // ATTACKER ON THE WIRE';}
+  .tl-stage-wrap canvas{aspect-ratio:820/560;}
 
   /* TLS step-order puzzle */
   .tl-steps{display:grid;gap:6px;margin-top:14px;}
@@ -1253,66 +1255,60 @@
           <div>{{ tlHud }}</div>
         </div>
         <div style="position:absolute;left:22px;bottom:20px;">{{ tlStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
-        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">ATTACKER {{ tlAttackerLabel }}</div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">{{ tlHud }}</div>
       </div>
 
       <main class="bb-shell">
         <div class="bb-kicker">MODULE 06 // CRYPTOGRAPHY</div>
         <h1 class="bb-title" style="font-size:clamp(52px,17vw,84px);">THE<br>HANDSHAKE</h1>
-        <p class="bb-friendly">Build a secure channel from the four tools you now own — while an eavesdropper watches every step — and watch them walk away with static.</p>
+        <p class="bb-friendly">A browser, a server, one wire — and an attacker clamped onto that wire from the very first second, with a live screen showing everything they can read. Build a secure channel from the four tools you now own, and watch their screen fade to static.</p>
 
-        <section class="bb-section">
-          <div class="bb-kicker">SCAN 00 // PLAIN HTTP</div>
-          <h2 class="bb-statement">THIS IS WHERE WE STARTED.</h2>
-          <p class="bb-friendly">On plain http, the login flows past in the clear. Everyone on the path can read you.</p>
-          <div class="cx-alarm">GET /login&nbsp;&nbsp;user=clay&nbsp;&nbsp;pass=hunter2<br>&nbsp;&nbsp;↳ OBSERVER ON THE WIRE READS EVERYTHING</div>
+        <section class="ha-stage-wrap tl-stage-wrap">
+          <canvas id="tl-canvas" width="820" height="560" aria-label="A browser and server handshake with an attacker tapping the wire"></canvas>
+          <div class="ha-stage-tag" id="tl-tag"></div>
         </section>
 
-        <section class="bb-section" style="padding-top:28px;">
-          <div class="bb-kicker">SCAN 01 // BUILD THE HANDSHAKE</div>
-          <h2 class="bb-statement">PUT THE FOUR STEPS IN ORDER.</h2>
-          <p class="bb-friendly">You can't encrypt before you share a key. You can't trust a key before you verify identity. Tap them in the right order.</p>
+        <div class="ha-tabs"><sc-for list="{{ tlTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ tlPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ tlBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ tlBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ tlBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ tlTodo }}</div>
+
+        <sc-if value="{{ tlChapterPlain }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="send" onClick="{{ tlSendLogin }}" style="margin-top:12px;">&gt; SEND LOGIN OVER PLAIN HTTP</button>
+          <sc-if value="{{ tlSent }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">READ IN THE CLEAR // user=clay pass=hunter2 — the attacker's screen shows your login verbatim. Every machine on the path can read it. This is the problem HTTPS solves.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ tlChapterBuild }}" hint-placeholder-val="{{ false }}">
           <div class="tl-steps">
             <sc-for list="{{ tlSteps }}" as="s" hint-placeholder-count="4">
               <button class="{{ s.className }}" data-reticle-target="step" data-step="{{ s.id }}" onClick="{{ tlPick }}"><span class="tl-ord">{{ s.ord }}</span><strong>{{ s.title }}</strong><span>{{ s.sub }}</span></button>
             </sc-for>
           </div>
           <sc-if value="{{ tlFailed }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">{{ tlFailMsg }}</div></sc-if>
-          <sc-if value="{{ tlSecure }}" hint-placeholder-val="{{ false }}">
-            <div class="tl-lock">SECURE CHANNEL 🔒</div>
-            <div class="cx-ok">All four tools, stacked in the right order, negotiated over the open wire. The padlock snaps shut.</div>
-          </sc-if>
-          <button class="cx-btn" data-reticle-target="restart" onClick="{{ tlReset }}">RESET STEPS</button>
-        </section>
-
-        <sc-if value="{{ tlSecure }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">SCAN 02 // BECOME THE EAVESDROPPER</div>
-            <h2 class="bb-statement">YOU WATCHED EVERYTHING. YOU HAVE NOTHING.</h2>
-            <p class="bb-friendly">Flip to the attacker's seat and read the traffic you just secured.</p>
-            <button class="cx-btn solid" data-reticle-target="attacker" onClick="{{ tlToggleAttacker }}">TOGGLE ATTACKER VIEW // {{ tlAttackerLabel }}</button>
-            <sc-if value="{{ tlAttacker }}" hint-placeholder-val="{{ false }}">
-              <div class="cx-card"><div class="cx-lab">CERTIFICATE EXCHANGE</div><div class="cx-hex">public info — you can read it, and it's useless to you</div></div>
-              <div class="cx-card"><div class="cx-lab">KEY AGREEMENT</div><div class="cx-hex">{{ tlNoise1 }}</div></div>
-              <div class="cx-card"><div class="cx-lab">ENCRYPTED DATA</div><div class="cx-hex">{{ tlNoise2 }}</div></div>
-              <div class="bb-readout">You saw every message. And you've got nothing but noise. <strong>That's HTTPS.</strong></div>
-            </sc-if>
-          </section>
-
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">SCAN 03 // MAN IN THE MIDDLE</div>
-            <h2 class="bb-statement">SWAP IN YOUR OWN CERTIFICATE.</h2>
-            <p class="bb-friendly">Try to impersonate the server — hand over your certificate instead of theirs.</p>
-            <button class="cx-btn" data-reticle-target="mitm" onClick="{{ tlMitmTry }}">&gt; IMPERSONATE THE SERVER</button>
-            <sc-if value="{{ tlMitm }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">CERTIFICATE INVALID // NOT SIGNED BY A TRUSTED AUTHORITY — the signature check catches you. The certificate is a signature vouching for the key. The RSA question — "how do I know it's really their key?" — is now answered.</div></sc-if>
-          </section>
-
-          <section class="bb-payoff">
-            <h2 class="bb-statement" style="max-width:14ch;">YOU BROKE IT, DEFENDED IT, REBUILT IT.</h2>
-            <p class="bb-friendly" style="margin-bottom:0;">That padlock in your browser bar is this exact handshake, happening in under a second, every time you load a secure page. Identity, key-exchange, a shared cipher, tamper-proofing — the four things you just learned, assembled while an attacker watched and walked away with static.</p>
-            <button class="cx-btn solid" data-reticle-target="exit" onClick="{{ closeStub }}" style="margin-top:16px;">&gt; RETURN TO THE ATLAS</button>
-          </section>
+          <sc-if value="{{ tlSecure }}" hint-placeholder-val="{{ false }}"><div class="cx-ok">SECURE CHANNEL 🔒 // All four tools, stacked in the right order over the open wire. Look at the attacker's screen — pure static. You saw every message and walked away with nothing. That's HTTPS.</div></sc-if>
+          <button class="cx-btn" data-reticle-target="restart" onClick="{{ tlReset }}" style="margin-top:8px;">RESET STEPS</button>
         </sc-if>
+
+        <sc-if value="{{ tlChapterMitm }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ tlSecure }}" hint-placeholder-val="{{ true }}">
+            <button class="cx-btn solid" data-reticle-target="mitm" onClick="{{ tlMitmTry }}" style="margin-top:12px;">&gt; ATTACKER: SWAP IN A FAKE CERTIFICATE</button>
+            <sc-if value="{{ tlMitm }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">CERTIFICATE INVALID // NOT SIGNED BY A TRUSTED AUTHORITY — the signature check from the last module catches you. The certificate is a signature vouching for the key. The public-key question — "how do I know it's really their key?" — is now answered.</div></sc-if>
+          </sc-if>
+          <sc-if value="{{ tlNotSecureYet }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">Build the secure channel first (chapter 02), then come back and try to break it.</div></sc-if>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:14ch;">YOU BROKE IT, DEFENDED IT, REBUILT IT.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">That padlock in your browser bar is this exact handshake, happening in under a second, every time you load a secure page. Identity, key-exchange, a shared cipher, tamper-proofing — the four things you learned, assembled while an attacker watched and walked away with static.</p>
+          <button class="cx-btn solid" data-reticle-target="exit" onClick="{{ closeStub }}" style="margin-top:16px;">&gt; RETURN TO THE ATLAS</button>
+        </section>
 
         <div class="bb-scope">LEARNING SIMULATION // Simplified handshake — real TLS 1.3 has more steps, session resumption, and cipher negotiation. The attacker view is a concept sim, never a real interception tool. These four steps are the essential shape.</div>
       </main>
@@ -1614,7 +1610,7 @@ class Component extends DCLogic {
     haText:'PAY BOB $100', haChapter:0, haGround:false, haNudged:false, haReversed:false, haBusy:false,
     rsaChapter:0, rsaShut:false, rsaReject:false, rsaSealed:false, rsaOpenState:null, rsaPublished:false, rsaEaves:0,
     sgMessage:'ALICE: SEND $500 TO BOB', sgChapter:0, sgSigned:false, sgSignedHash:'', sgSignedMessage:'', sgVerifier:'alice', sgVerifyResult:null, sgForgeTried:false,
-    tlSequence:[], tlFailed:null, tlSecure:false, tlAttacker:false, tlMitm:false,
+    tlSequence:[], tlChapter:0, tlSent:false, tlFailed:null, tlSecure:false, tlMitm:false,
     qbBit:0, qbAngle:90, qbZeros:0, qbOnes:0, qbTrapSprung:false, qbPhase:180, qbClassicalTries:0, qbClassicalResult:'—', qbQuantumSolved:false,
     qrRevealed:false, qrTries:0, qrBruteActive:false, qrQuantumRun:false, qrCascade:false,
     pqBasis:'bad', pqGuessWrong:false, pqQuantumFizzled:false, pqDecoded:false,
@@ -1952,6 +1948,7 @@ class Component extends DCLogic {
       if (this.state.stubId === 'hashing') this.drawHaCanvas();
       if (this.state.stubId === 'rsa') this.drawPkCanvas();
       if (this.state.stubId === 'sig') this.drawSgCanvas();
+      if (this.state.stubId === 'tls') this.drawTlCanvas();
       requestAnimationFrame(this._loop);
     };
     requestAnimationFrame(this._loop);
@@ -2364,11 +2361,19 @@ class Component extends DCLogic {
     const sgCur = sgBeatDefs[sgChapter];
     const sgTabs = sgBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === sgChapter ? ' on' : '') }));
 
-    // ---- TLS (CR-05) ----
+    // ---- TLS (CR-05) — the handshake theater ----
     const tlDefs = { verify:['VERIFY IDENTITY','check the server certificate'], key:['AGREE ON A KEY','asymmetric key exchange over the open wire'], cipher:['SWITCH TO FAST CIPHER','hand off to symmetric encryption'], data:['EXCHANGE DATA','send the real request, now scrambled'] };
     const tlDisplay = ['cipher','verify','data','key'];
     const tlSeq = st.tlSequence || [];
     const tlSteps = tlDisplay.map(id => { const pos = tlSeq.indexOf(id); return { id, title:tlDefs[id][0], sub:tlDefs[id][1], ord:pos >= 0 ? String(pos + 1) : '', className:'tl-step' + (pos >= 0 ? ' done' : '') }; });
+    const tlChapter = Math.max(0, Math.min(2, Number(st.tlChapter) || 0));
+    const tlBeatDefs = [
+      ['00','CLEARTEXT','EVERYONE ON THE WIRE CAN READ YOU.','On plain HTTP your login flies across in the open. The attacker tapping the wire copies it letter for letter. This is the world before HTTPS.','Press SEND LOGIN and watch the attacker’s screen fill with your password.'],
+      ['01','BUILD THE HANDSHAKE','FOUR TOOLS, IN THE RIGHT ORDER.','You can’t encrypt before you share a key; you can’t trust a key before you verify identity. Place the four steps in order — each one plays out on the wire and the attacker’s screen degrades a little more.','Tap the four steps in the correct order. Watch the attacker’s feed fade toward static.'],
+      ['02','THE IMPOSTER','TRY TO STAND IN THE MIDDLE.','Now play the attacker: swap in your own certificate to impersonate the server. The signature check from the last module catches you — a certificate is just a signature vouching for a key.','Press SWAP IN A FAKE CERTIFICATE and watch it get rejected.'],
+    ];
+    const tlCur = tlBeatDefs[tlChapter];
+    const tlTabs = tlBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === tlChapter ? ' on' : '') }));
 
     // ---- QUBIT (FR-01) ----
     const qbAngle = Math.max(0, Math.min(180, Number(st.qbAngle) || 0));
@@ -2570,11 +2575,13 @@ class Component extends DCLogic {
 
       // ---- TLS ----
       tlsOpen:st.stubId === 'tls', tlSteps,
+      tlTabs, tlBeatTag:tlCur[0] + ' // ' + tlCur[1], tlBeatTitle:tlCur[2], tlBeatBody:tlCur[3], tlTodo:tlCur[4],
+      tlChapterPlain:tlChapter === 0, tlChapterBuild:tlChapter === 1, tlChapterMitm:tlChapter === 2,
+      tlSent:!!st.tlSent,
       tlFailed:!!st.tlFailed, tlFailMsg:st.tlFailed || '', tlSecure:!!st.tlSecure,
-      tlAttacker:!!st.tlAttacker, tlAttackerLabel:st.tlAttacker ? 'ON' : 'OFF', tlMitm:!!st.tlMitm,
-      tlNoise1:this.tlNoise('ka'), tlNoise2:this.tlNoise('data'),
-      tlStatus:st.tlSecure ? (st.tlAttacker ? 'ATTACKER — LOCKED OUT' : 'SECURE') : (st.tlFailed ? 'HANDSHAKE FAILED' : 'ORDERING'),
-      tlHud:st.tlSecure ? 'CHANNEL SECURE · ATTACKER LOCKED OUT' : ('STEPS ' + tlSeq.length + '/4'),
+      tlMitm:!!st.tlMitm, tlNotSecureYet:!st.tlSecure,
+      tlStatus:st.tlSecure ? 'SECURE — ATTACKER LOCKED OUT' : (st.tlFailed ? 'HANDSHAKE FAILED' : (tlChapter === 0 ? 'PLAIN HTTP' : 'ORDERING')),
+      tlHud:st.tlSecure ? 'CHANNEL SECURE · ATTACKER BLIND' : ('STEPS ' + tlSeq.length + '/4'),
 
       haInput:(e) => this.haInput(e),
       haGrind:() => this.haGrind(),
@@ -2597,9 +2604,10 @@ class Component extends DCLogic {
       sgVerify:() => { this.sgAnim('verify'); this.verifySignature(); },
       sgForge:() => { this.sgAnim('forge'); this.setState({ sgForgeTried:true }); },
       tlPick:(e) => this.tlPick(e),
-      tlReset:() => this.setState({ tlSequence:[], tlFailed:null, tlSecure:false, tlAttacker:false, tlMitm:false }),
-      tlToggleAttacker:() => this.setState({ tlAttacker:!this.state.tlAttacker }),
-      tlMitmTry:() => this.setState({ tlMitm:true }),
+      tlPickChapter:(e) => this.setState({ tlChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      tlSendLogin:() => { this.tlAnim('login'); this.setState({ tlSent:true }); },
+      tlReset:() => this.setState({ tlSequence:[], tlFailed:null, tlSecure:false, tlMitm:false }),
+      tlMitmTry:() => { this.tlAnim('mitm'); this.setState({ tlMitm:true }); },
 
       // ---- QUBIT ----
       quantumOpen:st.stubId === 'quantum', qbBit:st.qbBit || 0,
@@ -3394,6 +3402,7 @@ class Component extends DCLogic {
     const expected = order[seq.length];
     if (id === expected) {
       seq.push(id);
+      this.tlAnim('step:' + id);   // fly the matching envelope across the wire
       this.setState({ tlSequence:seq, tlFailed:null, tlSecure:seq.length === 4 });
       return;
     }
@@ -3403,6 +3412,102 @@ class Component extends DCLogic {
     else if (id !== 'verify' && !seq.includes('verify')) msg = 'CANNOT TRUST KEY: IDENTITY UNVERIFIED';
     else msg = 'OUT OF ORDER // THAT STEP CAN\'T RUN YET';
     this.setState({ tlSequence:[], tlFailed:msg });
+  }
+  // ---------- CR-05 // the handshake theater ----------
+  tlAnim(mode) { this._tl = { mode, t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur:mode === 'mitm' ? 800 : 1000 }; }
+  tlColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawTlCanvas() {
+    const canvas = document.getElementById('tl-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(220, rect.height || W*560/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.tlColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.tlColor(canvas,'--bb-ink','#171717');
+    const bg = this.tlColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.tlColor(canvas,'--bb-muted','#555');
+    const alarm = '#ff2a22';
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const anim = this._tl; let k = 1, mode = null;
+    if (anim) { k = Math.max(0, Math.min(1, (now - anim.t0)/anim.dur)); mode = anim.mode; if (k >= 1) this._tl = null; }
+    const seq = st.tlSequence || [], secure = !!st.tlSecure;
+
+    const wireY = H*0.32, bx = W*0.16, sx = W*0.84;
+    // the wire
+    ctx.save();
+    if (secure) { ctx.strokeStyle = hud; ctx.globalAlpha = .5; ctx.lineWidth = 6;
+      ctx.beginPath(); for (let x = bx; x < sx; x += 8) { ctx.moveTo(x, wireY-4+((x/8)%2?3:-3)); ctx.lineTo(x+8, wireY-4+((x/8)%2?-3:3)); } ctx.stroke();
+      ctx.globalAlpha = 1; }
+    else { ctx.strokeStyle = hud; ctx.globalAlpha = .4; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(bx, wireY); ctx.lineTo(sx, wireY); ctx.stroke(); ctx.globalAlpha = 1; }
+    ctx.restore();
+
+    // browser + server endpoints
+    const endpoint = (x, label, sub) => {
+      const w = W*0.16, h = H*0.15;
+      ctx.save(); ctx.fillStyle = bg; ctx.strokeStyle = hud; ctx.lineWidth = 2;
+      this.roundRect(ctx, x-w/2, wireY-h/2, w, h, 6); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = hud; ctx.globalAlpha = .18; ctx.fillRect(x-w/2+5, wireY-h/2+5, w-10, h*0.4); ctx.globalAlpha = 1;
+      ctx.fillStyle = ink; ctx.font = "800 " + Math.round(w*0.18) + "px 'Archivo', sans-serif"; ctx.textAlign = 'center';
+      ctx.fillText(label, x, wireY+h/2+16);
+      ctx.fillStyle = muted; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.fillText(sub, x, wireY+h/2+28); ctx.restore();
+    };
+    endpoint(bx, 'BROWSER', 'you');
+    endpoint(sx, 'SERVER', 'shop.site');
+
+    // attacker clamped on the wire, tapping down to a live screen
+    const ax = (bx+sx)/2, tapY = H*0.60;
+    ctx.save(); ctx.strokeStyle = mode === 'mitm' ? alarm : hud; ctx.setLineDash([3,3]); ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(ax, wireY); ctx.lineTo(ax, tapY-6); ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.fillStyle = mode === 'mitm' ? alarm : hud; ctx.beginPath(); ctx.arc(ax, wireY, 5, 0, Math.PI*2); ctx.fill(); ctx.restore();
+    // attacker screen
+    const scW = W*0.6, scH = H*0.26, scX = ax-scW/2, scY = tapY;
+    ctx.save(); ctx.fillStyle = ink; ctx.strokeStyle = mode === 'mitm' ? alarm : hud; ctx.lineWidth = 2;
+    this.roundRect(ctx, scX, scY, scW, scH, 4); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = mode === 'mitm' ? alarm : hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign = 'left';
+    ctx.fillText('ATTACKER // WHAT I CAN READ', scX+8, scY+14);
+    // readable content degrades as the handshake builds
+    let lines;
+    if (secure) lines = [this.tlNoise('a').slice(0,26), this.tlNoise('b').slice(0,26), this.tlNoise('c').slice(0,26)];
+    else if (st.tlChapter === 0 && st.tlSent) lines = ['GET /login', 'user=clay', 'pass=hunter2'];
+    else if (seq.length >= 3) lines = ['████ cipher engaged', this.tlNoise('x').slice(0,24), '████████'];
+    else if (seq.length >= 2) lines = ['CERT: shop.site (public)', 'KEYX ' + this.tlNoise('k').slice(0,16), '…scrambling…'];
+    else if (seq.length >= 1) lines = ['CERT: shop.site', '(public, readable)', ''];
+    else lines = ['…listening…', '', ''];
+    ctx.font = "11px 'IBM Plex Mono', monospace";
+    const readable = secure || (st.tlChapter === 0 && st.tlSent);
+    ctx.fillStyle = secure ? muted : (readable ? alarm : '#e6e6e6');
+    lines.forEach((ln, i) => ctx.fillText(ln, scX+8, scY+34+i*15));
+    ctx.restore();
+
+    // a flying envelope for the current animation (login or a handshake step)
+    if (mode && (mode === 'login' || mode.startsWith('step:'))) {
+      const backwards = mode === 'step:verify' || mode === 'step:cipher'; // server->browser beats
+      const t = this.easeOut(k);
+      const px = backwards ? sx + (bx-sx)*t : bx + (sx-bx)*t;
+      ctx.save(); ctx.translate(px, wireY);
+      ctx.fillStyle = bg; ctx.strokeStyle = mode === 'login' ? alarm : hud; ctx.lineWidth = 2;
+      ctx.fillRect(-16,-11,32,22); ctx.strokeRect(-16,-11,32,22);
+      ctx.beginPath(); ctx.moveTo(-16,-11); ctx.lineTo(0,1); ctx.lineTo(16,-11); ctx.stroke();
+      ctx.restore();
+    }
+    // mitm: a fake cert flung at the server gets a red ✕
+    if (mode === 'mitm') {
+      const t = this.easeOut(k), px = ax + (sx-ax)*t;
+      ctx.save(); ctx.strokeStyle = alarm; ctx.lineWidth = 2; ctx.strokeRect(px-14, wireY-24, 28, 20);
+      ctx.beginPath(); ctx.moveTo(px-8, wireY-20); ctx.lineTo(px+8, wireY-8); ctx.moveTo(px+8, wireY-20); ctx.lineTo(px-8, wireY-8); ctx.stroke(); ctx.restore();
+    }
+    if (st.tlMitm && !mode) { ctx.save(); ctx.fillStyle = alarm; ctx.font = "900 10px 'IBM Plex Mono', monospace"; ctx.textAlign = 'center'; ctx.fillText('✕ CERT REJECTED', sx, wireY-H*0.12); ctx.restore(); }
+
+    // padlock badge when secure
+    if (secure) { ctx.save(); ctx.fillStyle = hud; ctx.font = "900 " + Math.round(W*0.03) + "px 'Archivo', sans-serif"; ctx.textAlign = 'center'; ctx.fillText('🔒 SECURE', (bx+sx)/2, wireY-H*0.13); ctx.restore(); }
+
+    const tag = document.getElementById('tl-tag');
+    if (tag) tag.textContent = mode ? 'TX…' : (secure ? 'ENCRYPTED' : (st.tlChapter===0 && st.tlSent ? 'CLEARTEXT' : 'OPEN WIRE'));
   }
   qbMeasure() {
     const angle = Math.max(0, Math.min(180, Number(this.state.qbAngle) || 0));
