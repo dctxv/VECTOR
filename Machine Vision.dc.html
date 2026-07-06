@@ -288,6 +288,8 @@
   .tl-stage-wrap canvas{aspect-ratio:820/560;}
   .qb-stage-wrap:before{content:'ONE ARROW, ONE DIAL // DRAG TO AIM';}
   .qb-stage-wrap canvas{aspect-ratio:820/740;}
+  .qr-stage-wrap:before{content:'PERIOD-FINDING // TUNE THE COMB';}
+  .qr-stage-wrap canvas{aspect-ratio:820/600;}
 
   /* TLS step-order puzzle */
   .tl-steps{display:grid;gap:6px;margin-top:14px;}
@@ -1399,7 +1401,7 @@
       <div class="bb-hud">
         <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
         <span class="bb-corner bl"></span><span class="bb-corner br"></span>
-        <div style="position:absolute;left:22px;top:20px;">FR-02 // THE BREAK</div>
+        <div style="position:absolute;left:22px;top:20px;">FR-02 // THE COMB</div>
         <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
           <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
             <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
@@ -1413,56 +1415,45 @@
 
       <main class="bb-shell">
         <div class="bb-kicker">FRONTIER // QUANTUM</div>
-        <h1 class="bb-title" style="font-size:clamp(54px,18vw,88px);">THE<br>BREAK</h1>
-        <p class="bb-friendly">Point the quantum machine at the RSA lock you built — and discover RSA's security was a bet on one hard math problem. A bet quantum wins.</p>
+        <h1 class="bb-title" style="font-size:clamp(54px,18vw,88px);">THE<br>COMB</h1>
+        <p class="bb-friendly">RSA's whole strength is one hidden number. Shor's algorithm finds it by finding a repeating pattern — a period — buried in a signal. Feel it by hand with a comb, then watch the quantum machine try every spacing at once.</p>
 
-        <section class="bb-section">
-          <div class="bb-kicker">SCAN 01 // OPEN THE LOCK'S SECRET</div>
-          <h2 class="bb-statement">YOUR LOCK. STILL HOLDING. WHAT KEEPS IT SHUT?</h2>
-          <div class="{{ qrLockClass }}">
-            <div class="pk-shackle"></div>
-            <div class="pk-body"><strong>{{ qrLockGlyph }}</strong></div>
-          </div>
-          <button class="cx-btn solid" data-reticle-target="inspect" onClick="{{ qrInspect }}">&gt; INSPECT THE LOCK</button>
-          <sc-if value="{{ qrRevealed }}" hint-placeholder-val="{{ false }}">
-            <div class="cx-card"><div class="cx-lab">THE LOCK'S SECRET NUMBER</div>
-              <div style="font:900 34px 'Archivo',sans-serif;color:var(--bb-ink);letter-spacing:1px;">N = {{ qrN }}</div>
-              <div class="cx-lab" style="margin-top:8px;">STAYS SHUT WHILE NOBODY CAN FIND THE TWO PRIMES THAT MULTIPLY TO N</div>
-            </div>
-            <div class="bb-readout">RSA's strength was never magic. It's one arithmetic question nobody could answer fast.</div>
-          </sc-if>
+        <section class="ha-stage-wrap qr-stage-wrap">
+          <canvas id="qr-canvas" width="820" height="600" aria-label="A periodic signal with a draggable comb that resonates at the hidden period"></canvas>
+          <div class="ha-stage-tag" id="qr-tag"></div>
         </section>
 
-        <sc-if value="{{ qrRevealed }}" hint-placeholder-val="{{ false }}">
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">SCAN 02 // TRY IT CLASSICALLY</div>
-            <h2 class="bb-statement">SAME WALL AS THE CIPHER.</h2>
-            <p class="bb-friendly">Find the two primes by brute force. Watch the time-to-crack balloon into geological time — same futility you hit in Symmetric.</p>
-            <button class="cx-btn" data-reticle-target="brute" onClick="{{ qrBruteStart }}">&gt; BRUTE-FORCE THE FACTORS</button>
-            <div class="cx-counter">{{ qrTries }}<span> CANDIDATES</span></div>
-            <div style="color:var(--bb-hud);font-size:8px;letter-spacing:1px;">EST. TIME TO FACTOR CLASSICALLY: {{ qrClassicalEst }}</div>
-          </section>
+        <div class="ha-tabs"><sc-for list="{{ qrTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ qrPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
 
-          <section class="bb-section" style="padding-top:28px;">
-            <div class="bb-kicker">SCAN 03 // POINT THE QUANTUM MACHINE</div>
-            <h2 class="bb-statement">CANCEL THE WRONG PERIODS. THE RIGHT ONE RINGS OUT.</h2>
-            <p class="bb-friendly">The machine doesn't try factors one by one. It finds a hidden repeating pattern — a period — using the interference you just learned. Wrong periods cancel; the right one blooms.</p>
-            <div class="qr-bloom"><sc-for list="{{ qrBloom }}" as="b" hint-placeholder-count="24"><i class="{{ b.className }}" style="{{ b.style }}"></i></sc-for></div>
-            <button class="cx-btn solid" data-reticle-target="qfactor" onClick="{{ qrQuantum }}">&gt; RUN SHOR'S PERIOD-FINDING</button>
-            <sc-if value="{{ qrQuantumRun }}" hint-placeholder-val="{{ false }}">
-              <div class="cx-alarm">RSA BROKEN // N FACTORED // {{ qrN }} = {{ qrP }} × {{ qrQ }} — period found, factors fell out, the padlock sprang open. Your own lock, opened by the machine you learned to operate one node ago.</div>
-            </sc-if>
-          </section>
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ qrBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ qrBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ qrBeatBody }}</p>
+        </section>
 
+        <div class="pq-todo"><span>DO THIS</span>{{ qrTodo }}</div>
+
+        <sc-if value="{{ qrChapterSecret }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="inspect" onClick="{{ qrInspect }}" style="margin-top:12px;">&gt; INSPECT THE LOCK</button>
+          <sc-if value="{{ qrRevealed }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">THE LOCK'S SECRET // <strong>N = {{ qrN }}</strong> — it stays shut while nobody can find the two primes that multiply to N. RSA's strength was never magic; it's one arithmetic question nobody could answer fast. The signal above repeats — but with what period?</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ qrChapterHand }}" hint-placeholder-val="{{ false }}">
+          <input class="qb-slider" data-reticle-target="spacing" type="range" min="2" max="16" step="1" value="{{ qrSpacing }}" onChange="{{ qrSetSpacing }}" aria-label="Comb spacing" style="margin-top:12px;">
+          <div class="bb-readout">COMB SPACING / <strong>{{ qrSpacing }}</strong> // {{ qrResonantLabel }}</div>
+          <button class="cx-btn" data-reticle-target="brute" onClick="{{ qrBruteStart }}" style="margin-top:8px;">&gt; OR BRUTE-FORCE THE FACTORS</button>
+          <div class="cx-counter">{{ qrTries }}<span> CANDIDATES</span></div>
+          <div style="color:var(--bb-hud);font-size:8px;letter-spacing:1px;">EST. TIME TO FACTOR A REAL KEY CLASSICALLY: {{ qrClassicalEst }} — you found the toy period by hand, but real N needs more spacings than there are atoms.</div>
+        </sc-if>
+
+        <sc-if value="{{ qrChapterMachine }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="qfactor" onClick="{{ qrQuantum }}" style="margin-top:12px;">&gt; RUN SHOR'S PERIOD-FINDING</button>
           <sc-if value="{{ qrQuantumRun }}" hint-placeholder-val="{{ false }}">
-            <section class="bb-section" style="padding-top:28px;">
-              <div class="bb-kicker">SCAN 04 // THE BLAST RADIUS</div>
-              <h2 class="bb-statement">YOU DIDN'T BREAK ONE LOCK.</h2>
-              <p class="bb-friendly">RSA sat underneath the handshake, the certificate, the whole secure web. Pull that thread and it all comes apart.</p>
-              <button class="cx-btn" data-reticle-target="cascade" onClick="{{ qrCascadeRun }}">&gt; TRACE THE CHAIN REACTION</button>
-              <div class="qr-cascade"><sc-for list="{{ qrCascadeRows }}" as="r" hint-placeholder-count="4"><div class="{{ r.className }}">{{ r.name }}<span>{{ r.note }}</span></div></sc-for></div>
-            </section>
-
+            <div class="cx-alarm">RSA BROKEN // N FACTORED // {{ qrN }} = {{ qrP }} × {{ qrQ }} — every wrong spacing cancelled, the true period bloomed, the factors fell out and the padlock sprang open. Your own lock, opened by the machine you learned to operate one node ago.</div>
+            <button class="cx-btn" data-reticle-target="cascade" onClick="{{ qrCascadeRun }}" style="margin-top:8px;">&gt; TRACE THE CHAIN REACTION</button>
+            <div class="qr-cascade"><sc-for list="{{ qrCascadeRows }}" as="r" hint-placeholder-count="4"><div class="{{ r.className }}">{{ r.name }}<span>{{ r.note }}</span></div></sc-for></div>
             <section class="bb-payoff">
               <h2 class="bb-statement" style="max-width:14ch;">THE SOBER PART.</h2>
               <p class="bb-friendly" style="margin-bottom:0;">Quantum computers big enough to do this to real keys <strong>don't exist yet</strong> — but they might, and data stolen today could be cracked later ("harvest now, decrypt later"). So the world is already rebuilding the lock on a different hard problem — one where interference doesn't help the attacker.</p>
@@ -1470,7 +1461,7 @@
             </section>
           </sc-if>
         </sc-if>
-        <div class="bb-scope">HONESTY MANDATE // Real quantum computers CANNOT yet factor RSA-sized numbers — this demonstrates the principle, and "harvest now, decrypt later" is why it matters despite that. RSA is not broken today. Shor's is period-finding via interference (cancel wrong periods), NOT "tries all factors at once." Note: quantum only weakens symmetric keys like AES (double the key size), it does not shatter them the way it does RSA.</div>
+        <div class="bb-scope">HONESTY MANDATE // Real quantum computers CANNOT yet factor RSA-sized numbers — this demonstrates the principle, and "harvest now, decrypt later" is why it matters despite that. The comb and toy period are the honest shadow of Shor's real period-finding: interference cancels wrong periods, it does NOT "try all factors at once." Note: quantum only weakens symmetric keys like AES (double the key size), it does not shatter them the way it does RSA.</div>
       </main>
     </div>
   </sc-if>
@@ -1604,7 +1595,7 @@ class Component extends DCLogic {
     sgMessage:'ALICE: SEND $500 TO BOB', sgChapter:0, sgSigned:false, sgSignedHash:'', sgSignedMessage:'', sgVerifier:'alice', sgVerifyResult:null, sgForgeTried:false,
     tlSequence:[], tlChapter:0, tlSent:false, tlFailed:null, tlSecure:false, tlMitm:false,
     qbBit:0, qbChapter:0, qbAngle:52, qbZeros:0, qbOnes:0, qbTrapSprung:false, qbPhase:180, qbClassicalTries:0, qbClassicalResult:'—', qbQuantumSolved:false,
-    qrRevealed:false, qrTries:0, qrBruteActive:false, qrQuantumRun:false, qrCascade:false,
+    qrRevealed:false, qrChapter:0, qrSpacing:5, qrTries:0, qrBruteActive:false, qrQuantumRun:false, qrCascade:false,
     pqBasis:'bad', pqGuessWrong:false, pqQuantumFizzled:false, pqDecoded:false,
     pqChapter:0, pqSkew:3, pqGoodBasis:[[1.6,0.2],[0.2,1.6]], pqTarget:[2.3,1.4], pqShowTruth:false, pqLanded:null, pqNearest:null,
     pqIntroSeen:false, pqCh0Done:false, pqTriedGood:false, pqTriedBad:false };
@@ -1942,6 +1933,7 @@ class Component extends DCLogic {
       if (this.state.stubId === 'sig') this.drawSgCanvas();
       if (this.state.stubId === 'tls') this.drawTlCanvas();
       if (this.state.stubId === 'quantum') this.drawQbCanvas();
+      if (this.state.stubId === 'quantum-rsa') this.drawQrCanvas();
       requestAnimationFrame(this._loop);
     };
     requestAnimationFrame(this._loop);
@@ -2389,11 +2381,17 @@ class Component extends DCLogic {
 
     // ---- QUANTUM vs RSA (FR-02) ----
     const qrN = 3233, qrP = 61, qrQ = 53;                   // toy RSA modulus 61×53
-    const qrBloom = Array.from({ length: 24 }, (_, i) => {
-      const peak = st.qrQuantumRun && (i === 8 || i === 16); // the found period rings out at two positions
-      const h = st.qrQuantumRun ? (peak ? 100 : 6) : (30 + (this.hashLearningText('bloom' + i) % 34));
-      return { className: peak ? 'peak' : '', style: { height: h + '%' } };
-    });
+    const qrTruePeriod = 8;                                 // the honest-shadow hidden period the comb hunts for
+    const qrChapter = Math.max(0, Math.min(2, Number(st.qrChapter) || 0));
+    const qrSpacing = Math.max(2, Math.min(16, Number(st.qrSpacing) || 5));
+    const qrResonant = qrSpacing === qrTruePeriod;
+    const qrBeatDefs = [
+      ['01','THE SECRET','ONE HIDDEN NUMBER.','Your padlock stays shut only while nobody can factor its secret number N. Inspect it — then look at the signal above: it repeats, but the spacing of the repeat is hidden. Find that spacing and the lock falls.','Press INSPECT THE LOCK to reveal N and boot the signal.'],
+      ['02','BY HAND','FIND THE REPEAT.','Drag the comb’s spacing until its teeth line up with every peak in the signal. On this toy you can find it by hand — but a real key’s signal needs more spacings to check than there are atoms in the universe.','Move the COMB SPACING slider until the whole signal lights up in resonance.'],
+      ['03','THE MACHINE','EVERY SPACING AT ONCE.','Shor’s doesn’t try spacings one by one. It puts every spacing into superposition; the wrong ones cancel by interference and the true period blooms. The period gives the factors, and the lock springs open.','Press RUN SHOR’S PERIOD-FINDING and watch the wrong combs cancel.'],
+    ];
+    const qrCur = qrBeatDefs[qrChapter];
+    const qrTabs = qrBeatDefs.map((c, i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i === qrChapter ? ' on' : '') }));
     const qrLaneLocks = [
       { name:'RSA KEY EXCHANGE', note:'PRIVATE KEY RECOVERED' },
       { name:'TLS HANDSHAKE', note:'SESSION KEY NOW READABLE' },
@@ -2628,12 +2626,13 @@ class Component extends DCLogic {
       // ---- QUANTUM vs RSA ----
       quantumRsaOpen:st.stubId === 'quantum-rsa',
       qrModuleClass:'bb-module qr-module' + (st.qrQuantumRun ? ' bbc-module alarm' : ''),
+      qrTabs, qrBeatTag:qrCur[0] + ' // ' + qrCur[1], qrBeatTitle:qrCur[2], qrBeatBody:qrCur[3], qrTodo:qrCur[4],
+      qrChapterSecret:qrChapter === 0, qrChapterHand:qrChapter === 1, qrChapterMachine:qrChapter === 2,
+      qrSpacing:String(qrSpacing), qrResonantLabel:qrResonant ? 'RESONANCE // PERIOD FOUND BY HAND' : 'NO ALIGNMENT // KEEP SEARCHING',
       qrRevealed:!!st.qrRevealed, qrN:qrN.toLocaleString(), qrP, qrQ,
-      qrLockClass:'pk-lock' + (st.qrQuantumRun ? ' open' : ''),
-      qrLockGlyph:st.qrQuantumRun ? '○' : '●',
       qrTries:(st.qrTries || 0).toLocaleString(),
       qrClassicalEst:'~4.0 MILLION YEARS',
-      qrBloom, qrQuantumRun:!!st.qrQuantumRun,
+      qrQuantumRun:!!st.qrQuantumRun,
       qrCascadeRows,
       qrStatus:st.qrQuantumRun ? 'RSA BROKEN' : (st.qrBruteActive ? 'BRUTE-FORCING' : (st.qrRevealed ? 'LOCK INSPECTED' : 'LOCK SEALED')),
       qrTimerText:st.qrQuantumRun ? 'QUANTUM 0.3s' : (st.qrBruteActive ? 'CLASSICAL: 4.0M YR' : 'IDLE'),
@@ -2664,8 +2663,10 @@ class Component extends DCLogic {
       qbClassicalTry:() => this.setState({ qbClassicalTries:(this.state.qbClassicalTries || 0) + 1, qbClassicalResult:Math.random() < 0.5 ? '0' : '1' }),
       qbQuantumRun:() => this.setState({ qbQuantumSolved:true }),
       qrInspect:() => this.setState({ qrRevealed:true }),
+      qrPickChapter:(e) => this.setState({ qrChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      qrSetSpacing:(e) => this.setState({ qrSpacing:Math.max(2, Math.min(16, Number(e.currentTarget.value) || 5)) }),
       qrBruteStart:() => this.startQrBrute(),
-      qrQuantum:() => { clearInterval(this._qrIv); this.setState({ qrQuantumRun:true, qrBruteActive:false }); },
+      qrQuantum:() => { clearInterval(this._qrIv); this._qrShorAt = (typeof performance !== 'undefined' ? performance.now() : Date.now()); this.setState({ qrQuantumRun:true, qrBruteActive:false }); },
       qrCascadeRun:() => this.setState({ qrCascade:true }),
       pqCanvasDown:(e) => this.pqCanvasDown(e),
       pqCanvasMove:(e) => this.pqCanvasMove(e),
@@ -3617,6 +3618,80 @@ class Component extends DCLogic {
     }
     const tag = document.getElementById('qb-tag');
     if (tag) tag.textContent = chapter === 0 ? 'CLASSICAL BIT' : (this._qbCollapse ? 'COLLAPSING…' : (chapter===2 ? 'INTERFERENCE' : 'SUPERPOSITION'));
+  }
+  // ---------- FR-02 // the period-finding comb ----------
+  qrColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawQrCanvas() {
+    const canvas = document.getElementById('qr-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(220, rect.height || W*600/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.qrColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.qrColor(canvas,'--bb-ink','#171717');
+    const bg = this.qrColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.qrColor(canvas,'--bb-muted','#555');
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const chapter = Math.max(0, Math.min(2, Number(st.qrChapter) || 0));
+    const truePeriod = 8, spacing = Math.max(2, Math.min(16, Number(st.qrSpacing) || 5));
+    const revealed = !!st.qrRevealed || chapter >= 1;
+    const shor = !!st.qrQuantumRun;
+    const N = 40, pad = W*0.05, cw = (W - pad*2)/N;
+    const baseY = H*0.42, amp = H*0.20;
+    // the periodic signal: a bump every `truePeriod` samples (the hidden period)
+    const sig = (i) => { const ph = (i % truePeriod) / truePeriod; return Math.max(0, Math.cos((ph)*Math.PI*2)) ** 2; };
+    // signal wall
+    ctx.save(); ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign='left';
+    ctx.fillText(revealed ? 'SIGNAL // a^x mod N  (repeats every ? samples)' : 'SIGNAL // INSPECT THE LOCK TO BOOT', pad, baseY - amp - 10); ctx.restore();
+    for (let i = 0; i < N; i++) {
+      const x = pad + i*cw + cw/2, h = revealed ? sig(i)*amp : amp*0.06;
+      const onTine = revealed && (i % spacing === 0);
+      const resonant = revealed && (spacing === truePeriod) && (i % truePeriod === 0);
+      ctx.save();
+      ctx.strokeStyle = hud; ctx.globalAlpha = revealed ? .5 : .2; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x, baseY); ctx.lineTo(x, baseY - h); ctx.stroke();
+      const dotR = resonant ? 5 : (sig(i) > 0.5 ? 3.4 : 2);
+      ctx.globalAlpha = 1; ctx.fillStyle = resonant ? hud : ink; ctx.beginPath(); ctx.arc(x, baseY - h, dotR, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+    ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .3; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pad, baseY); ctx.lineTo(W-pad, baseY); ctx.stroke(); ctx.restore();
+
+    // the comb, below the signal — teeth at `spacing`. In Shor mode, many ghost combs at once.
+    const combY = H*0.60, toothH = H*0.20;
+    if (revealed && !shor) {
+      const resonant = spacing === truePeriod;
+      ctx.save(); ctx.strokeStyle = resonant ? hud : ink; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(pad, combY); ctx.lineTo(W-pad, combY); ctx.stroke();
+      for (let i = 0; i * spacing < N; i++) {
+        const x = pad + (i*spacing)*cw + cw/2;
+        ctx.beginPath(); ctx.moveTo(x, combY); ctx.lineTo(x, combY + toothH); ctx.stroke();
+      }
+      ctx.restore();
+      if (resonant) { ctx.save(); ctx.fillStyle = hud; ctx.font = "900 " + Math.round(W*0.032) + "px 'Archivo', sans-serif"; ctx.textAlign='center'; ctx.fillText('★ RESONANCE — PERIOD ' + truePeriod, W/2, combY + toothH + 26); ctx.restore(); }
+      else { ctx.save(); ctx.fillStyle = muted; ctx.font = "8px 'IBM Plex Mono', monospace"; ctx.textAlign='center'; ctx.fillText('SPACING ' + spacing + ' // teeth miss the peaks', W/2, combY + toothH + 22); ctx.restore(); }
+    }
+    if (shor) {
+      const k = Math.min(1, (now - (this._qrShorAt || now)) / 1400);
+      // all spacings ghosted at once, wrong ones fading out, the true period surviving bright
+      ctx.save();
+      for (let sp = 2; sp <= 16; sp++) {
+        const isTrue = sp === truePeriod;
+        ctx.globalAlpha = isTrue ? 1 : 0.28 * (1 - k);
+        ctx.strokeStyle = isTrue ? hud : ink; ctx.lineWidth = isTrue ? 2.5 : 1;
+        for (let i = 0; i * sp < N; i++) { const x = pad + (i*sp)*cw + cw/2; ctx.beginPath(); ctx.moveTo(x, combY); ctx.lineTo(x, combY + toothH*(isTrue?1:0.6)); ctx.stroke(); }
+      }
+      ctx.restore();
+      ctx.save(); ctx.fillStyle = hud; ctx.font = "900 " + Math.round(W*0.03) + "px 'Archivo', sans-serif"; ctx.textAlign='center';
+      ctx.fillText(k < 1 ? 'CANCELLING WRONG PERIODS…' : 'PERIOD ' + truePeriod + ' → N = 61 × 53', W/2, combY + toothH + 28); ctx.restore();
+    }
+
+    const tag = document.getElementById('qr-tag');
+    if (tag) tag.textContent = shor ? 'FACTORED' : (spacing === truePeriod && revealed ? 'RESONANT' : (revealed ? 'SEARCHING' : 'SEALED'));
   }
   startQrBrute() {
     clearInterval(this._qrIv);
