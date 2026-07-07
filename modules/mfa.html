@@ -1,0 +1,66 @@
+  <sc-if value="{{ mfaOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="bb-module id-module">
+      <div class="bb-hud">
+        <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
+        <span class="bb-corner bl"></span><span class="bb-corner br"></span>
+        <div style="position:absolute;left:22px;top:20px;">ID-02 // SECOND FACTOR</div>
+        <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
+            <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
+            <button data-reticle-target="exit" onClick="{{ closeStub }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">[ EXIT ]</button>
+          </div>
+          <div>{{ mfHud }}</div>
+        </div>
+        <div style="position:absolute;left:22px;bottom:20px;">{{ mfStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">A/B TEST</div>
+      </div>
+
+      <main class="bb-shell">
+        <div class="bb-kicker">MODULE 14 // IDENTITY &amp; ACCESS</div>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">SECOND<br>PROOF</h1>
+        <p class="bb-friendly">Run the same stolen password against two accounts — one with just a password, one with a second factor too. Find out why stealing one secret doesn't get you the other.</p>
+
+        <section class="ha-stage-wrap mf-stage-wrap">
+          <canvas id="mf-canvas" width="820" height="560" aria-label="Two account doors, one with a password lock only and one with a password plus a second factor"></canvas>
+          <div class="ha-stage-tag" id="mf-tag"></div>
+        </section>
+
+        <div class="ha-tabs"><sc-for list="{{ mfTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ mfPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ mfBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ mfBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ mfBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ mfTodo }}</div>
+
+        <sc-if value="{{ mfChapter0 }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="attacka" onClick="{{ mfAttackA }}" style="margin-top:12px;">&gt; ATTACK A WITH THE LEAKED PASSWORD</button>
+          <sc-if value="{{ mfAttackedA }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">ACCOUNT A FELL // the password alone was enough. One leaked secret, one open door.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ mfChapter1 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="attackb" onClick="{{ mfAttackB }}" style="margin-top:12px;">&gt; ATTACK B WITH THE SAME PASSWORD</button>
+          <sc-if value="{{ mfAttackedBBlocked }}" hint-placeholder-val="{{ false }}"><div class="cx-ok">PASSWORD OK — THEN BLOCKED // a second factor is required, and the attacker doesn't have it.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ mfChapter2 }}" hint-placeholder-val="{{ false }}">
+          <div class="cx-grid2" style="margin-top:12px;">
+            <div class="cx-card"><strong>PASSWORD</strong><div style="font-size:9px;color:var(--bb-hud);margin-top:6px;">SOMETHING YOU KNOW — leaks, gets phished, gets reused.</div></div>
+            <div class="cx-card"><strong>DEVICE CODE</strong><div style="font-size:9px;color:var(--bb-hud);margin-top:6px;">SOMETHING YOU HAVE — not sitting in a leaked database.</div></div>
+          </div>
+          <div class="bb-readout">The trick isn't two secrets of the same kind — those leak together. It's two DIFFERENT kinds of proof. Stealing one doesn't hand you the other.</div>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:13ch;">NOW YOU CAN PROVE WHO YOU ARE.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">But every app you use can't be trusted with your actual password — so how does a third-party app act on your behalf without ever seeing it?</p>
+          <button class="cx-btn solid" data-reticle-target="next" data-node="oauth" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: OAUTH</button>
+        </section>
+        <div class="bb-scope">LEARNING SIMULATION // Conceptual only. TOTP internals, SIM-swap and phishing-resistant factors (passkeys are the newest — even phishing can't steal them), and push-fatigue attacks are left out.</div>
+      </main>
+    </div>
+  </sc-if>

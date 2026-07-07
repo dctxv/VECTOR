@@ -15,7 +15,15 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
     qrRevealed:false, qrTries:0, qrBruteActive:false, qrQuantumRun:false, qrCascade:false,
     pqBasis:'bad', pqGuessWrong:false, pqQuantumFizzled:false, pqDecoded:false,
     pqChapter:0, pqSkew:3, pqGoodBasis:[[1.6,0.2],[0.2,1.6]], pqTarget:[2.3,1.4], pqShowTruth:false, pqLanded:null, pqNearest:null,
-    pqIntroSeen:false, pqCh0Done:false, pqTriedGood:false, pqTriedBad:false };
+    pqIntroSeen:false, pqCh0Done:false, pqTriedGood:false, pqTriedBad:false,
+
+    ptText:'hi bob, meet at 8?', ptChapter:0, ptChopped:false, ptRaced:false, ptDropped:false, ptNumbering:true, ptRetransmit:true, ptBusy:false,
+    dnDomain:'bob.host', dnChapter:0, dnResolved:false, dnCached:false, dnBusy:false, dnPoisonShown:false, dnPoisonChoice:null, dnLookups:0,
+    vpChapter:0, vpOn:false, vpSeat:'observer',
+    pwChapter:0, pwDictRun:false, pwCrackedCount:0, pwUserPassword:'', pwSaltOn:false, pwBusy:false,
+    mfChapter:0, mfAttackedA:false, mfAttackedB:null,
+    oaChapter:0, oaRequested:false, oaGranted:false, oaScopeEmail:false, oaOverBroad:false, oaRevoked:false, oaBusy:false,
+    ztChapter:0, ztModel:'castle', ztBreached:false, ztDevice:20, ztLocation:30, ztTime:70, ztBehavior:25, ztReBreached:null };
 
   // ---------- graph ----------
   buildGraph() {
@@ -40,17 +48,17 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
       ['quantum-rsa','node',296,875,'QUANTUM VS RSA','cryptographic impact model','live',100,'FRONTIER'],
       ['pqc','synth',180,975,'POST-QUANTUM CRYPTOGRAPHY','quantum-safe algorithms','live',100,'FRONTIER'],
 
-      ['networks','head',180,1090,'NETWORKS','how data travels','signal',22,'NETWORKS'],
-      ['packets','node',64,1185,'PACKETS / TCP-IP','packet journey simulator','signal',11,'NETWORKS'],
-      ['dns','node',296,1185,'DNS','DNS lookup visualizer','signal',8,'NETWORKS'],
-      ['vpn','node',64,1285,'VPNS','tunnel routing visualizer','signal',10,'NETWORKS'],
+      ['networks','head',180,1090,'NETWORKS','how data travels','detected',80,'NETWORKS'],
+      ['packets','node',64,1185,'PACKETS / TCP-IP','packet journey simulator','live',100,'NETWORKS'],
+      ['dns','node',296,1185,'DNS','DNS lookup visualizer','live',100,'NETWORKS'],
+      ['vpn','node',64,1285,'VPNS','tunnel routing visualizer','live',100,'NETWORKS'],
       ['mitm','node',296,1285,'MITM','interception demo','signal',15,'NETWORKS'],
 
-      ['idam','head',180,1400,'IDENTITY & ACCESS','who you are & what you can do','signal',13,'IDENTITY'],
-      ['pw','node',64,1495,'PASSWORDS & HASHING','credential storage / cracking','signal',13,'IDENTITY'],
-      ['mfa','node',296,1495,'MFA','login attack comparison','signal',9,'IDENTITY'],
-      ['oauth','node',64,1595,'OAUTH','flow visualizer','signal',7,'IDENTITY'],
-      ['ztrust','node',296,1595,'ZERO TRUST','access decision simulator','signal',11,'IDENTITY'],
+      ['idam','head',180,1400,'IDENTITY & ACCESS','who you are & what you can do','detected',100,'IDENTITY'],
+      ['pw','node',64,1495,'PASSWORDS & HASHING','credential storage / cracking','live',100,'IDENTITY'],
+      ['mfa','node',296,1495,'MFA','login attack comparison','live',100,'IDENTITY'],
+      ['oauth','node',64,1595,'OAUTH','flow visualizer','live',100,'IDENTITY'],
+      ['ztrust','node',296,1595,'ZERO TRUST','access decision simulator','live',100,'IDENTITY'],
 
       // PHASE 2 — BREAK THE SYSTEM
       ['attacks','head',180,1775,'ATTACKS & DEFENSE','traditional threats','signal',16,'ATTACKS'],
@@ -347,6 +355,13 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
       if (this.state.stubId === 'internet') this.drawIwCanvas();
       if (this.state.stubId === 'hashing') this.drawHaCanvas();
       if (this.state.stubId === 'rsa') this.drawPkCanvas();
+      if (this.state.stubId === 'packets') this.drawPtCanvas();
+      if (this.state.stubId === 'dns') this.drawDnCanvas();
+      if (this.state.stubId === 'vpn') this.drawVpCanvas();
+      if (this.state.stubId === 'pw') this.drawPwCanvas();
+      if (this.state.stubId === 'mfa') this.drawMfCanvas();
+      if (this.state.stubId === 'oauth') this.drawOaCanvas();
+      if (this.state.stubId === 'ztrust') this.drawZtCanvas();
       requestAnimationFrame(this._loop);
     };
     requestAnimationFrame(this._loop);
@@ -433,7 +448,7 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
   // the seven modules that render their own full-screen interactive UI (vs. the
   // generic "pending analysis" stub) — kept in one place so the loop, reticle,
   // and stub gate all agree
-  isLiveModule(id) { return id === 'bits' || id === 'internet' || id === 'symmetric' || id === 'hashing' || id === 'rsa' || id === 'sig' || id === 'tls' || id === 'quantum' || id === 'quantum-rsa' || id === 'pqc'; }
+  isLiveModule(id) { return id === 'bits' || id === 'internet' || id === 'symmetric' || id === 'hashing' || id === 'rsa' || id === 'sig' || id === 'tls' || id === 'quantum' || id === 'quantum-rsa' || id === 'pqc' || id === 'packets' || id === 'dns' || id === 'vpn' || id === 'pw' || id === 'mfa' || id === 'oauth' || id === 'ztrust'; }
   // illustrative 32-hex-char digest with strong avalanche — every output byte
   // depends on the whole input, so a one-character change scrambles ~half of it
   learningDigest(text) {
@@ -818,6 +833,91 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
     const pqView = this._pqView || { yaw:-0.68, pitch:0.86, zoom:1 };
     const pqCameraReadout = 'YAW ' + Math.round(pqView.yaw * 57.2958) + ' // PITCH ' + Math.round(pqView.pitch * 57.2958);
 
+    // ---- PACKETS / TCP-IP (NW-01) ----
+    const ptChapter = Math.max(0, Math.min(3, Number(st.ptChapter) || 0));
+    const ptBeatDefs = [
+      ['01','THE CHOP','TOO BIG TO SEND WHOLE.','Type a message and press CHOP IT. The network can’t send it in one piece — it shatters it into small, numbered packets first.','Type a message above and press CHOP IT. Watch it shatter into numbered packet-cards.'],
+      ['02','THE RACE','SAME MESSAGE, DIFFERENT ROADS.','Each packet takes whatever route is free at that instant — some faster, some slower. They can arrive in a completely different order than they left in.','Press SEND ACROSS THE NETWORK and watch the packets race two different routes and land out of order.'],
+      ['03','THE DROP','ONE GOES MISSING. ONLY ONE GETS RESENT.','A packet vanishes mid-route. The receiver notices a gap in the numbering and asks for that ONE piece again — not the whole message.','Press DROP PACKET #3 and watch the receiver notice the gap and request a retransmit.'],
+      ['04','BREAK IT','NOW REMOVE THE SAFETY NET.','Turn numbering off and the message reassembles in whatever order pieces arrived — gibberish. Turn retransmit off and a drop becomes a permanent hole.','Flip a toggle off, then press RUN IT AGAIN and watch delivery break.'],
+    ];
+    const ptCur = ptBeatDefs[ptChapter];
+    const ptTabs = ptBeatDefs.map((c,i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i===ptChapter?' on':'') }));
+    const ptBreakReadout = (!st.ptNumbering && !st.ptRetransmit) ? 'BOTH SAFEGUARDS OFF // the message reassembled out of order AND has a permanent hole where packet #3 should be.'
+      : (!st.ptNumbering ? 'NUMBERING OFF // pieces landed in arrival order, not sent order — the message reassembled as gibberish.'
+      : (!st.ptRetransmit ? 'RETRANSMIT OFF // packet #3 never came back. That gap is permanent — nothing fills it.'
+      : 'BOTH SAFEGUARDS ON // the gap was noticed and re-sent. Delivery is clean.'));
+
+    // ---- DNS (NW-02) ----
+    const dnChapter = Math.max(0, Math.min(2, Number(st.dnChapter) || 0));
+    const dnBeatDefs = [
+      ['01','THE PHONEBOOK','NAMES AREN’T ADDRESSES.','“bob.host” means nothing to a router — it needs a number. Walk the lookup chain yourself: root, then the .host registry, then the server that actually knows the answer.','Press RESOLVE and walk the chain from ROOT to the AUTHORITATIVE server.'],
+      ['02','THE CACHE','ASK ONCE, REMEMBER IT.','Resolve the same name again. No walk this time — the answer was cached the first time, so it comes back instantly.','Press RESOLVE again on the same domain and watch it return instantly, marked CACHED.'],
+      ['03','THE LIE','WHOEVER ANSWERS, YOU TRUST.','An attacker can inject a forged answer into the lookup. Accept it without checking and you get routed to their address instead of the real one.','Press INTERCEPT, compare the two answers, then ACCEPT or REJECT the forged one.'],
+    ];
+    const dnCur = dnBeatDefs[dnChapter];
+    const dnTabs = dnBeatDefs.map((c,i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i===dnChapter?' on':'') }));
+    const dnDomainClean = (st.dnDomain || 'bob.host').trim().toLowerCase() || 'bob.host';
+    const dnIp = this.internetIpFor(dnDomainClean);
+
+    // ---- VPN (NW-03) ----
+    const vpChapter = Math.max(0, Math.min(2, Number(st.vpChapter) || 0));
+    const vpBeatDefs = [
+      ['01','NAKED PATH','ANYONE NEARBY SEES EVERYTHING.','With no VPN, a local onlooker on your network sees exactly where you are going and — on plain HTTP — what you are saying.','Look at what the LOCAL OBSERVER can read: destination and content, in the clear.'],
+      ['02','TUNNEL ON','THE LOCAL WATCHER GOES BLIND.','Flip the VPN on and your traffic runs inside an encrypted tunnel to a relay first. The local observer now sees only "you ↔ relay" — nothing past it.','Press TURN ON VPN and watch what the LOCAL OBSERVER loses.'],
+      ['03','BECOME THE RELAY','TRUST MOVED. IT DIDN’T VANISH.','Switch seats to the relay itself. From here your real destination is wide open — a VPN doesn’t make you invisible, it moves who can see you.','Press SWITCH SEATS and see what the RELAY can see that the local observer no longer can.'],
+    ];
+    const vpCur = vpBeatDefs[vpChapter];
+    const vpTabs = vpBeatDefs.map((c,i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i===vpChapter?' on':'') }));
+
+    // ---- PASSWORDS & HASHING (ID-01) ----
+    const pwChapter = Math.max(0, Math.min(3, Number(st.pwChapter) || 0));
+    const pwBeatDefs = [
+      ['01','THE HEIST','THEY WEREN’T STORING PASSWORDS.','You just stole a password database — but every row is a hash, a fingerprint. Now what?','Press STEAL THE DATABASE and see what you actually got: hashes, not passwords.'],
+      ['02','DICTIONARY ATTACK','COMMON FALLS INSTANTLY.','Run a list of the most-used passwords against the hashes. Anything common breaks in a fraction of a second.','Press RUN DICTIONARY ATTACK and watch the common ones fall.'],
+      ['03','LENGTH BEATS SYMBOLS','EACH CHARACTER MULTIPLIES THE TIME.','Build your own password. Watch the estimated crack time explode as you add length — far more than adding one symbol does.','Type a password above and watch the crack-time estimate change live.'],
+      ['04','SALT','THE SAME PASSWORD, TWO DIFFERENT PRINTS.','Two accounts share a password. Without salt their hashes are identical — crack one, crack both. Add salt and the hashes stop matching, even for the same password.','Toggle SALT and watch the two identical hashes stop matching.'],
+    ];
+    const pwCur = pwBeatDefs[pwChapter];
+    const pwTabs = pwBeatDefs.map((c,i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i===pwChapter?' on':'') }));
+    const pwEst = this.pwCrackEstimate(st.pwUserPassword || '');
+    const pwSaltA = 'x7f2', pwSaltB = 'q9k1', pwSharedPw = 'sunshine1';
+    const pwHashA = this.learningDigest(pwSharedPw + (st.pwSaltOn ? pwSaltA : ''));
+    const pwHashB = this.learningDigest(pwSharedPw + (st.pwSaltOn ? pwSaltB : ''));
+
+    // ---- MFA (ID-02) ----
+    const mfChapter = Math.max(0, Math.min(2, Number(st.mfChapter) || 0));
+    const mfBeatDefs = [
+      ['01','THE LEAK','ONE STOLEN PASSWORD, TWO TARGETS.','You have a leaked password. Account A has only a password. Account B has a password plus a second factor.','Press ATTACK A with the leaked password.'],
+      ['02','THE WALL','PASSWORD ISN’T ENOUGH HERE.','Try the exact same password against Account B. It gets you past the first door — then stops cold.','Press ATTACK B with the same leaked password.'],
+      ['03','TWO KINDS OF PROOF','WHY IT ACTUALLY WORKS.','A password is something you KNOW. A device code is something you HAVE. Stealing one doesn’t hand you the other — two factors of a DIFFERENT kind beat two of the same kind.','Compare what each factor actually is.'],
+    ];
+    const mfCur = mfBeatDefs[mfChapter];
+    const mfTabs = mfBeatDefs.map((c,i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i===mfChapter?' on':'') }));
+    const mfLeaked = st.pwUserPassword || 'sunshine1';
+
+    // ---- OAUTH (ID-03) ----
+    const oaChapter = Math.max(0, Math.min(2, Number(st.oaChapter) || 0));
+    const oaBeatDefs = [
+      ['01','THE ASK','A TOKEN, NOT YOUR PASSWORD.','An app wants access to your photos. Instead of typing your password into it, you get redirected to the provider, approve, and come back with a token.','Press CONTINUE WITH PROVIDER and follow the redirect.'],
+      ['02','SCOPE','ITEMIZED, NOT UNLIMITED.','The token only grants what you approved. Try granting more than the app asked for and see the mismatch flagged.','Toggle the EMAIL scope on and see what happens.'],
+      ['03','REVOKE','CUT OFF ONE APP, NOT EVERYTHING.','Revoke the token and the app loses access immediately — your password never had to change.','Press REVOKE and watch the connection die.'],
+    ];
+    const oaCur = oaBeatDefs[oaChapter];
+    const oaTabs = oaBeatDefs.map((c,i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i===oaChapter?' on':'') }));
+
+    // ---- ZERO TRUST (ID-04) ----
+    const ztChapter = Math.max(0, Math.min(2, Number(st.ztChapter) || 0));
+    const ztBeatDefs = [
+      ['01','THE CASTLE','ONE DOOR. FULL RUN OF THE PLACE.','Breach the perimeter once and the old model just trusts you from then on. Every resource inside is now yours.','Press BREACH THE FRONT DOOR and watch it cascade.'],
+      ['02','THE ENGINE','EVERY REQUEST, RE-CHECKED LIVE.','Now every resource has its own gate that scores live signals — device, location, time, behavior — before deciding.','Drag the signal sliders and watch the live ALLOW / DENY verdict flip.'],
+      ['03','THE RE-BREACH','STEAL ONE DOOR. YOU’VE STOLEN ONE DOOR.','Try the exact same breach again — but now every internal request gets re-checked. Suspicious signals stop it cold, and nothing else falls.','Press TRY THE SAME BREACH AGAIN and compare the blast radius.'],
+    ];
+    const ztCur = ztBeatDefs[ztChapter];
+    const ztTabs = ztBeatDefs.map((c,i) => ({ id:i, label:c[0], short:c[1], className:'ha-tab' + (i===ztChapter?' on':'') }));
+    const ztScore = Math.round((Number(st.ztDevice||0) + Number(st.ztLocation||0) + Number(st.ztTime||0) + Number(st.ztBehavior||0)) / 4);
+    const ztAllow = ztScore >= 55;
+
     const hidden = (extra) => ({ opacity:0, transform:'translateY(8px)', transition:'opacity .5s steps(4), transform .5s steps(4)', ...extra });
     const shown  = (extra) => ({ opacity:1, transform:'translateY(0)', transition:'opacity .5s steps(4), transform .5s steps(4)', ...extra });
 
@@ -1029,6 +1129,115 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
       pqGuessWrong:!!st.pqGuessWrong, pqDecoded:!!st.pqDecoded, pqQuantumFizzled:!!st.pqQuantumFizzled,
       pqStatus:st.pqDecoded ? 'DECODED' : (st.pqQuantumFizzled ? 'QUANTUM FIZZLED' : (st.pqGuessWrong ? 'WRONG POINT' : 'LATTICE LOADED')),
       pqHud:st.pqQuantumFizzled ? 'QUANTUM: NO ADVANTAGE' : (pqBad ? 'PUBLIC BASIS · HARD' : 'PRIVATE BASIS · EASY'),
+
+      // ---- PACKETS / TCP-IP ----
+      packetsOpen: st.stubId === 'packets', ptText: st.ptText != null ? st.ptText : '',
+      ptTabs, ptBeatTag: ptCur[0] + ' // ' + ptCur[1], ptBeatTitle: ptCur[2], ptBeatBody: ptCur[3], ptTodo: ptCur[4],
+      ptChapter0: ptChapter === 0, ptChapter1: ptChapter === 1, ptChapter2: ptChapter === 2, ptChapter3: ptChapter === 3,
+      ptChopLabel: st.ptChopped ? 'RE-CHOP ▶' : 'CHOP IT ▶',
+      ptChopped: !!st.ptChopped, ptRaced: !!st.ptRaced, ptDropped: !!st.ptDropped,
+      ptNumbering: !!st.ptNumbering, ptRetransmit: !!st.ptRetransmit,
+      ptNumClass: 'pt-toggle' + (st.ptNumbering ? '' : ' off'), ptNumLabel: st.ptNumbering ? 'ON' : 'OFF',
+      ptRetryClass: 'pt-toggle' + (st.ptRetransmit ? '' : ' off'), ptRetryLabel: st.ptRetransmit ? 'ON' : 'OFF',
+      ptBreakReadout,
+      ptStatus: st.ptBusy ? 'IN FLIGHT' : (ptChapter === 3 && st.ptDropped ? (st.ptNumbering && st.ptRetransmit ? 'DELIVERED CLEAN' : 'DELIVERY BROKEN') : (st.ptRaced ? 'REASSEMBLED' : (st.ptChopped ? 'CHOPPED' : 'HOPPER EMPTY'))),
+      ptHud: 'CH ' + (ptChapter + 1) + '/4',
+      ptInput:(e) => this.ptInput(e),
+      ptPickChapter:(e) => this.setState({ ptChapter:Math.max(0, Math.min(3, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      ptChop:() => this.ptChop(),
+      ptRace:() => this.ptRace(),
+      ptDropOne:() => this.ptDropOne(),
+      ptRunAgain:() => this.ptRunAgain(),
+      ptToggleNumbering:() => this.setState({ ptNumbering:!this.state.ptNumbering }),
+      ptToggleRetransmit:() => this.setState({ ptRetransmit:!this.state.ptRetransmit }),
+
+      // ---- DNS ----
+      dnsOpen: st.stubId === 'dns', dnDomain: st.dnDomain != null ? st.dnDomain : '',
+      dnTabs, dnBeatTag: dnCur[0] + ' // ' + dnCur[1], dnBeatTitle: dnCur[2], dnBeatBody: dnCur[3], dnTodo: dnCur[4],
+      dnChapter0: dnChapter === 0, dnChapter1: dnChapter === 1, dnChapter2: dnChapter === 2,
+      dnResolveLabel: st.dnResolved ? 'RESOLVE AGAIN ▶' : 'RESOLVE ▶',
+      dnResolved: !!st.dnResolved, dnCached: !!st.dnCached, dnBusy: !!st.dnBusy, dnIp,
+      dnPoisonShown: !!st.dnPoisonShown, dnAccepted: st.dnPoisonChoice === 'accept', dnRejected: st.dnPoisonChoice === 'reject',
+      dnStatus: st.dnBusy ? 'RESOLVING' : (st.dnPoisonChoice === 'accept' ? 'WRONG DESTINATION' : (st.dnPoisonChoice === 'reject' ? 'FORGERY CAUGHT' : (st.dnCached ? 'CACHE HIT' : (st.dnResolved ? 'RESOLVED' : 'UNRESOLVED')))),
+      dnHud: st.dnResolved ? (dnDomainClean + ' = ' + dnIp) : 'NO LOOKUP YET',
+      dnInput:(e) => this.dnInput(e),
+      dnPickChapter:(e) => this.setState({ dnChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      dnResolve:() => this.dnResolve(),
+      dnIntercept:() => this.setState({ dnPoisonShown:true, dnPoisonChoice:null }),
+      dnAccept:() => this.setState({ dnPoisonChoice:'accept' }),
+      dnReject:() => this.setState({ dnPoisonChoice:'reject' }),
+
+      // ---- VPN ----
+      vpnOpen: st.stubId === 'vpn',
+      vpTabs, vpBeatTag: vpCur[0] + ' // ' + vpCur[1], vpBeatTitle: vpCur[2], vpBeatBody: vpCur[3], vpTodo: vpCur[4],
+      vpChapter0: vpChapter === 0, vpChapter1: vpChapter === 1, vpChapter2: vpChapter === 2,
+      vpOn: !!st.vpOn, vpOnLabel: st.vpOn ? 'VPN ON' : 'VPN OFF',
+      vpSeatRelay: st.vpSeat === 'relay',
+      vpSeatSwitchLabel: st.vpSeat === 'relay' ? 'BACK TO LOCAL OBSERVER' : 'BECOME THE RELAY',
+      vpStatus: st.vpSeat === 'relay' ? 'VIEW: RELAY' : (st.vpOn ? 'VIEW: LOCAL OBSERVER — BLIND PAST RELAY' : 'VIEW: LOCAL OBSERVER — SEES ALL'),
+      vpHud: st.vpOn ? 'TUNNEL ACTIVE' : 'PLAINTEXT ON THE WIRE',
+      vpPickChapter:(e) => this.setState({ vpChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      vpToggleOn:() => this.setState({ vpOn:!this.state.vpOn, vpChapter:1 }),
+      vpSwitchSeat:() => this.setState({ vpSeat: this.state.vpSeat === 'relay' ? 'observer' : 'relay', vpChapter:2 }),
+
+      // ---- PASSWORDS & HASHING ----
+      pwOpen: st.stubId === 'pw',
+      pwTabs, pwBeatTag: pwCur[0] + ' // ' + pwCur[1], pwBeatTitle: pwCur[2], pwBeatBody: pwCur[3], pwTodo: pwCur[4],
+      pwChapter0: pwChapter === 0, pwChapter1: pwChapter === 1, pwChapter2: pwChapter === 2, pwChapter3: pwChapter === 3,
+      pwDictRun: !!st.pwDictRun,
+      pwUserPassword: st.pwUserPassword != null ? st.pwUserPassword : '',
+      pwCrackText: pwEst.text,
+      pwSaltOn: !!st.pwSaltOn, pwSaltLabel: st.pwSaltOn ? 'SALT ON' : 'SALT OFF',
+      pwSaltMatch: pwHashA === pwHashB, pwSaltDiffer: pwHashA !== pwHashB,
+      pwStatus: pwChapter === 3 ? (st.pwSaltOn ? 'HASHES DIFFER' : 'HASHES MATCH') : (pwChapter === 2 ? ('EST. ' + pwEst.text) : (st.pwDictRun ? '2/3 CRACKED' : 'HASHES ONLY')),
+      pwHud: 'CH ' + (pwChapter + 1) + '/4',
+      pwPickChapter:(e) => this.setState({ pwChapter:Math.max(0, Math.min(3, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      pwSteal:() => this.setState({ pwChapter:0 }),
+      pwRunDict:() => this.setState({ pwChapter:1, pwDictRun:true }),
+      pwInputPassword:(e) => this.setState({ pwUserPassword:e.currentTarget.value || '', pwChapter:2 }),
+      pwToggleSalt:() => this.setState({ pwSaltOn:!this.state.pwSaltOn, pwChapter:3 }),
+
+      // ---- MFA ----
+      mfaOpen: st.stubId === 'mfa',
+      mfTabs, mfBeatTag: mfCur[0] + ' // ' + mfCur[1], mfBeatTitle: mfCur[2], mfBeatBody: mfCur[3], mfTodo: mfCur[4],
+      mfChapter0: mfChapter === 0, mfChapter1: mfChapter === 1, mfChapter2: mfChapter === 2,
+      mfLeaked, mfAttackedA: !!st.mfAttackedA, mfAttackedBBlocked: st.mfAttackedB === 'blocked',
+      mfStatus: st.mfAttackedB === 'blocked' ? 'B BLOCKED' : (st.mfAttackedA ? 'A COMPROMISED' : 'AWAITING ATTACK'),
+      mfHud: 'LEAKED // "' + mfLeaked + '"',
+      mfPickChapter:(e) => this.setState({ mfChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      mfAttackA:() => this.setState({ mfChapter:0, mfAttackedA:true }),
+      mfAttackB:() => this.setState({ mfChapter:1, mfAttackedB:'blocked' }),
+
+      // ---- OAUTH ----
+      oauthOpen: st.stubId === 'oauth',
+      oaTabs, oaBeatTag: oaCur[0] + ' // ' + oaCur[1], oaBeatTitle: oaCur[2], oaBeatBody: oaCur[3], oaTodo: oaCur[4],
+      oaChapter0: oaChapter === 0, oaChapter1: oaChapter === 1, oaChapter2: oaChapter === 2,
+      oaRequested: !!st.oaRequested, oaGranted: !!st.oaGranted, oaRevoked: !!st.oaRevoked,
+      oaScopeEmail: !!st.oaScopeEmail, oaOverBroad: !!st.oaOverBroad, oaScopeEmailLabel: st.oaScopeEmail ? 'ON' : 'OFF',
+      oaContinueLabel: st.oaGranted ? 'RE-AUTHORIZE' : (st.oaRequested ? 'AUTHORIZING…' : 'CONTINUE WITH PROVIDER ▶'),
+      oaStatus: st.oaRevoked ? 'TOKEN REVOKED' : (st.oaOverBroad ? 'SCOPE EXCEEDS INTENT' : (st.oaGranted ? 'TOKEN GRANTED' : 'NOT CONNECTED')),
+      oaHud: st.oaGranted ? ('SCOPE: PHOTOS' + (st.oaScopeEmail ? ' + EMAIL' : '')) : 'NO TOKEN',
+      oaPickChapter:(e) => this.setState({ oaChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      oaContinue:() => this.oaContinue(),
+      oaToggleEmailScope:() => { const on = !this.state.oaScopeEmail; this.setState({ oaScopeEmail:on, oaOverBroad:on, oaChapter:1 }); },
+      oaRevoke:() => this.setState({ oaRevoked:true, oaGranted:false, oaChapter:2 }),
+
+      // ---- ZERO TRUST ----
+      ztrustOpen: st.stubId === 'ztrust',
+      ztTabs, ztBeatTag: ztCur[0] + ' // ' + ztCur[1], ztBeatTitle: ztCur[2], ztBeatBody: ztCur[3], ztTodo: ztCur[4],
+      ztChapter0: ztChapter === 0, ztChapter1: ztChapter === 1, ztChapter2: ztChapter === 2,
+      ztBreached: !!st.ztBreached, ztReBreached: st.ztReBreached,
+      ztDevice: Number(st.ztDevice || 0), ztLocation: Number(st.ztLocation || 0), ztTime: Number(st.ztTime || 0), ztBehavior: Number(st.ztBehavior || 0),
+      ztScore, ztVerdict: ztAllow ? 'ALLOW' : 'DENY',
+      ztStatus: st.ztReBreached ? (st.ztReBreached === 'denied' ? '1/4 BLAST RADIUS' : '4/4 BLAST RADIUS AGAIN') : (st.ztBreached ? '4/4 COMPROMISED' : 'LIVE SCORE ' + ztScore),
+      ztHud: 'CH ' + (ztChapter + 1) + '/3',
+      ztPickChapter:(e) => this.setState({ ztChapter:Math.max(0, Math.min(2, Number(e.currentTarget.dataset.chapter) || 0)) }),
+      ztBreachCastle:() => this.setState({ ztChapter:0, ztBreached:true }),
+      ztSetDevice:(e) => this.setState({ ztDevice:Number(e.currentTarget.value) || 0 }),
+      ztSetLocation:(e) => this.setState({ ztLocation:Number(e.currentTarget.value) || 0 }),
+      ztSetTime:(e) => this.setState({ ztTime:Number(e.currentTarget.value) || 0 }),
+      ztSetBehavior:(e) => this.setState({ ztBehavior:Number(e.currentTarget.value) || 0 }),
+      ztReBreach:() => { const score = Math.round((Number(this.state.ztDevice||0)+Number(this.state.ztLocation||0)+Number(this.state.ztTime||0)+Number(this.state.ztBehavior||0))/4); this.setState({ ztChapter:2, ztReBreached: score >= 55 ? 'allowed' : 'denied' }); },
 
       qbFlipBit:() => this.setState({ qbBit:this.state.qbBit ? 0 : 1 }),
       qbSetAngle:(e) => this.setState({ qbAngle:Number(e.currentTarget.value) || 0 }),
@@ -1981,6 +2190,625 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
   // the quantum attack finds nothing to lock onto — stay on THE ATTACK and fire a
   // scan-ring pulse from the message that dissipates without resolving to a dot
   pqQuantumTry() { this._pqFizzleAt = (typeof performance !== 'undefined' ? performance.now() : Date.now()); this.setState({ pqQuantumFizzled:true }); }
+
+  // ---------- NW-01 // packets: chop, race, drop ----------
+  ptChunks(text) {
+    const t = (text || '').trim() || 'hi bob, meet at 8?';
+    const size = Math.max(2, Math.ceil(t.length / 6));
+    const chunks = [];
+    for (let i = 0; i < t.length; i += size) chunks.push(t.slice(i, i + size));
+    return chunks.length ? chunks : [t];
+  }
+  ptInput(e) {
+    this._ptRun = null; clearTimeout(this._ptTimer);
+    this.setState({ ptText:e.currentTarget.value || '', ptChopped:false, ptRaced:false, ptDropped:false, ptBusy:false });
+  }
+  ptChop() {
+    this._ptRun = null; clearTimeout(this._ptTimer);
+    this.setState({ ptChapter:0, ptChopped:true, ptRaced:false, ptDropped:false, ptBusy:false });
+  }
+  ptBuildRun(dropIdx) {
+    const chunks = this.ptChunks(this.state.ptText);
+    const packets = chunks.map((text, i) => {
+      const route = i % 2 === 0 ? 'A' : 'B';
+      const launchDelay = i * 130;
+      const travelDur = 1000 + ((i * 37 + (route === 'A' ? 13 : 71)) % 9) * 90;
+      return { idx:i, text, route, launchDelay, travelDur, dropped:i === dropIdx };
+    });
+    let all = packets;
+    if (dropIdx != null && this.state.ptRetransmit) {
+      const orig = packets[dropIdx];
+      const dropAt = orig.launchDelay + orig.travelDur * 0.55;
+      all = packets.concat([{ idx:dropIdx, text:orig.text, route:'A', launchDelay:dropAt + 320, travelDur:1050, dropped:false, retransmit:true }]);
+    }
+    const total = Math.max(...all.map(p => p.launchDelay + p.travelDur)) + 260;
+    this._ptRun = { t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), packets:all, n:chunks.length, dropIdx, total };
+    return total;
+  }
+  ptRace() {
+    const total = this.ptBuildRun(null);
+    this.setState({ ptChapter:1, ptChopped:true, ptRaced:false, ptBusy:true });
+    clearTimeout(this._ptTimer);
+    this._ptTimer = setTimeout(() => this.setState({ ptRaced:true, ptBusy:false }), total);
+  }
+  ptDropOne() {
+    const idx = 2 % Math.max(1, this.ptChunks(this.state.ptText).length);
+    const total = this.ptBuildRun(idx);
+    this.setState({ ptChapter:2, ptDropped:false, ptBusy:true });
+    clearTimeout(this._ptTimer);
+    this._ptTimer = setTimeout(() => this.setState({ ptDropped:true, ptBusy:false }), total);
+  }
+  ptRunAgain() {
+    const idx = 2 % Math.max(1, this.ptChunks(this.state.ptText).length);
+    const total = this.ptBuildRun(idx);
+    this.setState({ ptChapter:3, ptDropped:false, ptBusy:true });
+    clearTimeout(this._ptTimer);
+    this._ptTimer = setTimeout(() => this.setState({ ptDropped:true, ptBusy:false }), total);
+  }
+  ptColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  ptBez(p0, p1, p2, t) { const u = 1 - t; return [u*u*p0[0] + 2*u*t*p1[0] + t*t*p2[0], u*u*p0[1] + 2*u*t*p1[1] + t*t*p2[1]]; }
+  drawPtCanvas() {
+    const canvas = document.getElementById('pt-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(320, rect.width || 1000), H = Math.max(280, rect.height || W*620/1000);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.ptColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.ptColor(canvas,'--bb-ink','#171717');
+    const bg = this.ptColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.ptColor(canvas,'--bb-muted','#555');
+    const alarm = '#ff2a22';
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const chunks = this.ptChunks(st.ptText);
+    const n = chunks.length;
+
+    const srcX = W*0.11, dstX = W*0.89, midY = H*0.40;
+    const ctrlA = [W*0.5, midY - H*0.26], ctrlB = [W*0.5, midY + H*0.26];
+    const p0 = [srcX, midY], p2 = [dstX, midY];
+
+    const box = (x, y, label) => {
+      ctx.save(); ctx.strokeStyle = hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.fillRect(x-30, y-22, 60, 44); ctx.strokeRect(x-30, y-22, 60, 44);
+      ctx.fillStyle = ink; ctx.font = "800 10px 'Archivo', sans-serif"; ctx.textAlign = 'center';
+      ctx.fillText(label, x, y+4); ctx.restore();
+    };
+    box(srcX, midY, 'YOU'); box(dstX, midY, 'BOB');
+
+    ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .22; ctx.lineWidth = 1.4; ctx.setLineDash([4,5]);
+    ctx.beginPath(); ctx.moveTo(p0[0],p0[1]);
+    for (let t=0;t<=1;t+=0.05){ const p=this.ptBez(p0,ctrlA,p2,t); ctx.lineTo(p[0],p[1]); } ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(p0[0],p0[1]);
+    for (let t=0;t<=1;t+=0.05){ const p=this.ptBez(p0,ctrlB,p2,t); ctx.lineTo(p[0],p[1]); } ctx.stroke();
+    ctx.restore();
+    ctx.save(); ctx.fillStyle = muted; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+    ctx.fillText('ROUTE A', W*0.5, midY - H*0.30); ctx.fillText('ROUTE B', W*0.5, midY + H*0.32); ctx.restore();
+
+    const trayY = H*0.72, slotW = Math.min(64, (W*0.7)/Math.max(n,1)), slotH = 30;
+    const trayLeft = W*0.5 - (slotW*n)/2;
+    const run = this._ptRun;
+    const landedOrder = [];
+    const slotFill = new Array(n).fill(null);
+    let finished = true;
+
+    if (!run) {
+      ctx.save(); ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.fillStyle = hud; ctx.textAlign='left';
+      ctx.fillText(st.ptChopped ? 'CHOPPED // ' + n + ' PACKETS QUEUED' : 'TYPE A MESSAGE AND PRESS CHOP', 14, 22);
+      ctx.restore();
+      if (st.ptChopped) {
+        chunks.forEach((c,i) => {
+          const cy = midY - 70 + i*24;
+          ctx.save(); ctx.strokeStyle = hud; ctx.fillStyle = bg; ctx.lineWidth = 1.5;
+          ctx.fillRect(srcX+40, cy-9, 88, 18); ctx.strokeRect(srcX+40, cy-9, 88, 18);
+          ctx.fillStyle = ink; ctx.font = "700 9px 'IBM Plex Mono', monospace"; ctx.textAlign='left';
+          ctx.fillText('#'+(i+1)+' '+c, srcX+45, cy+3); ctx.restore();
+        });
+      }
+      finished = st.ptChopped;
+    } else {
+      const elapsed = now - run.t0;
+      finished = elapsed >= run.total;
+      const landings = run.packets.filter(p => !p.dropped).map(p => ({ p, at:p.launchDelay+p.travelDur })).sort((a,b) => a.at - b.at);
+      landings.forEach((l,rank) => { if (elapsed >= l.at) landedOrder[rank] = l.p; });
+
+      run.packets.forEach(p => {
+        const localT = elapsed - p.launchDelay;
+        if (localT < 0) return;
+        const prog = Math.min(1, localT / p.travelDur);
+        const ctrl = p.route === 'A' ? ctrlA : ctrlB;
+        let alpha = 1;
+        if (p.dropped) {
+          if (prog >= 0.85) return;
+          if (prog > 0.5) alpha = 1 - (prog-0.5)/0.35;
+        }
+        if (prog < 1 || p.dropped) {
+          const pos = this.ptBez(p0, ctrl, p2, prog);
+          ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = (p.dropped && prog>0.5) ? alarm : hud; ctx.strokeStyle = bg; ctx.lineWidth = 1.2;
+          ctx.fillRect(pos[0]-13, pos[1]-9, 26, 18); ctx.strokeRect(pos[0]-13, pos[1]-9, 26, 18);
+          ctx.fillStyle = bg; ctx.font = "800 8px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+          ctx.fillText('#'+(p.idx+1), pos[0], pos[1]+3); ctx.restore();
+        }
+      });
+
+      const numberingOn = st.ptNumbering;
+      run.packets.forEach(p => {
+        if (p.dropped) return;
+        const finishAt = p.launchDelay + p.travelDur;
+        if (elapsed >= finishAt && numberingOn) slotFill[p.idx] = p.text;
+      });
+      if (!numberingOn) landedOrder.forEach((p, rank) => { if (p && rank < n) slotFill[rank] = p.text; });
+    }
+
+    for (let i=0;i<n;i++){
+      const x = trayLeft + i*slotW;
+      const gapPermanent = !!run && finished && run.dropIdx != null && slotFill[i] == null;
+      ctx.save(); ctx.strokeStyle = gapPermanent ? alarm : hud; ctx.globalAlpha = slotFill[i] != null ? 1 : .3; ctx.lineWidth = 1.4;
+      ctx.strokeRect(x+2, trayY, slotW-4, slotH);
+      if (slotFill[i] != null) {
+        ctx.globalAlpha = 1; ctx.fillStyle = ink; ctx.font = "700 9px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+        ctx.fillText(slotFill[i], x+slotW/2, trayY+slotH/2+3);
+      } else if (gapPermanent) {
+        ctx.globalAlpha = 1; ctx.fillStyle = alarm; ctx.font = "800 9px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+        ctx.fillText('LOST', x+slotW/2, trayY+slotH/2+3);
+      }
+      ctx.restore();
+    }
+    ctx.save(); ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign='left';
+    ctx.fillText(st.ptNumbering ? 'REASSEMBLED BY NUMBER' : 'REASSEMBLED BY ARRIVAL ORDER', trayLeft, trayY-8);
+    ctx.restore();
+
+    if (finished && (run || st.ptChopped)) {
+      const hasGap = !!run && slotFill.some(s => s == null);
+      const text = run ? slotFill.map(s => s == null ? '▢▢' : s).join('') : chunks.join('');
+      ctx.save(); ctx.fillStyle = hasGap ? alarm : ink; ctx.font = "800 " + Math.round(W*0.026) + "px 'Archivo', sans-serif"; ctx.textAlign='center';
+      ctx.fillText(text, W*0.5, trayY + slotH + 34);
+      ctx.restore();
+    }
+
+    const tag = document.getElementById('pt-tag');
+    if (tag) tag.textContent = run ? (finished ? 'DELIVERED' : 'IN FLIGHT') : (st.ptChopped ? 'CHOPPED' : 'IDLE');
+  }
+
+  // ---------- NW-02 // dns: walk the chain, cache, poison ----------
+  dnInput(e) {
+    clearTimeout(this._dnTimer); this._dn = null;
+    this.setState({ dnDomain:e.currentTarget.value || '', dnResolved:false, dnCached:false, dnBusy:false, dnPoisonShown:false, dnPoisonChoice:null });
+  }
+  dnResolve() {
+    const domain = (this.state.dnDomain || 'bob.host').trim().toLowerCase() || 'bob.host';
+    if (this.state.dnResolved && this._dnLastDomain === domain) {
+      this._dn = { mode:'cache', t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur:260 };
+      this.setState({ dnChapter:1, dnCached:true });
+      return;
+    }
+    this._dnLastDomain = domain;
+    this._dn = { mode:'walk', t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur:1800 };
+    this.setState({ dnChapter:0, dnResolved:false, dnCached:false, dnBusy:true, dnLookups:(this.state.dnLookups || 0) + 1 });
+    clearTimeout(this._dnTimer);
+    this._dnTimer = setTimeout(() => { this._dn = null; this.setState({ dnResolved:true, dnBusy:false }); }, 1820);
+  }
+  dnColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawDnCanvas() {
+    const canvas = document.getElementById('dn-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(320, rect.width || 1000), H = Math.max(260, rect.height || W*560/1000);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.dnColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.dnColor(canvas,'--bb-ink','#171717');
+    const bg = this.dnColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.dnColor(canvas,'--bb-muted','#555');
+    const alarm = '#ff2a22';
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const anim = this._dn;
+    const domain = (st.dnDomain || 'bob.host').trim().toLowerCase() || 'bob.host';
+
+    const y = H*0.36;
+    const xs = { you:W*0.10, root:W*0.36, tld:W*0.60, auth:W*0.84 };
+    const box = (x, label, sub) => {
+      ctx.save(); ctx.strokeStyle = hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.fillRect(x-34, y-22, 68, 44); ctx.strokeRect(x-34, y-22, 68, 44);
+      ctx.fillStyle = ink; ctx.font = "800 10px 'Archivo', sans-serif"; ctx.textAlign='center';
+      ctx.fillText(label, x, y-1);
+      ctx.fillStyle = hud; ctx.font = "6.5px 'IBM Plex Mono', monospace";
+      ctx.fillText(sub, x, y+13); ctx.restore();
+    };
+    box(xs.you, 'YOU', 'asking');
+    box(xs.root, 'ROOT', '.');
+    box(xs.tld, 'TLD', '.host');
+    box(xs.auth, 'AUTH', domain);
+    [[xs.you,xs.root],[xs.root,xs.tld],[xs.tld,xs.auth]].forEach(([A,B]) => {
+      ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .3; ctx.lineWidth = 1.4; ctx.setLineDash([5,5]);
+      ctx.beginPath(); ctx.moveTo(A+34,y); ctx.lineTo(B-34,y); ctx.stroke(); ctx.restore();
+    });
+
+    let k = 0, mode = anim ? anim.mode : null;
+    if (anim) k = Math.max(0, Math.min(1, (now-anim.t0)/anim.dur));
+
+    if (mode === 'walk') {
+      const legs = [[xs.you,xs.root],[xs.root,xs.tld],[xs.tld,xs.auth]];
+      const outK = Math.min(1, k/0.7);
+      const leg = Math.min(2, Math.floor(outK*3));
+      const legT = Math.min(1, outK*3 - leg);
+      const [ax,bx] = legs[leg];
+      const qx = ax + (bx-ax)*legT;
+      if (outK < 1) {
+        ctx.save(); ctx.fillStyle = hud; ctx.beginPath(); ctx.arc(qx, y-40, 6, 0, Math.PI*2); ctx.fill();
+        ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign='center'; ctx.fillText('query', qx, y-50); ctx.restore();
+      } else {
+        const backK = (k-0.7)/0.3;
+        const rx = xs.auth + (xs.you-xs.auth)*Math.min(1,backK);
+        ctx.save(); ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(rx, y+40, 6, 0, Math.PI*2); ctx.fill();
+        ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign='center'; ctx.fillText('answer', rx, y+54); ctx.restore();
+      }
+    }
+
+    const ip = this.internetIpFor(domain);
+    if (st.dnResolved && !anim) {
+      ctx.save(); ctx.fillStyle = hud; ctx.font = "800 " + Math.round(W*0.022) + "px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+      ctx.fillText(domain + '  =  ' + ip, W*0.5, H*0.62);
+      ctx.restore();
+      if (st.dnCached) { ctx.save(); ctx.fillStyle = muted; ctx.font = "8px 'IBM Plex Mono', monospace"; ctx.textAlign='center'; ctx.fillText('CACHED — NO WALK NEEDED', W*0.5, H*0.70); ctx.restore(); }
+    }
+
+    if (st.dnChapter === 2 && st.dnPoisonShown) {
+      const fakeIp = this.internetIpFor(domain + '.evil');
+      const cardY = H*0.82;
+      const drawCard = (x, label, cardIp, bad, chosen) => {
+        ctx.save(); ctx.strokeStyle = bad ? alarm : hud; ctx.fillStyle = bg; ctx.lineWidth = chosen ? 3 : 1.6;
+        ctx.fillRect(x-84, cardY-24, 168, 48); ctx.strokeRect(x-84, cardY-24, 168, 48);
+        ctx.fillStyle = bad ? alarm : ink; ctx.font = "800 9px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+        ctx.fillText(label, x, cardY-6);
+        ctx.fillText(cardIp, x, cardY+12); ctx.restore();
+      };
+      const accepted = st.dnPoisonChoice === 'accept', rejected = st.dnPoisonChoice === 'reject';
+      drawCard(W*0.30, 'REAL // AUTHORITATIVE', ip, false, rejected);
+      drawCard(W*0.70, 'FORGED // ATTACKER', fakeIp, true, accepted);
+      if (accepted) { ctx.save(); ctx.fillStyle = alarm; ctx.font = "800 10px 'IBM Plex Mono', monospace"; ctx.textAlign='center'; ctx.fillText('ROUTED TO THE ATTACKER’S ADDRESS', W*0.5, cardY+40); ctx.restore(); }
+      if (rejected) { ctx.save(); ctx.fillStyle = ink; ctx.font = "800 10px 'IBM Plex Mono', monospace"; ctx.textAlign='center'; ctx.fillText('FORGERY REJECTED — REAL ANSWER KEPT', W*0.5, cardY+40); ctx.restore(); }
+    }
+
+    const tag = document.getElementById('dn-tag');
+    if (tag) tag.textContent = anim ? (mode === 'cache' ? 'CACHE HIT' : 'RESOLVING…') : (st.dnPoisonChoice === 'accept' ? 'COMPROMISED' : (st.dnResolved ? 'RESOLVED' : 'UNRESOLVED'));
+  }
+
+  // ---------- NW-03 // vpn: naked path, tunnel, become the relay ----------
+  vpColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawVpCanvas() {
+    const canvas = document.getElementById('vp-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(320, rect.width || 1000), H = Math.max(260, rect.height || W*560/1000);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.vpColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.vpColor(canvas,'--bb-ink','#171717');
+    const bg = this.vpColor(canvas,'--bb-bg','#F7F7F4');
+    const st = this.state;
+    const y = H*0.42;
+    const on = !!st.vpOn;
+    const xs = on ? { you:W*0.10, relay:W*0.5, dest:W*0.90 } : { you:W*0.10, relay:null, dest:W*0.90 };
+    const box = (x, label, sub) => {
+      ctx.save(); ctx.strokeStyle = hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.fillRect(x-36, y-22, 72, 44); ctx.strokeRect(x-36, y-22, 72, 44);
+      ctx.fillStyle = ink; ctx.font = "800 10px 'Archivo', sans-serif"; ctx.textAlign='center';
+      ctx.fillText(label, x, y-1);
+      ctx.fillStyle = hud; ctx.font = "6.5px 'IBM Plex Mono', monospace";
+      ctx.fillText(sub, x, y+13); ctx.restore();
+    };
+    box(xs.you, 'YOU', 'your device');
+    if (on) box(xs.relay, 'RELAY', 'VPN endpoint');
+    box(xs.dest, 'DEST', 'wiki.info');
+
+    const wire = (ax, bx, tunnel) => {
+      ctx.save(); ctx.strokeStyle = hud; ctx.lineWidth = tunnel ? 8 : 1.6; ctx.globalAlpha = tunnel ? .16 : .35;
+      if (!tunnel) ctx.setLineDash([5,5]);
+      ctx.beginPath(); ctx.moveTo(ax+36,y); ctx.lineTo(bx-36,y); ctx.stroke(); ctx.restore();
+      if (tunnel) { ctx.save(); ctx.strokeStyle = hud; ctx.globalAlpha = .55; ctx.lineWidth = 1.4; ctx.setLineDash([2,6]);
+        ctx.beginPath(); ctx.moveTo(ax+36,y); ctx.lineTo(bx-36,y); ctx.stroke(); ctx.restore(); }
+    };
+    if (on) { wire(xs.you, xs.relay, true); wire(xs.relay, xs.dest, false); } else { wire(xs.you, xs.dest, false); }
+
+    const destName = 'wiki.info', content = 'salary negotiation tips';
+    const seat = st.vpSeat || 'observer';
+    const eyeX = seat === 'relay' ? (on ? xs.relay : xs.you) : xs.you;
+    ctx.save(); ctx.fillStyle = hud; ctx.font = "800 9px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+    ctx.fillText(seat === 'relay' ? 'YOU ARE: THE RELAY' : 'YOU ARE: LOCAL OBSERVER', eyeX, y-56);
+    ctx.restore();
+
+    const seesDest = seat === 'relay' ? true : !on;
+    const seesContent = seat === 'relay' ? false : !on;
+    const readoutY = H*0.78;
+    ctx.save(); ctx.strokeStyle = hud; ctx.fillStyle = bg; ctx.lineWidth = 1.6;
+    ctx.strokeRect(W*0.5-140, readoutY-30, 280, 60);
+    ctx.fillStyle = ink; ctx.font = "700 9px 'IBM Plex Mono', monospace"; ctx.textAlign='left';
+    ctx.fillText('DEST:    ' + (seesDest ? destName : '?????????????'), W*0.5-124, readoutY-8);
+    ctx.fillText('CONTENT: ' + (seesContent ? content : '?????????????'), W*0.5-124, readoutY+12);
+    ctx.restore();
+
+    const tag = document.getElementById('vp-tag');
+    if (tag) tag.textContent = seat === 'relay' ? 'RELAY VIEW' : (on ? 'BLINDED' : 'SEES ALL');
+  }
+
+  // ---------- ID-01 // passwords: crack the vault, then defend one ----------
+  pwColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  pwCrackEstimate(pw) {
+    const len = (pw || '').length;
+    if (!len) return { seconds:0, text:'—' };
+    const hasUpper = /[A-Z]/.test(pw), hasDigit = /[0-9]/.test(pw), hasSym = /[^A-Za-z0-9]/.test(pw);
+    const charset = 26 + (hasUpper?26:0) + (hasDigit?10:0) + (hasSym?20:0) || 26;
+    const combos = Math.pow(charset, len);
+    const seconds = combos / 1e10 / 2;
+    return { seconds, text:this.pwFormatDuration(seconds) };
+  }
+  pwFormatDuration(s) {
+    if (s < 1) return 'INSTANT';
+    const units = [[3.15e16,'AGES OF THE UNIVERSE'],[31536000000,'BILLENNIA'],[31536000,'YEARS'],[86400,'DAYS'],[3600,'HOURS'],[60,'MINUTES']];
+    for (const [sec,label] of units) { if (s >= sec) { const v = s/sec; return (v >= 1000 ? v.toExponential(1) : v.toFixed(1)) + ' ' + label; } }
+    return s.toFixed(1) + ' SECONDS';
+  }
+  drawPwCanvas() {
+    const canvas = document.getElementById('pw-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(320, rect.height || W*640/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.pwColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.pwColor(canvas,'--bb-ink','#171717');
+    const bg = this.pwColor(canvas,'--bb-bg','#F7F7F4');
+    const muted = this.pwColor(canvas,'--bb-muted','#555');
+    const st = this.state;
+    const chapter = Math.max(0, Math.min(3, Number(st.pwChapter) || 0));
+    const accounts = [['admin','password123'], ['j.smith','qwerty'], ['r.chen','Tr0ub4dor&3']];
+
+    if (chapter <= 1) {
+      const rowH = 54, top = H*0.10;
+      accounts.forEach((a, i) => {
+        const [user, pw] = a;
+        const y = top + i*rowH;
+        const cracked = st.pwDictRun && i < 2;
+        ctx.save(); ctx.strokeStyle = cracked ? hud : muted; ctx.lineWidth = 1.4;
+        ctx.strokeRect(W*0.08, y, W*0.84, rowH-10);
+        ctx.fillStyle = ink; ctx.font = "800 10px 'Archivo', sans-serif"; ctx.textAlign='left';
+        ctx.fillText(user, W*0.11, y+18);
+        ctx.fillStyle = cracked ? hud : muted; ctx.font = "700 9px 'IBM Plex Mono', monospace";
+        ctx.fillText(cracked ? ('CRACKED // "' + pw + '"') : this.learningDigest(pw).slice(0,20), W*0.11, y+36);
+        ctx.restore();
+      });
+      const tag = document.getElementById('pw-tag');
+      if (tag) tag.textContent = st.pwDictRun ? '2/3 CRACKED' : 'HASHES ONLY';
+      return;
+    }
+
+    if (chapter === 2) {
+      const pw = st.pwUserPassword || '';
+      const est = this.pwCrackEstimate(pw);
+      ctx.save(); ctx.fillStyle = ink; ctx.font = "800 " + Math.round(W*0.05) + "px 'Archivo', sans-serif"; ctx.textAlign='center';
+      ctx.fillText(pw ? '•'.repeat(Math.min(24,pw.length)) : 'TYPE A PASSWORD', W*0.5, H*0.28);
+      ctx.restore();
+      const barY = H*0.44, barW = W*0.8, barX = W*0.1;
+      const frac = Math.max(0.02, Math.min(1, Math.log10(Math.max(1,est.seconds)) / 20));
+      ctx.save(); ctx.strokeStyle = hud; ctx.lineWidth = 1.6; ctx.strokeRect(barX, barY, barW, 22);
+      ctx.fillStyle = hud; ctx.globalAlpha = .8; ctx.fillRect(barX, barY, barW*frac, 22); ctx.restore();
+      ctx.save(); ctx.fillStyle = ink; ctx.font = "800 12px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+      ctx.fillText('EST. TIME TO CRACK: ' + est.text, W*0.5, barY+46);
+      ctx.restore();
+      const tag = document.getElementById('pw-tag');
+      if (tag) tag.textContent = est.text;
+      return;
+    }
+
+    const saltA = 'x7f2', saltB = 'q9k1', shared = 'sunshine1';
+    const hashA = this.learningDigest(shared + (st.pwSaltOn ? saltA : ''));
+    const hashB = this.learningDigest(shared + (st.pwSaltOn ? saltB : ''));
+    const match = hashA === hashB;
+    [['ACCOUNT A', hashA, saltA], ['ACCOUNT B', hashB, saltB]].forEach((row, i) => {
+      const y = H*0.20 + i*H*0.22;
+      ctx.save(); ctx.strokeStyle = match ? '#ff2a22' : hud; ctx.lineWidth = 1.6;
+      ctx.strokeRect(W*0.1, y, W*0.8, 60);
+      ctx.fillStyle = ink; ctx.font = "800 10px 'Archivo', sans-serif"; ctx.textAlign='left';
+      ctx.fillText(row[0] + (st.pwSaltOn ? ('  // salt ' + row[2]) : ''), W*0.13, y+20);
+      ctx.fillStyle = match ? '#ff2a22' : hud; ctx.font = "700 9px 'IBM Plex Mono', monospace";
+      ctx.fillText(row[1].slice(0,26), W*0.13, y+42);
+      ctx.restore();
+    });
+    ctx.save(); ctx.fillStyle = match ? '#ff2a22' : ink; ctx.font = "800 11px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+    ctx.fillText(match ? 'IDENTICAL HASHES — CRACK ONE, CRACK BOTH' : 'DIFFERENT HASHES — SALT DEFEATS THE SHORTCUT', W*0.5, H*0.72);
+    ctx.restore();
+    const tag = document.getElementById('pw-tag');
+    if (tag) tag.textContent = match ? 'UNSALTED' : 'SALTED';
+  }
+
+  // ---------- ID-02 // mfa: same password, two accounts ----------
+  mfColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawMfCanvas() {
+    const canvas = document.getElementById('mf-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(300, rect.width || 820), H = Math.max(280, rect.height || W*560/820);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.mfColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.mfColor(canvas,'--bb-ink','#171717');
+    const bg = this.mfColor(canvas,'--bb-bg','#F7F7F4');
+    const alarm = '#ff2a22';
+    const st = this.state;
+
+    const door = (cx, label, sub, breached, blocked) => {
+      const y = H*0.30, w = W*0.30, h = H*0.42;
+      ctx.save(); ctx.strokeStyle = breached ? alarm : hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.strokeRect(cx-w/2, y, w, h);
+      ctx.fillStyle = ink; ctx.font = "900 12px 'Archivo', sans-serif"; ctx.textAlign='center';
+      ctx.fillText(label, cx, y-10);
+      ctx.fillStyle = breached ? alarm : (blocked ? hud : ink); ctx.font = "800 13px 'Archivo', sans-serif";
+      ctx.fillText(breached ? 'BREACHED' : (blocked ? 'PASSWORD OK' : 'SECURE'), cx, y+h*0.42);
+      ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace";
+      ctx.fillText(sub, cx, y+h*0.58);
+      if (blocked) {
+        ctx.strokeStyle = hud; ctx.lineWidth = 2; ctx.strokeRect(cx-w*0.22, y+h*0.68, w*0.44, h*0.2);
+        ctx.fillStyle = hud; ctx.font = "700 8px 'IBM Plex Mono', monospace"; ctx.fillText('SECOND FACTOR?', cx, y+h*0.8);
+      }
+      ctx.restore();
+    };
+    door(W*0.27, 'ACCOUNT A', 'password only', !!st.mfAttackedA, false);
+    door(W*0.73, 'ACCOUNT B', 'password + MFA', false, st.mfAttackedB === 'blocked');
+
+    const tag = document.getElementById('mf-tag');
+    if (tag) tag.textContent = (st.mfAttackedA && st.mfAttackedB) ? 'A FELL // B HELD' : 'READY';
+  }
+
+  // ---------- ID-03 // oauth: redirect, token, scope, revoke ----------
+  oaContinue() {
+    this._oa = { t0:(typeof performance !== 'undefined' ? performance.now() : Date.now()), dur:1600 };
+    this.setState({ oaChapter:0, oaRequested:true, oaGranted:false, oaRevoked:false });
+    clearTimeout(this._oaTimer);
+    this._oaTimer = setTimeout(() => { this._oa = null; this.setState({ oaGranted:true, oaRequested:false }); }, 1620);
+  }
+  oaColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawOaCanvas() {
+    const canvas = document.getElementById('oa-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(320, rect.width || 1000), H = Math.max(260, rect.height || W*560/1000);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.oaColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.oaColor(canvas,'--bb-ink','#171717');
+    const bg = this.oaColor(canvas,'--bb-bg','#F7F7F4');
+    const alarm = '#ff2a22';
+    const st = this.state;
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const anim = this._oa;
+    const y = H*0.40;
+    const xs = { app:W*0.14, prov:W*0.5, you:W*0.86 };
+    const box = (x, label, sub) => {
+      ctx.save(); ctx.strokeStyle = hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.fillRect(x-40, y-24, 80, 48); ctx.strokeRect(x-40, y-24, 80, 48);
+      ctx.fillStyle = ink; ctx.font = "800 10px 'Archivo', sans-serif"; ctx.textAlign='center';
+      ctx.fillText(label, x, y-2);
+      ctx.fillStyle = hud; ctx.font = "6.5px 'IBM Plex Mono', monospace";
+      ctx.fillText(sub, x, y+14); ctx.restore();
+    };
+    box(xs.app, 'APP', 'wants photos'); box(xs.prov, 'PROVIDER', 'auth server'); box(xs.you, 'YOU', 'approve?');
+
+    const revoked = st.oaRevoked;
+    const line = (ax, bx, dead) => {
+      ctx.save(); ctx.strokeStyle = dead ? alarm : hud; ctx.globalAlpha = dead ? .5 : .3; ctx.lineWidth = 1.6;
+      if (dead) ctx.setLineDash([5,5]);
+      ctx.beginPath(); ctx.moveTo(ax+40,y); ctx.lineTo(bx-40,y); ctx.stroke(); ctx.restore();
+    };
+    line(xs.app, xs.prov, revoked); line(xs.prov, xs.you, false);
+
+    if (anim) {
+      const k = Math.min(1, (now-anim.t0)/anim.dur);
+      const legs = [[xs.app,xs.prov],[xs.prov,xs.you],[xs.you,xs.prov],[xs.prov,xs.app]];
+      const leg = Math.min(3, Math.floor(k*4)), legT = Math.min(1, k*4-leg);
+      const [ax,bx] = legs[leg];
+      const px = ax + (bx-ax)*legT;
+      ctx.save(); ctx.fillStyle = hud; ctx.beginPath(); ctx.arc(px, y-38, 6, 0, Math.PI*2); ctx.fill();
+      ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+      ctx.fillText(leg < 2 ? 'redirect' : 'token', px, y-48); ctx.restore();
+    } else if (st.oaGranted && !revoked) {
+      ctx.save(); ctx.strokeStyle = hud; ctx.fillStyle = bg; ctx.lineWidth = 2;
+      ctx.fillRect(xs.app-30, y+38, 60, 26); ctx.strokeRect(xs.app-30, y+38, 60, 26);
+      ctx.fillStyle = ink; ctx.font = "800 8px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+      ctx.fillText('TOKEN', xs.app, y+54); ctx.restore();
+    }
+
+    const tag = document.getElementById('oa-tag');
+    if (tag) tag.textContent = revoked ? 'REVOKED' : (anim ? 'REDIRECTING…' : (st.oaGranted ? 'TOKEN HELD' : 'NOT CONNECTED'));
+  }
+
+  // ---------- ID-04 // zero trust: castle cascade vs live engine ----------
+  ztColor(canvas, name, fallback) { const v = getComputedStyle(canvas).getPropertyValue(name).trim(); return v || fallback; }
+  drawZtCanvas() {
+    const canvas = document.getElementById('zt-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(320, rect.width || 1000), H = Math.max(280, rect.height || W*620/1000);
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const wantW = Math.round(W*dpr), wantH = Math.round(H*dpr);
+    if (canvas.width !== wantW || canvas.height !== wantH) { canvas.width = wantW; canvas.height = wantH; }
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const hud = this.ztColor(canvas,'--bb-hud','#F5150E');
+    const ink = this.ztColor(canvas,'--bb-ink','#171717');
+    const bg = this.ztColor(canvas,'--bb-bg','#F7F7F4');
+    const alarm = '#ff2a22';
+    const st = this.state;
+    const chapter = Math.max(0, Math.min(2, Number(st.ztChapter) || 0));
+    const names = ['PAYROLL DB','USER FILES','ADMIN PANEL','BACKUPS'];
+    const resY = H*0.5, w = W*0.18, gap = W*0.04;
+    const total = names.length*w + (names.length-1)*gap;
+    const startX = W*0.5 - total/2;
+
+    if (chapter === 0) {
+      const breached = !!st.ztBreached;
+      ctx.save(); ctx.strokeStyle = breached ? alarm : hud; if (breached) ctx.setLineDash([10,8]); ctx.lineWidth = 3;
+      ctx.strokeRect(startX-24, resY-70, total+48, 140); ctx.restore();
+      ctx.save(); ctx.fillStyle = hud; ctx.font = "7px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+      ctx.fillText(breached ? 'PERIMETER BREACHED' : 'PERIMETER // HARD SHELL, SOFT INSIDE', W*0.5, resY-84); ctx.restore();
+      names.forEach((n,i) => {
+        const x = startX + i*(w+gap);
+        ctx.save(); ctx.strokeStyle = breached ? alarm : hud; ctx.fillStyle = bg; ctx.lineWidth = 1.6;
+        ctx.fillRect(x, resY-30, w, 60); ctx.strokeRect(x, resY-30, w, 60);
+        ctx.fillStyle = ink; ctx.font = "700 8px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+        ctx.fillText(n, x+w/2, resY-4);
+        ctx.fillStyle = breached ? alarm : hud; ctx.font = "800 9px 'IBM Plex Mono', monospace";
+        ctx.fillText(breached ? 'BREACHED' : 'TRUSTED', x+w/2, resY+16);
+        ctx.restore();
+      });
+      const tag = document.getElementById('zt-tag');
+      if (tag) tag.textContent = breached ? '4/4 COMPROMISED' : '0/4';
+      return;
+    }
+
+    const score = Math.round((Number(st.ztDevice||0)+Number(st.ztLocation||0)+Number(st.ztTime||0)+Number(st.ztBehavior||0))/4);
+    const allow = score >= 55;
+    names.forEach((n,i) => {
+      const x = startX + i*(w+gap);
+      const targeted = chapter === 2 && i === 0;
+      ctx.save(); ctx.strokeStyle = (targeted && allow) ? alarm : hud; ctx.fillStyle = bg; ctx.lineWidth = 1.6;
+      ctx.fillRect(x, resY-30, w, 60); ctx.strokeRect(x, resY-30, w, 60);
+      ctx.fillStyle = ink; ctx.font = "700 8px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+      ctx.fillText(n, x+w/2, resY-4);
+      ctx.beginPath(); ctx.arc(x+w/2, resY+16, 7, 0, Math.PI*2);
+      ctx.fillStyle = targeted ? (allow ? alarm : hud) : ink; ctx.globalAlpha = targeted ? 1 : .3; ctx.fill();
+      ctx.restore();
+    });
+    ctx.save(); ctx.fillStyle = allow ? alarm : hud; ctx.font = "800 12px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+    ctx.fillText('LIVE SCORE ' + score + ' // ' + (allow ? 'ALLOW' : 'DENY'), W*0.5, resY-60);
+    ctx.restore();
+    if (chapter === 2) {
+      ctx.save(); ctx.fillStyle = ink; ctx.font = "700 9px 'IBM Plex Mono', monospace"; ctx.textAlign='center';
+      ctx.fillText('CASTLE BLAST RADIUS: 4/4   //   ZERO TRUST BLAST RADIUS: ' + (allow ? '1/4' : '0/4'), W*0.5, resY+56);
+      ctx.restore();
+    }
+    const tag = document.getElementById('zt-tag');
+    if (tag) tag.textContent = chapter === 2 ? (allow ? 'BREACH SUCCEEDED (1)' : 'DENIED') : 'LIVE';
+  }
 
   // ---------- day / night sensor mode (corner-to-corner square-flip wipe) ----------
   toggleTheme() {

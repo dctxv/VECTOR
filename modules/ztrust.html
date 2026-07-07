@@ -1,0 +1,68 @@
+  <sc-if value="{{ ztrustOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="bb-module id-module">
+      <div class="bb-hud">
+        <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
+        <span class="bb-corner bl"></span><span class="bb-corner br"></span>
+        <div style="position:absolute;left:22px;top:20px;">ID-04 // VERIFY ALWAYS</div>
+        <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
+            <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
+            <button data-reticle-target="exit" onClick="{{ closeStub }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">[ EXIT ]</button>
+          </div>
+          <div>{{ ztHud }}</div>
+        </div>
+        <div style="position:absolute;left:22px;bottom:20px;">{{ ztStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">{{ ztVerdict }}</div>
+      </div>
+
+      <main class="bb-shell">
+        <div class="bb-kicker">MODULE 16 // IDENTITY &amp; ACCESS</div>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">TRUST<br>NO ONE</h1>
+        <p class="bb-friendly">Operate the access-decision engine yourself. Feed it live signals and watch allow/deny flip in real time — "inside the network" stops meaning "trusted."</p>
+
+        <section class="ha-stage-wrap zt-stage-wrap">
+          <canvas id="zt-canvas" width="1000" height="620" aria-label="Resources behind either a single perimeter wall or their own live-scored access gates"></canvas>
+          <div class="ha-stage-tag" id="zt-tag"></div>
+        </section>
+
+        <div class="ha-tabs"><sc-for list="{{ ztTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ ztPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ ztBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ ztBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ ztBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ ztTodo }}</div>
+
+        <sc-if value="{{ ztChapter0 }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="breach" onClick="{{ ztBreachCastle }}" style="margin-top:12px;">&gt; BREACH THE FRONT DOOR</button>
+          <sc-if value="{{ ztBreached }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">FULL COMPROMISE // one door, and the old model just trusts you from there on. Every resource inside fell.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ ztChapter1 }}" hint-placeholder-val="{{ false }}">
+          <div class="pq-controls" style="margin-top:12px;">
+            <div class="pq-slider-block"><label><span>DEVICE HEALTH</span><span>{{ ztDevice }}</span></label><input class="pq-slider" type="range" min="0" max="100" data-reticle-target="slider" value="{{ ztDevice }}" onChange="{{ ztSetDevice }}"></div>
+            <div class="pq-slider-block"><label><span>LOCATION TRUST</span><span>{{ ztLocation }}</span></label><input class="pq-slider" type="range" min="0" max="100" data-reticle-target="slider" value="{{ ztLocation }}" onChange="{{ ztSetLocation }}"></div>
+            <div class="pq-slider-block"><label><span>TIME OF DAY</span><span>{{ ztTime }}</span></label><input class="pq-slider" type="range" min="0" max="100" data-reticle-target="slider" value="{{ ztTime }}" onChange="{{ ztSetTime }}"></div>
+            <div class="pq-slider-block"><label><span>BEHAVIOR</span><span>{{ ztBehavior }}</span></label><input class="pq-slider" type="range" min="0" max="100" data-reticle-target="slider" value="{{ ztBehavior }}" onChange="{{ ztSetBehavior }}"></div>
+          </div>
+          <div class="bb-readout">Identical request, different answer — depending on the live context behind it.</div>
+        </sc-if>
+
+        <sc-if value="{{ ztChapter2 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="rebreach" onClick="{{ ztReBreach }}" style="margin-top:12px;">&gt; TRY THE SAME BREACH AGAIN</button>
+          <sc-if value="{{ ztReBreached }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">There's no "inside" anymore. Every request proves itself, every time. Steal one door and you've stolen... one door.</div></sc-if>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:14ch;">DEFENDERS ONLY WIN IF THEY UNDERSTAND THE ATTACK.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">You've built the whole front door — secrets, second factors, delegation, and an engine that never stops checking. Time to switch sides for real.</p>
+          <button class="cx-btn solid" data-reticle-target="exit" onClick="{{ closeStub }}" style="margin-top:16px;">&gt; RETURN TO THE ATLAS</button>
+        </section>
+        <div class="bb-scope">LEARNING SIMULATION // A conceptual access-decision model, not a real Zero Trust architecture. Specific frameworks (e.g. BeyondCorp), microsegmentation, and policy-engine internals are left out.</div>
+      </main>
+    </div>
+  </sc-if>

@@ -1,0 +1,74 @@
+  <sc-if value="{{ packetsOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="bb-module nw-module">
+      <div class="bb-hud">
+        <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
+        <span class="bb-corner bl"></span><span class="bb-corner br"></span>
+        <div style="position:absolute;left:22px;top:20px;">NW-01 // FRAGMENT</div>
+        <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
+            <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
+            <button data-reticle-target="exit" onClick="{{ closeStub }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">[ EXIT ]</button>
+          </div>
+          <div>{{ ptStatus }}</div>
+        </div>
+        <div style="position:absolute;left:22px;bottom:20px;">{{ ptStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">{{ ptHud }}</div>
+      </div>
+
+      <main class="bb-shell">
+        <div class="bb-kicker">MODULE 10 // NETWORKS</div>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">IN<br>PIECES</h1>
+        <p class="bb-friendly">Your message never travels as one piece. It gets chopped into numbered packets that race across the network on whatever route is free — and can arrive in any order. Watch it happen to your own words.</p>
+
+        <div class="ha-compose">
+          <input id="pt-input" class="ha-msg" data-reticle-target="input" value="{{ ptText }}" onChange="{{ ptInput }}" maxlength="40" autocomplete="off" spellcheck="false" placeholder="hi bob, meet at 8?">
+          <button class="ha-feed" data-reticle-target="chop" onClick="{{ ptChop }}">{{ ptChopLabel }}</button>
+        </div>
+
+        <section class="ha-stage-wrap pt-stage-wrap">
+          <canvas id="pt-canvas" width="1000" height="620" aria-label="A message shattered into numbered packets racing two routes to reassemble at the destination"></canvas>
+          <div class="ha-stage-tag" id="pt-tag"></div>
+        </section>
+
+        <div class="ha-tabs"><sc-for list="{{ ptTabs }}" as="t" hint-placeholder-count="4">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ ptPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ ptBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ ptBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ ptBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ ptTodo }}</div>
+
+        <sc-if value="{{ ptChapter1 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="race" onClick="{{ ptRace }}" style="margin-top:12px;">&gt; SEND ACROSS THE NETWORK</button>
+          <sc-if value="{{ ptRaced }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">Order recovered from the LABELS, not the arrival. Every packet took a different amount of time, but the numbers told the receiver exactly how to rebuild your sentence.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ ptChapter2 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="drop" onClick="{{ ptDropOne }}" style="margin-top:12px;">&gt; DROP PACKET #3</button>
+          <sc-if value="{{ ptDropped }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">It didn’t resend everything — just the ONE piece that went missing. That is the whole trick to reliable delivery on an unreliable network.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ ptChapter3 }}" hint-placeholder-val="{{ false }}">
+          <div class="pt-toggles">
+            <button class="{{ ptNumClass }}" data-reticle-target="toggle" onClick="{{ ptToggleNumbering }}"><strong>NUMBERING {{ ptNumLabel }}</strong>tap to flip</button>
+            <button class="{{ ptRetryClass }}" data-reticle-target="toggle" onClick="{{ ptToggleRetransmit }}"><strong>RETRANSMIT {{ ptRetryLabel }}</strong>tap to flip</button>
+          </div>
+          <button class="cx-btn solid" data-reticle-target="drop" onClick="{{ ptRunAgain }}" style="margin-top:10px;">&gt; RUN IT AGAIN</button>
+          <sc-if value="{{ ptDropped }}" hint-placeholder-val="{{ false }}">
+            <div class="cx-alarm">{{ ptBreakReadout }}</div>
+          </sc-if>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:14ch;">EVERY HOP JUST KNEW A NEXT STEP.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">These packets hopped machine to machine across the whole planet. But every hop had to know WHERE to send them. How does a packet aimed at "bob.host" know which machine that even is?</p>
+          <button class="cx-btn solid" data-reticle-target="next" data-node="dns" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: DNS</button>
+        </section>
+        <div class="bb-scope">LEARNING SIMULATION // This is the essential shape of packet delivery, not real TCP. Ports, congestion control, and the SYN/ACK handshake are left out on purpose.</div>
+      </main>
+    </div>
+  </sc-if>

@@ -369,6 +369,44 @@
   }
   @media (max-width:520px){.pq-tabs{grid-template-columns:1fr 1fr}.pq-control-row,.pq-control-row.three,.pq-metrics{grid-template-columns:1fr}}
 
+  /* ---- NW-01 packets: numbered cards racing two routes into a reassembly tray ---- */
+  .pt-stage-wrap:before{content:'PACKET JOURNEY // NUMBERED, ROUTED SEPARATELY';}
+  .pt-stage-wrap canvas{aspect-ratio:1000/620;}
+  .pt-toggles{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px;}
+  .pt-toggle{border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);padding:11px 8px;font:8px 'IBM Plex Mono',monospace;letter-spacing:.6px;text-align:left;}
+  .pt-toggle strong{display:block;font:900 12px 'Archivo',sans-serif;color:var(--bb-ink);margin-bottom:5px;}
+  .pt-toggle.off{opacity:.5;}
+  .pt-toggle.off strong{text-decoration:line-through;}
+
+  /* ---- NW-02 dns: name-to-address resolution chain ---- */
+  .dn-stage-wrap:before{content:'RESOLUTION CHAIN // NAME \2192 ADDRESS';}
+  .dn-stage-wrap canvas{aspect-ratio:1000/560;}
+  .dn-domain{width:100%;min-width:0;border:1px solid var(--bb-hud);outline:0;background:var(--bb-bg);color:var(--bb-ink);font:700 17px 'Archivo',sans-serif;padding:12px;caret-color:var(--bb-hud);}
+  .dn-compose{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:6px;}
+
+  /* ---- NW-03 vpn: who can see the path ---- */
+  .vp-stage-wrap:before{content:'THE WIRE // WHO CAN SEE WHAT';}
+  .vp-stage-wrap canvas{aspect-ratio:1000/560;}
+
+  /* ---- ID-01 passwords: credential vault + crack-time readout ---- */
+  .pw-stage-wrap:before{content:'CREDENTIAL VAULT // HASHES, NOT PASSWORDS';}
+  .pw-stage-wrap canvas{aspect-ratio:820/640;}
+
+  /* ---- ID-02 mfa: two account doors ---- */
+  .mf-stage-wrap:before{content:'TWO ACCOUNTS // ONE LEAKED PASSWORD';}
+  .mf-stage-wrap canvas{aspect-ratio:820/560;}
+
+  /* ---- ID-03 oauth: delegation flow ---- */
+  .oa-stage-wrap:before{content:'DELEGATION FLOW // APP, PROVIDER, TOKEN';}
+  .oa-stage-wrap canvas{aspect-ratio:1000/560;}
+  .oa-scope-row{display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid var(--bb-hud);padding:10px 12px;margin-top:6px;font-size:10px;}
+  .oa-scope-row strong{color:var(--bb-ink);font-weight:700;}
+  .oa-scope-row span{color:var(--bb-hud);font-size:8px;letter-spacing:.6px;}
+
+  /* ---- ID-04 zero trust: castle vs mesh access engine ---- */
+  .zt-stage-wrap:before{content:'ACCESS ENGINE // EVERY REQUEST, EVERY TIME';}
+  .zt-stage-wrap canvas{aspect-ratio:1000/620;}
+
   /* the reticle already tracks the pointer — hide the OS cursor on fine pointers */
   @media (pointer:fine){ html,html *{cursor:none !important;} }
 

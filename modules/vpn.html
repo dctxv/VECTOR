@@ -1,0 +1,58 @@
+  <sc-if value="{{ vpnOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="bb-module nw-module">
+      <div class="bb-hud">
+        <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
+        <span class="bb-corner bl"></span><span class="bb-corner br"></span>
+        <div style="position:absolute;left:22px;top:20px;">NW-03 // REROUTE</div>
+        <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
+            <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
+            <button data-reticle-target="exit" onClick="{{ closeStub }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">[ EXIT ]</button>
+          </div>
+          <div>{{ vpHud }}</div>
+        </div>
+        <div style="position:absolute;left:22px;bottom:20px;">{{ vpStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">{{ vpOnLabel }}</div>
+      </div>
+
+      <main class="bb-shell">
+        <div class="bb-kicker">MODULE 12 // NETWORKS</div>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">WHO<br>SEES YOU</h1>
+        <p class="bb-friendly">Flip a VPN on and off while playing the eavesdropper. Find out exactly what it hides — and, more importantly, what it doesn't. Trust doesn't disappear here. It just moves.</p>
+
+        <section class="ha-stage-wrap vp-stage-wrap">
+          <canvas id="vp-canvas" width="1000" height="560" aria-label="A wire from you to a destination, with or without a VPN relay, showing what an observer can read"></canvas>
+          <div class="ha-stage-tag" id="vp-tag"></div>
+        </section>
+
+        <div class="ha-tabs"><sc-for list="{{ vpTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ vpPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ vpBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ vpBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ vpBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ vpTodo }}</div>
+
+        <sc-if value="{{ vpChapter1 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="tunnel" onClick="{{ vpToggleOn }}" style="margin-top:12px;">&gt; {{ vpOnLabel }} // TAP TO TOGGLE</button>
+          <sc-if value="{{ vpOn }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">The local watcher is blinded. It still sees you talking to a relay — it just can't see past it anymore.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ vpChapter2 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="seat" onClick="{{ vpSwitchSeat }}" style="margin-top:12px;">&gt; {{ vpSeatSwitchLabel }}</button>
+          <div class="cx-alarm">A VPN doesn't make you invisible. It moves who can see you — from whoever's near you, to whoever runs the relay. Which is why WHO YOU TRUST is the whole question.</div>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:14ch;">YOU'VE BUILT THE FRONT OF THE SYSTEM.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">You've now seen how traffic moves, resolves, and hides. But every system you connect to still has to answer one question before any of this matters: are you actually allowed in?</p>
+          <button class="cx-btn solid" data-reticle-target="next" data-node="pw" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: PASSWORDS &amp; HASHING</button>
+        </section>
+        <div class="bb-scope">LEARNING SIMULATION // A conceptual model, not a real VPN protocol. Split tunneling, logging policy, and provider trust models are left out — the "trust moves to the relay" lesson is the real takeaway.</div>
+      </main>
+    </div>
+  </sc-if>

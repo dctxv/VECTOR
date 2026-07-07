@@ -1,0 +1,65 @@
+  <sc-if value="{{ oauthOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="bb-module id-module">
+      <div class="bb-hud">
+        <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
+        <span class="bb-corner bl"></span><span class="bb-corner br"></span>
+        <div style="position:absolute;left:22px;top:20px;">ID-03 // DELEGATE</div>
+        <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
+            <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
+            <button data-reticle-target="exit" onClick="{{ closeStub }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">[ EXIT ]</button>
+          </div>
+          <div>{{ oaHud }}</div>
+        </div>
+        <div style="position:absolute;left:22px;bottom:20px;">{{ oaStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">VALET KEY</div>
+      </div>
+
+      <main class="bb-shell">
+        <div class="bb-kicker">MODULE 15 // IDENTITY &amp; ACCESS</div>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">VALET<br>KEY</h1>
+        <p class="bb-friendly">Let an app do something for you and watch the token dance — your password never touches it. It gets a key that opens the glovebox, not the whole house.</p>
+
+        <section class="ha-stage-wrap oa-stage-wrap">
+          <canvas id="oa-canvas" width="1000" height="560" aria-label="An app redirecting through a provider to get a scoped access token instead of your password"></canvas>
+          <div class="ha-stage-tag" id="oa-tag"></div>
+        </section>
+
+        <div class="ha-tabs"><sc-for list="{{ oaTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ oaPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ oaBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ oaBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ oaBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ oaTodo }}</div>
+
+        <sc-if value="{{ oaChapter0 }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="continue" onClick="{{ oaContinue }}" style="margin-top:12px;">&gt; {{ oaContinueLabel }}</button>
+          <sc-if value="{{ oaGranted }}" hint-placeholder-val="{{ false }}"><div class="cx-ok">TOKEN ISSUED // look at what the app actually got: not your password, a scoped token.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ oaChapter1 }}" hint-placeholder-val="{{ false }}">
+          <div class="oa-scope-row"><strong>PHOTOS</strong><span>GRANTED</span></div>
+          <div class="oa-scope-row"><strong>CONTACTS</strong><span>NOT REQUESTED</span></div>
+          <button class="cx-btn" data-reticle-target="scope" onClick="{{ oaToggleEmailScope }}" style="margin-top:8px;">TOGGLE EMAIL SCOPE ({{ oaScopeEmailLabel }})</button>
+          <sc-if value="{{ oaOverBroad }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">SCOPE EXCEEDS INTENT // the app only asked for photos. Granting email too hands over more than you meant to.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ oaChapter2 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="revoke" onClick="{{ oaRevoke }}" style="margin-top:12px;">&gt; REVOKE ACCESS</button>
+          <sc-if value="{{ oaRevoked }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">The app lost access instantly. Your password never changed — you cut off one connection without disrupting anything else.</div></sc-if>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:14ch;">ACCESS GRANTED ONCE, AT THE DOOR.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">Passwords, second factors, scoped tokens — all of it decides access once, at the front door. What if being "logged in" wasn't enough — what if every single request had to prove itself, every time?</p>
+          <button class="cx-btn solid" data-reticle-target="next" data-node="ztrust" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: ZERO TRUST</button>
+        </section>
+        <div class="bb-scope">LEARNING SIMULATION // A simplified flow. Real OAuth involves authorization codes, PKCE, and refresh tokens; the OAuth/OIDC distinction and token-theft attacks are left out.</div>
+      </main>
+    </div>
+  </sc-if>

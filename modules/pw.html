@@ -1,0 +1,71 @@
+  <sc-if value="{{ pwOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="bb-module id-module">
+      <div class="bb-hud">
+        <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
+        <span class="bb-corner bl"></span><span class="bb-corner br"></span>
+        <div style="position:absolute;left:22px;top:20px;">ID-01 // CRACK</div>
+        <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
+            <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
+            <button data-reticle-target="exit" onClick="{{ closeStub }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">[ EXIT ]</button>
+          </div>
+          <div>{{ pwHud }}</div>
+        </div>
+        <div style="position:absolute;left:22px;bottom:20px;">{{ pwStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">CRACK {{ pwCrackText }}</div>
+      </div>
+
+      <main class="bb-shell">
+        <div class="bb-kicker">MODULE 13 // IDENTITY &amp; ACCESS</div>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">CRACK<br>IT OPEN</h1>
+        <p class="bb-friendly">Be the attacker cracking a stolen password database — then defend one of your own. Length beats symbols, common passwords fall in seconds, and salt is what actually stops a shortcut.</p>
+
+        <section class="ha-stage-wrap pw-stage-wrap">
+          <canvas id="pw-canvas" width="820" height="640" aria-label="A password database of hashes being cracked, a live crack-time estimate, and a salted-hash comparison"></canvas>
+          <div class="ha-stage-tag" id="pw-tag"></div>
+        </section>
+
+        <div class="ha-tabs"><sc-for list="{{ pwTabs }}" as="t" hint-placeholder-count="4">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ pwPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ pwBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ pwBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ pwBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ pwTodo }}</div>
+
+        <sc-if value="{{ pwChapter0 }}" hint-placeholder-val="{{ true }}">
+          <button class="cx-btn solid" data-reticle-target="steal" onClick="{{ pwSteal }}" style="margin-top:12px;">&gt; STEAL THE DATABASE</button>
+        </sc-if>
+
+        <sc-if value="{{ pwChapter1 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="dict" onClick="{{ pwRunDict }}" style="margin-top:12px;">&gt; RUN DICTIONARY ATTACK</button>
+          <sc-if value="{{ pwDictRun }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">Common = instant. The third account survived this pass — its password isn't on any common list.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ pwChapter2 }}" hint-placeholder-val="{{ false }}">
+          <div class="cx-field" style="margin-top:12px;">
+            <label>BUILD A PASSWORD</label>
+            <input id="pw-input" data-reticle-target="input" value="{{ pwUserPassword }}" onChange="{{ pwInputPassword }}" maxlength="24" autocomplete="off" spellcheck="false" placeholder="type here">
+          </div>
+          <div class="bb-readout">Each added character multiplies the crack time. Length is the lever — not symbol soup.</div>
+        </sc-if>
+
+        <sc-if value="{{ pwChapter3 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="salt" onClick="{{ pwToggleSalt }}" style="margin-top:12px;">&gt; {{ pwSaltLabel }} // TAP TO TOGGLE</button>
+          <sc-if value="{{ pwSaltMatch }}" hint-placeholder-val="{{ true }}"><div class="cx-alarm">IDENTICAL HASHES // crack one account's password and you've cracked both, instantly, with a precomputed table.</div></sc-if>
+          <sc-if value="{{ pwSaltDiffer }}" hint-placeholder-val="{{ false }}"><div class="cx-ok">DIFFERENT HASHES // salt defeats the precomputed shortcut, even for the same password.</div></sc-if>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:13ch;">A STOLEN PASSWORD SHOULDN'T BE ENOUGH.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">Even a perfect password is one secret — and secrets leak, get phished, get reused. What if a stolen password still wasn't enough to get in?</p>
+          <button class="cx-btn solid" data-reticle-target="next" data-node="mfa" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: MFA</button>
+        </section>
+        <div class="bb-scope">LEARNING SIMULATION // An illustrative hash and crack-time estimate, not real bcrypt/argon2 timing. Real password hashing is deliberately slow to fight exactly this kind of attack. Rainbow tables and credential stuffing are left out.</div>
+      </main>
+    </div>
+  </sc-if>

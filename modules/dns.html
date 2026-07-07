@@ -1,0 +1,69 @@
+  <sc-if value="{{ dnsOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="bb-module nw-module">
+      <div class="bb-hud">
+        <span class="bb-corner tl"></span><span class="bb-corner tr"></span>
+        <span class="bb-corner bl"></span><span class="bb-corner br"></span>
+        <div style="position:absolute;left:22px;top:20px;">NW-02 // RESOLVE</div>
+        <div style="position:absolute;right:22px;top:18px;text-align:right;line-height:1.6;">
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-bottom:3px;">
+            <button data-reticle-target="theme" onClick="{{ toggleTheme }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">{{ themeLabel }}</button>
+            <button data-reticle-target="exit" onClick="{{ closeStub }}" style="border:1px solid var(--bb-hud);background:var(--bb-bg);color:var(--bb-hud);font:8px 'IBM Plex Mono',monospace;letter-spacing:1px;padding:7px 9px;">[ EXIT ]</button>
+          </div>
+          <div>{{ dnHud }}</div>
+        </div>
+        <div style="position:absolute;left:22px;bottom:20px;">{{ dnStatus }}<span style="animation:mv-blink 1s steps(1) infinite;">_</span></div>
+        <div style="position:absolute;right:22px;bottom:20px;text-align:right;">IP {{ dnIp }}</div>
+      </div>
+
+      <main class="bb-shell">
+        <div class="bb-kicker">MODULE 11 // NETWORKS</div>
+        <h1 class="bb-title" style="font-size:clamp(46px,15vw,78px);">PHONE<br>BOOK</h1>
+        <p class="bb-friendly">Names are for humans. Machines need numbers. Walk the lookup chain yourself, feel how caching makes it instant the second time — then watch what happens if you can't trust the answer you get back.</p>
+
+        <div class="dn-compose">
+          <input id="dn-input" class="dn-domain" data-reticle-target="input" value="{{ dnDomain }}" onChange="{{ dnInput }}" maxlength="30" autocomplete="off" spellcheck="false" placeholder="bob.host">
+          <button class="ha-feed" data-reticle-target="resolve" onClick="{{ dnResolve }}">{{ dnResolveLabel }}</button>
+        </div>
+
+        <section class="ha-stage-wrap dn-stage-wrap">
+          <canvas id="dn-canvas" width="1000" height="560" aria-label="A domain name resolving through root, TLD, and authoritative servers to an IP address"></canvas>
+          <div class="ha-stage-tag" id="dn-tag"></div>
+        </section>
+
+        <div class="ha-tabs"><sc-for list="{{ dnTabs }}" as="t" hint-placeholder-count="3">
+          <button class="{{ t.className }}" data-reticle-target="chapter" data-chapter="{{ t.id }}" onClick="{{ dnPickChapter }}"><strong>{{ t.label }}</strong><span>{{ t.short }}</span></button>
+        </sc-for></div>
+
+        <section class="iw-explain">
+          <div class="iw-explain-tag">{{ dnBeatTag }}</div>
+          <h2 class="iw-explain-title">{{ dnBeatTitle }}</h2>
+          <p class="iw-explain-body">{{ dnBeatBody }}</p>
+        </section>
+
+        <div class="pq-todo"><span>DO THIS</span>{{ dnTodo }}</div>
+
+        <sc-if value="{{ dnChapter1 }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ dnCached }}" hint-placeholder-val="{{ false }}"><div class="bb-readout">Same name, no walk this time. The answer was remembered from the first lookup — that's the whole speed trick behind DNS caching.</div></sc-if>
+        </sc-if>
+
+        <sc-if value="{{ dnChapter2 }}" hint-placeholder-val="{{ false }}">
+          <button class="cx-btn solid" data-reticle-target="intercept" onClick="{{ dnIntercept }}" style="margin-top:12px;">&gt; INTERCEPT WITH A FORGED ANSWER</button>
+          <sc-if value="{{ dnPoisonShown }}" hint-placeholder-val="{{ false }}">
+            <div class="cx-grid2" style="margin-top:8px;">
+              <button class="cx-btn" data-reticle-target="accept" onClick="{{ dnAccept }}">ACCEPT THE FORGED ANSWER</button>
+              <button class="cx-btn" data-reticle-target="reject" onClick="{{ dnReject }}">REJECT IT</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ dnAccepted }}" hint-placeholder-val="{{ false }}"><div class="cx-alarm">WRONG DESTINATION // The whole system runs on trusting the answer you get back. Poison that answer, and you can send anyone anywhere.</div></sc-if>
+          <sc-if value="{{ dnRejected }}" hint-placeholder-val="{{ false }}"><div class="cx-ok">SAFE // You checked the answer against the real authoritative record before trusting it.</div></sc-if>
+        </sc-if>
+
+        <section class="bb-payoff">
+          <h2 class="bb-statement" style="max-width:14ch;">EVERY LOOKUP IS VISIBLE ON THE WIRE.</h2>
+          <p class="bb-friendly" style="margin-bottom:0;">Every site you visit starts with one of these lookups — visible to anyone watching your traffic. They can see every name you resolve. What if you wanted to hide which sites you're even asking about?</p>
+          <button class="cx-btn solid" data-reticle-target="next" data-node="vpn" onClick="{{ openInternetBridge }}" style="margin-top:16px;">&gt; NEXT: VPNS</button>
+        </section>
+        <div class="bb-scope">LEARNING SIMULATION // A simplified two-hop resolver chain, not the full recursive/iterative DNS protocol. Record types, DNSSEC (the real fix for this exact poisoning problem), and DNS-over-HTTPS are left out.</div>
+      </main>
+    </div>
+  </sc-if>
