@@ -1,9 +1,10 @@
 # VECTOR // CyberPath
 
-An interactive cybersecurity learning atlas — 29 hand-built, browser-based
+An interactive cybersecurity learning atlas — 30 hand-built, browser-based
 simulations that teach security concepts by letting you *do* them instead of
 reading about them: break a login with SQL injection, factor an RSA key with
-Shor's algorithm, phish yourself, audit a company for compliance, and more.
+Shor's algorithm, sit in the man-in-the-middle seat and watch encryption
+blind you, phish yourself, audit a company for compliance, and more.
 
 Built as both a study tool and a portfolio piece.
 
@@ -17,7 +18,7 @@ organised into four phases:
 | Phase | Covers |
 |---|---|
 | **0 — Foundations** | Bits & bytes, how the internet works |
-| **1 — Build the system** | Symmetric encryption, hashing, public-key crypto, digital signatures, TLS/HTTPS, quantum computing, quantum vs. RSA, post-quantum crypto, packets/TCP-IP, DNS, VPNs, passwords, MFA, OAuth, Zero Trust |
+| **1 — Build the system** | Symmetric encryption, hashing, public-key crypto, digital signatures, TLS/HTTPS, quantum computing, quantum vs. RSA, post-quantum crypto, packets/TCP-IP, DNS, VPNs, man-in-the-middle, passwords, MFA, OAuth, Zero Trust |
 | **2 — Break the system** | Malware, phishing, web vulnerabilities (XSS/SQLi), pentesting |
 | **3 — Govern the system** | Prompt injection, adversarial ML, data poisoning, model leakage, fraud & AML, cyber risk, governance, compliance |
 
@@ -63,8 +64,7 @@ python3 -m http.server 8000
 
 ## Status
 
-v0.2 — 29 of 30 planned modules are live and fully interactive. MITM
-interception is the one module still pending.
+v0.3 — 30 of 30 planned modules are live and fully interactive.
 
 ## License
 
