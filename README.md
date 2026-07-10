@@ -8,7 +8,7 @@ blind you, phish yourself, audit a company for compliance, and more.
 
 Built as both a study tool and a portfolio piece.
 
-**[Live demo](./index.html)** — open in a browser, no build step, no install.
+**[Live demo](https://dctxv.github.io/VECTOR/)** — open in a browser, no build step, no install.
 
 ## What it is
 
