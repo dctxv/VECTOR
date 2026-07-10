@@ -627,8 +627,7 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
       // ---- occasional genuine lock onto a real page element ----
       if (s.lockUntil && t < s.lockUntil) {
         let rect = null;
-        if (s.lockTarget === 'cursor') rect = { left:this.pointer.x-26, top:this.pointer.y-20, width:52, height:40 };
-        else if (s.lockTarget === 'title') { const te = document.querySelector('[data-screen-label] h1'); rect = te ? te.getBoundingClientRect() : null; }
+        if (s.lockTarget === 'title') { const te = document.querySelector('[data-screen-label] h1'); rect = te ? te.getBoundingClientRect() : null; }
         else { const te = document.querySelector(`#mv-field [data-node="${s.lockTarget}"]`); rect = te ? te.getBoundingClientRect() : null; }
         if (rect && rect.width) {
           const tx = (rect.left+rect.width/2)/W, ty = (rect.top+rect.height/2)/H;
@@ -642,7 +641,7 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
             bx.style.width = (cw+(tw-cw)*0.18).toFixed(1)+'px'; bx.style.height = (ch+(th-ch)*0.18).toFixed(1)+'px';
           }
           const stEl = document.getElementById('mv-st' + i);
-          if (stEl) stEl.textContent = s.lockTarget === 'cursor' ? 'lock' : 'trk•';
+          if (stEl) stEl.textContent = 'trk•';
           s.cx = s.sx; s.cy = s.sy; s.sampleAt = t;
           continue;
         }
@@ -679,9 +678,9 @@ window.CyberPathComponent = (DCLogic) => class CyberPathApp extends DCLogic {
         if (!s.lockUntil && Math.random() < 0.012) {
           if (fieldOn && Math.random() < 0.7) {
             const cands = document.querySelectorAll('#mv-field [data-node]');
-            s.lockTarget = cands.length ? cands[(Math.random()*cands.length)|0].dataset.node : 'cursor';
+            s.lockTarget = cands.length ? cands[(Math.random()*cands.length)|0].dataset.node : 'title';
           } else {
-            s.lockTarget = Math.random() < 0.5 ? 'cursor' : 'title';
+            s.lockTarget = 'title';
           }
           s.lockUntil = t + R(1.1, 2.4);
         }
